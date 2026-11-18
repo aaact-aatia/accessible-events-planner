@@ -1,0 +1,17 @@
+/* Minimal scaffold only; design-system integration follows. */
+body {
+  margin: 0;
+  font: 1rem/1.5 system-ui, sans-serif;
+  color: #202830;
+  background: #fff;
+}
+main {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
