@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare:deploy": "node scripts/prepare-deploy.mjs",
     "test": "node --test tests/rules.test.mjs && python3 -m unittest discover -s tests -p 'test_*.py'"
   }
 }
