@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Python 3.10 or later.
-- Node.js 18 or later.
+- Node.js 22 or later.
 - BeautifulSoup 4.13.4 as a test-only dependency. BeautifulSoup and the Python environment are not used in the production prototype.
 
 Create and activate a virtual environment, install the pinned test dependency, and run the suite:
@@ -40,6 +40,28 @@ Content authors should follow [the content maintenance guide](../docs/content-ma
 
 Feature tests for personalized URLs, editing, printing, downloads and browser accessibility remain part of later development stages. Automated checks and source-code review are not substitutes for manual accessibility testing and do not establish accessibility conformance.
 
+## Netlify deployment tests
+
+The deployment tests supply `AEP_PREVIEW_PASSWORD=unit-test-preview-password-not-a-real-secret` only inside the test process. GitHub Actions and contributors do not need the actual Netlify preview password.
+
+The tests verify:
+
+- Missing and empty passwords fail deployment preparation.
+- `dist/` contains exactly the website allowlist.
+- All deployed pages receive the accessible gate while canonical pages remain gate-free.
+- The password is absent from generated output.
+- The generated verifier matches the dedicated test password.
+- Deployed pages preserve session-storage, inert/ARIA-hidden and URL behavior.
+- Netlify noindex and Content Security Policy configuration covers the current assets and the approved GCDS CDN origin.
+
+For a local deployment preparation check, use a disposable test password:
+
+```sh
+AEP_PREVIEW_PASSWORD='local-test-only-not-a-real-password' npm run prepare:deploy
+```
+
+Never use or paste the actual Netlify preview password in terminal history, issues, pull requests, chat or repository files.
+
 ## Development-session browser validation
 
 During Step 3, the development environment’s browser automation was used for one-time validation of:
@@ -69,3 +91,5 @@ Run these checks in Safari on macOS after starting a local server:
 11. Turn off VoiceOver with Command-F5 and record any differences between keyboard, visual, and screen-reader navigation.
 
 If VoiceOver is unavailable, test with another supported screen reader and record that limitation. Do not report unperformed checks as completed.
+
+For a deployed preview, additionally verify the locked dialog, error announcements, Leave this preview link, Sign out control, hidden/inert underlying content, same-tab session persistence, 400% reflow and print hiding.

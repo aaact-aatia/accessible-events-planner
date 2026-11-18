@@ -18,6 +18,8 @@ Static HTML, CSS and vanilla JavaScript, with no production dependencies or buil
 
 Development is organized in feature branches and reviewed pull requests. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow and [AGENTS.md](../AGENTS.md) for repository instructions. Python dependencies are test-only and documented in [tests/README.md](../tests/README.md). Development fixtures, tests and development-only documentation must be excluded from a future public deployment.
 
+Hosting uses the existing Netlify site. `netlify.toml` prepares a website-only `dist/` allowlist for production and Deploy Previews, with noindex response headers. A removable client-side shared-password gate applies only to prepared deployment copies. It is a casual-access deterrent, not authentication, and must not enter canonical guidance or standalone downloads. The canonical complete guide remains usable without JavaScript. See [hosting.md](hosting.md) for deployment and Netlify secret configuration.
+
 ## Interaction and validation
 
 Retain existing question groups and values. Explicitly submit or update answers; no automatic navigation on input changes. Preserve answers when moving back to the questionnaire and support browser history. Restore focus to an appropriate heading or question after navigation as needed. Handle missing, invalid or unsupported URL parameters without silently dropping guidance. Provide a useful complete-guide route if JavaScript or personalized generation fails.
@@ -27,6 +29,7 @@ Retain existing question groups and values. Explicitly submit or update answers;
 - Exact URL parameter schema and versioning.
 - Question of how the complete guide should render repeated applicability context without excessive print length.
 - Final page controls, print layout, and design-system integration.
-- Hosting and release approval.
+- Manual Netlify production/Deploy Preview, VoiceOver and print verification.
+- Hosting release and eventual removal of the preview deterrent.
 
 Step 2 preserves the supplied source and applicability rules, and Step 3 refines the complete static guide. The questionnaire, personalized guide, bookmarking and exports are not implemented. Do not publish until content preservation, routing, and accessibility have been tested, including manual assistive-technology and print checks.
