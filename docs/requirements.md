@@ -14,7 +14,9 @@
 
 ## Implementation approach
 
-Initial scaffold: static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide should work without JavaScript; the personalized route will use the complete guide as its content source. Preserve source variants and applicability metadata even if the complete view deduplicates displayed content; decide the exact representation during extraction. Use the GC Design System for presentation after checking integration details; native semantics and functionality must not depend on its scripts.
+Static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide works without JavaScript and is the canonical content source; the personalized route will derive from that source. Preserve source variants, applicability metadata and support provenance even if the complete view deduplicates displayed content. Use the GC Design System for presentation after checking integration details; native semantics and functionality must not depend on its scripts.
+
+Development is organized in feature branches and reviewed pull requests. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow and [AGENTS.md](../AGENTS.md) for repository instructions. Python dependencies are test-only and documented in [tests/README.md](../tests/README.md). Development fixtures, tests and development-only documentation must be excluded from a future public deployment.
 
 ## Interaction and validation
 
@@ -23,8 +25,8 @@ Retain existing question groups and values. Explicitly submit or update answers;
 ## Open details
 
 - Exact URL parameter schema and versioning.
-- Source extraction and duplicate representation.
+- Question of how the complete guide should render repeated applicability context without excessive print length.
 - Final page controls, print layout, and design-system integration.
 - Hosting and release approval.
 
-The scaffold is not a working planner. Do not publish until content preservation, routing, and accessibility have been tested.
+Step 2 preserves the supplied source and applicability rules, and Step 3 refines the complete static guide. The questionnaire, personalized guide, bookmarking and exports are not implemented. Do not publish until content preservation, routing, and accessibility have been tested, including manual assistive-technology and print checks.
