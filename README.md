@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8001de39-e8e2-4247-a9a5-b8a058850ceb/deploy-status)](https://app.netlify.com/projects/aaacteventplanner/deploys)
+
 # accessible-events-planner
 
 A web-based tool for generating personalized, accessible meeting and event planning guides based on questionnaire responses.
