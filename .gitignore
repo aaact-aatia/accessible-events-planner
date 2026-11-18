@@ -3,3 +3,8 @@ node_modules/
 coverage/
 playwright-report/
 test-results/
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]

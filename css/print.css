@@ -1,6 +1,34 @@
-/* Initial print scaffold; document-specific rules follow. */
+/* Keep printed guide content readable without website navigation. */
 @page { margin: 18mm; }
 body { color: #000; background: #fff; }
 header, main, footer { max-width: none; padding: 0; }
-.skip-link, nav { display: none; }
-.guide-action { break-inside: avoid; }
+.site-header,
+.skip-link,
+.return-to-contents {
+  display: none;
+}
+.site-footer {
+  margin-block-start: 1rem;
+  padding-block-start: 0.5rem;
+  border-block-start: 1px solid #000;
+}
+main > * { max-width: none; }
+.planning-phase > h2,
+.guide-action > h3,
+.action-support > h4 {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+.action-context {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.guide-action,
+.action-support {
+  break-inside: auto;
+  page-break-inside: auto;
+}
+li {
+  orphans: 2;
+  widows: 2;
+}

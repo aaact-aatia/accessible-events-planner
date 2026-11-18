@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8001de39-e8e2-4247-a9a5-b8a058850ceb/deploy-status)](https://app.netlify.com/projects/aaacteventplanner/deploys)
+
 # accessible-events-planner
 
 A web-based tool for generating personalized, accessible meeting and event planning guides based on questionnaire responses.
@@ -16,12 +18,18 @@ The prototype uses native HTML, CSS and vanilla JavaScript. No build step, frame
 - `css/`: shared screen and print styles.
 - `js/`: questionnaire, applicability rules, guide rendering and export modules.
 - `docs/requirements.md`: agreed scope and implementation requirements.
-- `tests/README.md`: test plan.
+- `docs/content-maintenance.md`: canonical-content maintenance workflow.
+- `docs/source-content-inventory.md`: preservation inventory and review notes.
+- `tests/README.md`: test setup and verification plan.
+- [CONTRIBUTING.md](CONTRIBUTING.md): feature-branch, test, pull-request and review workflow.
+- [AGENTS.md](AGENTS.md): instructions for automated coding assistants and contributors.
 
-The initial scaffold is in place, and Step 2 has extracted the supplied source into the static canonical guide and applicability model. The questionnaire and personalized guide generation remain future development stages.
+The initial scaffold and Step 2 content extraction are complete. Step 3 refines the complete static guide with stable navigation, visible applicability context and readable screen/print presentation. The questionnaire and personalized guide generation remain future development stages.
 
 Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 
 ## Publication
 
 The repository is private. Do not enable GitHub Pages or publish the prototype until authorized. Development fixtures, tests and development-only documentation must be excluded from any eventual public deployment. Eventual integration into the Digital Accessibility Toolkit must support both official languages. No licence has been selected.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) before making changes. Repository contributors must install the documented test-only dependencies and run the automated suite before requesting review.
