@@ -18,8 +18,10 @@ The prototype uses native HTML, CSS and vanilla JavaScript. No build step, frame
 - `docs/requirements.md`: agreed scope and implementation requirements.
 - `tests/README.md`: test plan.
 
-The initial files are scaffolding only. The existing source guidance and questionnaire will be migrated in later steps.
+The initial scaffold is in place, and Step 2 has extracted the supplied source into the static canonical guide and applicability model. The questionnaire and personalized guide generation remain future development stages.
+
+Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 
 ## Publication
 
-The repository is private. Do not enable GitHub Pages or publish the prototype until authorized. Eventual integration into the Digital Accessibility Toolkit must support both official languages. No licence has been selected.
+The repository is private. Do not enable GitHub Pages or publish the prototype until authorized. Development fixtures, tests and development-only documentation must be excluded from any eventual public deployment. Eventual integration into the Digital Accessibility Toolkit must support both official languages. No licence has been selected.

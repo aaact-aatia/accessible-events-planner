@@ -1,4 +1,6 @@
 /* Initial print scaffold; document-specific rules follow. */
 @page { margin: 18mm; }
 body { color: #000; background: #fff; }
-main { max-width: none; padding: 0; }
+header, main, footer { max-width: none; padding: 0; }
+.skip-link, nav { display: none; }
+.guide-action { break-inside: avoid; }
