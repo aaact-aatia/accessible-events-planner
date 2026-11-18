@@ -14,7 +14,7 @@ This document inventories meaningful content in the original supplied HTML. The 
 
 ## Meaningful content outside actions
 
-The original page introduction, questionnaire instructions and controls, reference introduction, checklist titles, and applicability notes are retained in this inventory. This review copy remains available during Step 3 while the team decides how meaningful user-facing information is incorporated into the complete guide. It must not become permanently hidden metadata or be silently excluded.
+The original page introduction, questionnaire instructions and controls, reference introduction, checklist titles, and applicability notes are retained in this inventory. Meaningful complete-guide introductions and applicability notes are also displayed to users; questionnaire-only interface copy remains documented for later implementation.
 
 ### Page introduction
 
@@ -32,7 +32,7 @@ This wording remains in the source fixture for the questionnaire migration. The 
 
 ### Reference and checklist notes
 
-The reference introduction and the following checklist titles and applicability notes are retained in this review inventory and in the complete guide’s source registry. They are not currently rendered in the chronological guide. Step 3 must review them and provide an accessible user-facing home where the content remains meaningful.
+The reference introduction and the following checklist titles and applicability notes are retained as source metadata. Checklist titles and notes are displayed near their related actions without recreating the original category hierarchy in the heading outline. Questionnaire-specific and obsolete checklist instructions remain here for review.
 
 #### 1.1  In-person only meeting or event checklist
 
@@ -114,6 +114,7 @@ The reference introduction and the following checklist titles and applicability 
 ## Proposed interface exclusions and content decisions for review
 
 - Exclude source completion checkboxes, checklist labels, disclosure controls, stale-state messages and task-tracking wording from generated guides.
-- Retain checklist-specific applicability introductions for review. Do not permanently discard or conceal them. Step 3 will determine how to present them without reintroducing the original category hierarchy.
+- Display checklist-specific applicability introductions and guidance notes near the related actions without recreating the original category hierarchy in the heading structure.
+- Review the new complete-guide introduction with the content owner. It explains that actions serve different contexts and not every action applies to every event.
 - Replace interface instructions about expanding guidance, assigning responsibilities and completion tracking when those interfaces are implemented.
 - Preserve the source’s JavaScript-disabled, print-only and no-JavaScript fallback copy only as interface history unless a future page needs equivalent instructions.

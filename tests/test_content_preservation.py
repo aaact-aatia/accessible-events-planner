@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests/fixtures/Meetings-Events-Planning-Path_Draft1(2).html"
 INVENTORY = ROOT / "tests/fixtures/source-inventory.json"
 GUIDE = ROOT / "full-guide.html"
+STYLES = ROOT / "css/styles.css"
+PRINT_STYLES = ROOT / "css/print.css"
 
 
 def normalized_markup(node) -> str:
@@ -178,8 +180,58 @@ class ContentPreservationTests(unittest.TestCase):
         self.assertEqual(len(self.guide.select(".guide-action > h3")), 117)
         self.assertFalse(self.guide.select(".guide-action input[type=checkbox]"))
         self.assertFalse(self.guide.select(".guide-action details"))
+        self.assertFalse(
+            self.guide.select(
+                ".guide-action button, "
+                ".guide-action input, "
+                ".guide-action select, "
+                ".guide-action textarea, "
+                ".guide-action [role=button], "
+                ".guide-action [role=checkbox]"
+            )
+        )
         self.assertEqual(len(self.guide.select("main")), 1)
         self.assertIsNotNone(self.guide.select_one('a.skip-link[href="#main-content"]'))
+        toc_links = self.guide.select(".guide-contents > ul > li > a")
+        self.assertEqual(
+            [(link.get_text(" ", strip=True), link["href"]) for link in toc_links],
+            [
+                ("Before the meeting or event", "#before"),
+                ("During the meeting or event", "#during"),
+                ("After the meeting or event", "#after"),
+            ],
+        )
+        self.assertEqual(
+            len(self.guide.select('nav.guide-contents a[href^="#action-"]')),
+            0,
+        )
+        return_links = self.guide.select(
+            ".planning-phase > .return-to-contents > a"
+        )
+        self.assertEqual(len(return_links), 3)
+        self.assertTrue(all(link["href"] == "#contents" for link in return_links))
+
+    def test_action_fragments_are_based_on_stable_source_identifiers(self) -> None:
+        for article in self.guide.select(".guide-action"):
+            variants = article["data-source-actions"].split()
+            primary = article["data-primary-source-action"]
+            self.assertIn(primary, variants)
+            self.assertEqual(article["id"], f"action-{primary}")
+            reordered = list(reversed(variants))
+            self.assertEqual(article["id"], f"action-{primary}")
+            self.assertEqual(sorted(reordered), sorted(variants))
+        ids = {article["id"] for article in self.guide.select(".guide-action")}
+        self.assertEqual(len(ids), 117)
+        phase_counts = self.inventory["counts"]["byPhase"]
+        legacy_targets = [
+            target["id"] for target in self.guide.select(".legacy-fragment[id]")
+        ]
+        expected_legacy = [
+            f"action-{phase}-{index:03d}"
+            for phase in ("before", "during", "after")
+            for index in range(1, phase_counts[phase] + 1)
+        ]
+        self.assertCountEqual(legacy_targets, expected_legacy)
 
     def test_no_duplicate_dom_ids_or_in_page_link_targets_are_missing(self) -> None:
         parser = IdCollector()
@@ -244,6 +296,132 @@ class ContentPreservationTests(unittest.TestCase):
         for section in self.inventory["sections"]:
             self.assertTrue(section["title"])
             self.assertTrue(section["notes"])
+
+    def test_applicability_context_is_visible_near_related_actions(self) -> None:
+        contexts = self.guide.select("main .action-context")
+        self.assertEqual(len(contexts), 132)
+        for section in self.inventory["sections"]:
+            matches = [
+                context
+                for context in contexts
+                if context["data-source-section"] == section["id"]
+            ]
+            self.assertTrue(matches, section["id"])
+            for context in matches:
+                self.assertEqual(
+                    context.find("strong").get_text(" ", strip=True),
+                    section["title"],
+                )
+                visible_notes = [
+                    note.get_text(" ", strip=True)
+                    for note in context.find_all("p", recursive=False)[1:]
+                ]
+                expected_notes = [
+                    BeautifulSoup(note, "html.parser").get_text(" ", strip=True)
+                    for note in section["notes"]
+                ]
+                self.assertEqual(visible_notes, expected_notes)
+        records = {
+            action["sourceAction"]: action for action in self.inventory["actions"]
+        }
+        for article in self.guide.select(".guide-action"):
+            expected_sections = {
+                records[source_id]["section"]
+                for source_id in article["data-source-actions"].split()
+            }
+            actual_sections = {
+                context["data-source-section"]
+                for context in article.select(".action-context")
+            }
+            self.assertEqual(actual_sections, expected_sections, article["id"])
+        introduction = self.guide.select_one("main .guide-introduction")
+        self.assertIn(
+            "Not every action applies to every event.",
+            introduction.get_text(" ", strip=True),
+        )
+
+    def test_item_level_conditions_are_visible_without_broadening_them(self) -> None:
+        conditional = [
+            action
+            for action in self.inventory["actions"]
+            if action["delivery"] or action["needs"] or action["features"]
+        ]
+        self.assertEqual(len(conditional), 14)
+        for action in conditional:
+            rendered = self.guide.select_one(
+                f'.action-applicability[data-source-action="{action["sourceAction"]}"]'
+            )
+            self.assertIsNotNone(rendered, action["sourceAction"])
+            text = rendered.get_text(" ", strip=True)
+            if action["delivery"]:
+                self.assertIn("Delivery format:", text)
+            if action["features"]:
+                self.assertIn("Session feature:", text)
+            if action["needs"]:
+                self.assertIn("Additional consideration:", text)
+            condition_types = sum(
+                value is not None
+                for value in (action["delivery"], action["features"], action["needs"])
+            )
+            self.assertEqual(
+                "All of the following conditions must apply." in text,
+                condition_types > 1,
+            )
+
+    def test_displayed_support_has_no_unexpected_or_duplicate_entries(self) -> None:
+        records = {
+            action["sourceAction"]: action for action in self.inventory["actions"]
+        }
+        for article in self.guide.select(".guide-action"):
+            source_ids = article["data-source-actions"].split()
+            expected: dict[str, list[str]] = {
+                title: []
+                for title in (
+                    "How to do this",
+                    "Related guidance",
+                    "Helps prevent barriers such as",
+                )
+            }
+            category_names = {
+                "How to do this": "How to do this:",
+                "Related guidance": "Related guidance:",
+                "Helps prevent barriers such as":
+                    "Helps prevent barriers such as:",
+            }
+            for source_id in source_ids:
+                for visible_name, source_name in category_names.items():
+                    for entry in records[source_id]["support"][source_name]:
+                        markup = canonical_markup(entry["markup"])
+                        if markup not in expected[visible_name]:
+                            expected[visible_name].append(markup)
+            for section in article.select(".action-support"):
+                heading = section.find("h4").get_text(" ", strip=True)
+                rendered = []
+                for item in section.select(":scope > ul > li"):
+                    copied = BeautifulSoup(str(item), "html.parser").find("li")
+                    del copied["data-source-actions"]
+                    rendered.append(canonical_markup(str(copied)))
+                self.assertEqual(rendered, expected[heading], article["id"])
+
+    def test_screen_styles_include_reflow_and_forced_colors_support(self) -> None:
+        styles = STYLES.read_text(encoding="utf-8")
+        self.assertIn("max-width: 75ch", styles)
+        self.assertIn("@media (forced-colors: active)", styles)
+        self.assertIn("overflow-wrap: anywhere", styles)
+        self.assertIn("outline-color: Highlight", styles)
+        self.assertNotIn("position: sticky", styles)
+        self.assertNotIn("position: fixed", styles)
+
+    def test_print_styles_hide_chrome_without_forcing_whole_actions_together(
+        self,
+    ) -> None:
+        styles = PRINT_STYLES.read_text(encoding="utf-8")
+        self.assertIn(".site-header", styles)
+        self.assertIn(".site-footer", styles)
+        self.assertIn(".site-footer {\n  margin-block-start", styles)
+        self.assertIn("break-after: avoid", styles)
+        self.assertIn(".guide-action,\n.action-support {\n  break-inside: auto", styles)
+        self.assertNotIn(".guide-action { break-inside: avoid; }", styles)
 
 
 if __name__ == "__main__":

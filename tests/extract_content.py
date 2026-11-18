@@ -192,6 +192,7 @@ def source_registry(sections: list[dict], actions: list[Tag]) -> str:
 
 def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]) -> str:
     grouped = build_records(actions)
+    sections_by_id = {section["id"]: section for section in sections}
     toc = "\n".join(
         f'        <li><a href="#{phase}">{PHASE_TITLES[phase]}</a></li>'
         for phase in PHASES
@@ -202,9 +203,14 @@ def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]
         for index, record in enumerate(grouped[phase], start=1):
             variants = [action["data-source-action"] for action in record["variants"]]
             variant_list = " ".join(variants)
+            primary_source_action = variants[0]
+            action_id = f"action-{primary_source_action}"
+            legacy_id = f"action-{phase}-{index:03d}"
             articles.append(
-                f'''      <article class="guide-action" id="action-{phase}-{index:03d}" data-source-actions="{variant_list}">
+                f'''      <article class="guide-action" id="{action_id}" data-primary-source-action="{primary_source_action}" data-source-actions="{variant_list}">
+        <span class="legacy-fragment" id="{legacy_id}" aria-hidden="true"></span>
         <h3>{record["titleMarkup"]}</h3>
+{render_action_context(record, sections_by_id)}
 {render_support(record["support"])}
       </article>'''
             )
@@ -213,6 +219,7 @@ def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]
             f'''  <section id="{phase}" class="planning-phase">
     <h2>{PHASE_TITLES[phase]}</h2>
 {article_markup}
+    <p class="return-to-contents"><a href="#contents">Return to contents</a></p>
   </section>'''
         )
 
@@ -223,6 +230,16 @@ def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]
         if description is not None and description.get("content")
         else "Complete accessibility planning guide for meetings and events."
     )
+    page_introduction = source.select_one("#main-content > .page-container > section")
+    audience_introduction = ""
+    detailed_guidance = ""
+    if page_introduction:
+        for paragraph in page_introduction.find_all("p", recursive=False):
+            text = paragraph.get_text(" ", strip=True)
+            if text.startswith("This tool is for organizers"):
+                audience_introduction = normalized_markup(paragraph)
+            elif text.startswith("See the "):
+                detailed_guidance = normalized_markup(paragraph)
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -247,8 +264,12 @@ def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]
   </header>
   <main id="main-content" tabindex="-1">
     <h1>Accessible meetings and events planning guide</h1>
-    <p>This complete guide is organized chronologically. It contains all planning actions and displays their guidance, related resources, and barriers by default.</p>
-    <nav aria-labelledby="contents-heading">
+    <div class="guide-introduction">
+      <p>This complete guide contains actions for different meeting and event delivery formats, audience sizes, session features, and accessibility considerations. Use the actions that apply to your meeting or event. Not every action applies to every event.</p>
+      {audience_introduction}
+      {detailed_guidance}
+    </div>
+    <nav class="guide-contents" id="contents" aria-labelledby="contents-heading">
       <h2 id="contents-heading">Contents</h2>
       <ul>
 {toc}
@@ -265,6 +286,75 @@ def render_guide(source: BeautifulSoup, actions: list[Tag], sections: list[dict]
 </body>
 </html>
 '''
+
+
+def render_action_context(record: dict, sections_by_id: dict[str, dict]) -> str:
+    section_ids = list(
+        dict.fromkeys(action["_section"] for action in record["variants"])
+    )
+    contexts = []
+    for section_id in section_ids:
+        section = sections_by_id[section_id]
+        notes = "\n".join(f"          {note}" for note in section["notes"])
+        conditions = []
+        for action in record["variants"]:
+            if action["_section"] != section_id:
+                continue
+            condition_parts = render_applicability_conditions(action)
+            if condition_parts:
+                conditions.append(
+                    f'''          <div class="action-applicability" data-source-action="{escape(action["data-source-action"], quote=True)}">
+            <p><strong>Action applicability</strong></p>
+            <ul>
+{"".join(f"              <li>{part}</li>{chr(10)}" for part in condition_parts)}            </ul>
+          </div>'''
+                )
+        condition_markup = "\n".join(conditions)
+        contexts.append(
+            f'''        <div class="action-context" data-source-section="{escape(section_id, quote=True)}">
+          <p><strong>{escape(section["title"])}</strong></p>
+{notes}
+{condition_markup}
+        </div>'''
+        )
+    return "\n".join(contexts)
+
+
+def render_applicability_conditions(action: Tag) -> list[str]:
+    delivery_labels = {
+        "inPerson": "In-person only",
+        "virtual": "Virtual only",
+        "hybrid": "Hybrid",
+    }
+    feature_labels = {
+        "training": "Training, workshop, or presentation",
+        "formal": "Public, formal, technical, legal, or high-profile event",
+        "organizationWide": "Town hall or organization-wide session",
+    }
+    need_labels = {
+        "risk": "High-risk content",
+        "languages": "Bilingual or spoken-language interpretation",
+        "supports": "Accessibility supports",
+        "presenters": "Multiple presenters",
+        "visual": "Visual content",
+        "prerecorded": "Pre-recorded content",
+        "interaction": "Interaction",
+        "recording": "Recording the session",
+        "followup": "Sharing follow-up materials",
+        "cultural": "Indigenous, cultural, or community considerations",
+    }
+    parts = []
+    for attribute, label, values in (
+        ("data-delivery", "Delivery format", delivery_labels),
+        ("data-features", "Session feature", feature_labels),
+        ("data-needs", "Additional consideration", need_labels),
+    ):
+        if action.has_attr(attribute):
+            labels = [values[value] for value in action[attribute].split()]
+            parts.append(f"{label}: {' or '.join(labels)}.")
+    if len(parts) > 1:
+        parts.insert(0, "All of the following conditions must apply.")
+    return parts
 
 
 def render_support(support: dict[str, list[dict]]) -> str:
@@ -400,7 +490,7 @@ def render_inventory_markdown(inventory: dict) -> str:
         "",
         "## Meaningful content outside actions",
         "",
-        "The original page introduction, questionnaire instructions and controls, reference introduction, checklist titles, and applicability notes are retained in the generated inventory. They are not yet presented in the complete guide unless listed below.",
+        "The original page introduction, questionnaire instructions and controls, reference introduction, checklist titles, and applicability notes are retained in this inventory. Meaningful complete-guide introductions and applicability notes are also displayed to users; questionnaire-only interface copy remains documented for later implementation.",
         "",
         "### Page introduction",
         "",
@@ -420,7 +510,7 @@ def render_inventory_markdown(inventory: dict) -> str:
             "",
             "### Reference and checklist notes",
             "",
-            "The reference introduction and the following checklist titles and applicability notes are retained as source metadata in the complete guide’s hidden content registry. They are not rendered in the chronological guide while their presentation is reviewed.",
+            "The reference introduction and the following checklist titles and applicability notes are retained as source metadata. Checklist titles and notes are displayed near their related actions without recreating the original category hierarchy in the heading outline. Questionnaire-specific and obsolete checklist instructions remain here for review.",
             "",
         ]
     )
@@ -433,10 +523,11 @@ def render_inventory_markdown(inventory: dict) -> str:
 
     lines.extend(
         [
-            "## Proposed exclusions and relocations for review",
+            "## Proposed interface exclusions and content decisions for review",
             "",
             "- Exclude source completion checkboxes, checklist labels, disclosure controls, stale-state messages and task-tracking wording from generated guides.",
-            "- Relocate checklist-specific applicability introductions to source metadata for now. The complete guide already conveys applicability through the phase/action structure; presentation of these notes requires review because it could reintroduce the original category hierarchy.",
+            "- Display checklist-specific applicability introductions and guidance notes near the related actions without recreating the original category hierarchy in the heading structure.",
+            "- Review the new complete-guide introduction with the content owner. It explains that actions serve different contexts and not every action applies to every event.",
             "- Replace interface instructions about expanding guidance, assigning responsibilities and completion tracking when those interfaces are implemented.",
             "- Preserve the source’s JavaScript-disabled, print-only and no-JavaScript fallback copy only as interface history unless a future page needs equivalent instructions.",
             "",

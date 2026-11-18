@@ -14,9 +14,10 @@ The extraction script in [tests/extract_content.py](../tests/extract_content.py)
 2. Locate the affected displayed action in [full-guide.html](../full-guide.html) by its `data-source-actions` value and review every listed source variant.
 3. Update the displayed action and supporting content once, preserving meaningful inline semantics, link text, destinations and new-tab disclosures.
 4. Update the variant provenance and any generated source inventory entries when applicability or a source-specific support entry changes. Do not remove a source identifier.
-5. Run `npm test` and review the test output for content, routing, applicability and deduplication regressions.
-6. If a change affects meaningful section introductions or applicability notes, review [the source content inventory](source-content-inventory.md) and determine how the information will remain user-facing.
-7. Record suspected editorial errors or unresolved wording decisions separately. Do not silently incorporate unapproved corrections.
+5. Keep each action’s `id` based on its first `data-source-actions` identifier. Do not renumber action fragments when inserting, removing or reordering actions.
+6. Run `npm test` and review the test output for content, routing, applicability, navigation and deduplication regressions.
+7. If a change affects meaningful section introductions or applicability notes, review [the source content inventory](source-content-inventory.md) and determine how the information will remain user-facing.
+8. Record suspected editorial errors or unresolved wording decisions separately. Do not silently incorporate unapproved corrections.
 
 ## Adding or changing applicability
 

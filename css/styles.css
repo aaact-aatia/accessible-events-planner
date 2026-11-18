@@ -25,6 +25,9 @@ footer {
   padding: 1rem;
   overflow-wrap: anywhere;
 }
+main > * {
+  max-width: 75ch;
+}
 .site-header nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -36,13 +39,47 @@ footer {
   font-size: 1.25rem;
   font-weight: 700;
 }
+.guide-introduction {
+  margin-block-end: 2rem;
+}
+.guide-contents {
+  margin-block: 2rem 3rem;
+  padding-block: 1rem;
+  border-block: 1px solid #b7bcc1;
+}
+.guide-contents h2 {
+  margin-block-start: 0;
+}
 .guide-action {
-  margin-block: 2rem;
-  padding-block-start: 0.5rem;
+  margin-block: 1.5rem;
+  padding-block-start: 0.75rem;
   border-top: 1px solid #b7bcc1;
+}
+.guide-action > h3 {
+  margin-block: 0 0.75rem;
+}
+.action-context {
+  margin-block: 0.75rem 1rem;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 0.25rem solid #b7bcc1;
+}
+.action-context p {
+  margin-block: 0.25rem;
+}
+.action-applicability {
+  margin-block: 0.75rem;
+}
+.action-applicability ul {
+  margin-block: 0.25rem;
+}
+.legacy-fragment {
+  scroll-margin-top: 1rem;
 }
 .action-support {
   margin-block-start: 1rem;
+}
+.return-to-contents {
+  margin-block: 2rem 3rem;
 }
 .action-support h4 {
   margin-block: 0.75rem 0.25rem;
@@ -61,4 +98,22 @@ footer {
 a:focus-visible, button:focus-visible, input:focus-visible {
   outline: 3px solid currentColor;
   outline-offset: 3px;
+}
+
+@media (forced-colors: active) {
+  .skip-link {
+    color: LinkText;
+    background: Canvas;
+    border: 2px solid CanvasText;
+  }
+  .guide-action,
+  .guide-contents,
+  .action-context {
+    border-color: CanvasText;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline-color: Highlight;
+  }
 }
