@@ -24,6 +24,14 @@
 
     const encoder = new TextEncoder();
     let storageReadWarning = "";
+    let restoreSignOutFocus = false;
+
+    function announceStorageMessage(message) {
+      storageMessage.hidden = false;
+      queueMicrotask(() => {
+        storageMessage.textContent = message;
+      });
+    }
 
     function showDialogMessage(message, invalid = false) {
       error.textContent = message;
@@ -70,9 +78,9 @@
       try {
         sessionStorage.setItem(storageKey, config.verifier);
       } catch {
-        storageMessage.textContent =
-          "Preview access works, but this browser cannot remember it for this tab.";
-        storageMessage.hidden = false;
+        announceStorageMessage(
+          "Preview access works, but this browser cannot remember it for this tab.",
+        );
       }
     }
 
@@ -134,7 +142,14 @@
       setLocked(false);
       if (dialog.open) dialog.close();
       if (remember) rememberUnlock();
-      if (focus) focusInitialContent();
+      if (focus) {
+        if (restoreSignOutFocus) {
+          restoreSignOutFocus = false;
+          signOut.focus();
+        } else {
+          focusInitialContent();
+        }
+      }
     }
 
     function lock() {
@@ -180,6 +195,7 @@
     });
 
     signOut.addEventListener("click", () => {
+      restoreSignOutFocus = true;
       const cleared = forgetUnlock();
       lock();
       if (!cleared) {
