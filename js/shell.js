@@ -9,6 +9,22 @@ async function readyComponents(tagName) {
   }));
 }
 
+async function waitForNativeControlFocusToLeave() {
+  if (!document.activeElement.closest?.(".native-control-fallback")) return;
+  await new Promise((resolve) => {
+    const finish = () => {
+      requestAnimationFrame(() => {
+        if (document.activeElement.closest?.(".native-control-fallback")) {
+          return;
+        }
+        document.removeEventListener("focusout", finish);
+        resolve();
+      });
+    };
+    document.addEventListener("focusout", finish);
+  });
+}
+
 async function enhanceGcShell() {
   await Promise.all([
     readyComponents("gcds-header"),
@@ -23,7 +39,8 @@ enhanceGcShell().catch((error) => {
 });
 
 readyComponents("gcds-button")
-  .then(() => {
+  .then(async () => {
+    await waitForNativeControlFocusToLeave();
     document.documentElement.classList.add("gcds-controls-ready");
   })
   .catch((error) => {

@@ -165,6 +165,17 @@ function validate(answers) {
   return problems;
 }
 
+function refreshActiveErrors() {
+  const gcdsSummary = document.getElementById("questionnaire-gcds-errors");
+  if (errors.hidden && gcdsSummary.hidden) return;
+  showErrors(
+    errors,
+    validate(readFormAnswers(form)),
+    "Complete the required answers:",
+    false,
+  );
+}
+
 function loadFromUrl() {
   lastSearch = location.search;
   setStatus(status, "");
@@ -269,14 +280,7 @@ form.addEventListener("change", (event) => {
       name === "deliveryFormat" ? "delivery-error" : "size-error",
       false,
     );
-    if (!errors.hidden) {
-      showErrors(
-        errors,
-        validate(readFormAnswers(form)),
-        "Complete the required answers:",
-        false,
-      );
-    }
+    refreshActiveErrors();
   }
   if (!changeStatusAnnounced) {
     setStatus(status, "Answers changed. Select Show my planning path when ready.");
@@ -295,6 +299,7 @@ form.addEventListener("gcdsChange", (event) => {
       radioHost.name === "deliveryFormat" ? "delivery-error" : "size-error",
       false,
     );
+    refreshActiveErrors();
   }
   updateSelectAll();
   if (!changeStatusAnnounced) {

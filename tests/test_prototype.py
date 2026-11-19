@@ -101,6 +101,7 @@ class PrototypeTests(unittest.TestCase):
             'document.activeElement.closest?.(".native-checkbox-fallback")',
             questionnaire,
         )
+        self.assertIn("refreshActiveErrors();", questionnaire)
         self.assertIn("location.search !== lastSearch", questionnaire)
         self.assertIn("lastSearch = location.search", questionnaire)
         self.assertNotIn('role="alert"', (ROOT / "index.html").read_text())
@@ -317,6 +318,9 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell", styles)
         self.assertIn(".gcds-controls-ready .gcds-control-enhancement", styles)
         self.assertIn(".gcds-errors-ready .gcds-error-enhancement", styles)
+        shell = (ROOT / "js/shell.js").read_text(encoding="utf-8")
+        self.assertIn("waitForNativeControlFocusToLeave", shell)
+        self.assertIn('closest?.(".native-control-fallback")', shell)
         self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(
@@ -340,7 +344,7 @@ class PrototypeTests(unittest.TestCase):
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
         self.assertIn('setGroupError("deliveryFormat", "delivery-error"', questionnaire)
         self.assertIn('setGroupError("eventType", "size-error"', questionnaire)
-        self.assertIn('if (!errors.hidden)', questionnaire)
+        self.assertIn("if (errors.hidden && gcdsSummary.hidden) return;", questionnaire)
         for script_name in ("js/guide.js", "js/full-guide.js"):
             script = (ROOT / script_name).read_text(encoding="utf-8")
             self.assertIn('aria-disabled", "true"', script)
