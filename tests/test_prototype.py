@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import unittest
 from pathlib import Path
 
@@ -79,6 +80,13 @@ class PrototypeTests(unittest.TestCase):
     def test_select_all_exposes_native_mixed_state(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
         self.assertIn("selectAll.indeterminate = selected > 0", questionnaire)
+        self.assertIn("const nativeSelectAll", questionnaire)
+        self.assertIn('host.value = [...(answers[host.name] || [])]', questionnaire)
+        self.assertIn("syncNativeCheckboxes(host)", questionnaire)
+        self.assertIn(
+            'document.activeElement.closest?.(".native-checkbox-fallback")',
+            questionnaire,
+        )
         self.assertIn("location.search !== lastSearch", questionnaire)
         self.assertIn("lastSearch = location.search", questionnaire)
         self.assertNotIn('role="alert"', (ROOT / "index.html").read_text())
@@ -246,6 +254,42 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertIsNotNone(questionnaire_list)
         self.assertEqual(len(questionnaire_list.select(":scope > li")), 10)
+        gcds_features = self.questionnaire.select_one(
+            'gcds-checkboxes#session-features-checkboxes[name="sessionFeatures"]'
+        )
+        gcds_needs = self.questionnaire.select_one(
+            'gcds-checkboxes#needs-checkboxes[name="needs"]'
+        )
+        self.assertIsNotNone(gcds_features)
+        self.assertIsNotNone(gcds_needs)
+        self.assertIsNone(
+            self.questionnaire.select_one(
+                ".native-checkbox-fallback gcds-checkboxes"
+            )
+        )
+        self.assertFalse(
+            any(
+                fieldset.find_parent("fieldset")
+                for fieldset in self.questionnaire.select(
+                    ".native-checkbox-fallback"
+                )
+                if fieldset.name == "fieldset"
+            )
+        )
+        self.assertEqual(
+            self.questionnaire.select_one("#select-all-needs")[
+                "aria-controls"
+            ],
+            "needs-checkboxes",
+        )
+        self.assertEqual(
+            self.questionnaire.select_one("#select-all-needs-native")[
+                "aria-controls"
+            ],
+            "needs-options",
+        )
+        self.assertEqual(len(json.loads(gcds_features["options"])), 3)
+        self.assertEqual(len(json.loads(gcds_needs["options"])), 10)
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".gcds-ready .native-shell-fallback", styles)
@@ -260,7 +304,7 @@ class PrototypeTests(unittest.TestCase):
         print_styles = (ROOT / "css/print.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined),", print_styles)
         self.assertIn(
-            ".action-grid:not(:defined),\n.needs-grid {\n"
+            ".action-grid:not(:defined),\n.needs-grid,\nul.needs-grid {\n"
             "  display: block;",
             print_styles,
         )

@@ -40,9 +40,19 @@ export function setStatus(element, message) {
 }
 
 export function readFormAnswers(form) {
-  const selected = (name) => [...form.querySelectorAll(
-    `input[name="${name}"]:checked`,
-  )].map((input) => input.value);
+  const enhanced = (name) => {
+    const host = form.querySelector(`gcds-checkboxes[name="${name}"]`);
+    if (
+      document.documentElement.classList.contains("gcds-checkboxes-ready")
+      && host
+    ) {
+      return Array.isArray(host.value) ? [...host.value] : [];
+    }
+    return [...form.querySelectorAll(
+      `input[name="${name}"]:checked`,
+    )].map((input) => input.value);
+  };
+  const selected = (name) => enhanced(name);
   return {
     deliveryFormat: selected("deliveryFormat")[0] || "",
     eventType: selected("eventType")[0] || "",
@@ -59,5 +69,8 @@ export function restoreFormAnswers(form, answers) {
         ? [answers.eventType]
         : answers[input.name] || [];
     input.checked = values.includes(input.value);
+  });
+  form.querySelectorAll("gcds-checkboxes").forEach((host) => {
+    host.value = [...(answers[host.name] || [])];
   });
 }

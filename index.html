@@ -52,21 +52,34 @@
             <li><label for="size-townhall"><input id="size-townhall" type="radio" name="eventType" value="townhall" required> <span>Large: 101 or more participants</span></label></li>
           </ul>
         </fieldset>
-        <fieldset>
+        <fieldset class="native-checkbox-fallback">
           <legend>Session features (optional)</legend>
           <p>Select all that apply. Leave them unchecked if none apply.</p>
-          <ul class="choice-list">
+          <ul class="choice-list native-checkbox-fallback">
             <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
             <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
             <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
           </ul>
         </fieldset>
+        <gcds-checkboxes
+            class="gcds-checkbox-enhancement"
+            id="session-features-checkboxes"
+            name="sessionFeatures"
+            legend="Session features (optional)"
+            hint="Select all that apply. Leave them unchecked if none apply."
+            options='[
+              {"id":"feature-training","label":"Training, workshop, or presentation","value":"training"},
+              {"id":"feature-formal","label":"Public, formal, technical, legal, or high-profile event","value":"formal"},
+              {"id":"feature-organization-wide","label":"Town hall or organization-wide session, regardless of size","value":"organizationWide"}
+            ]'
+        ></gcds-checkboxes>
       </div>
 
-      <fieldset class="question-group">
+      <div class="question-group">
+        <fieldset class="native-checkbox-fallback">
         <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
         <p>Select all that apply. Leave them unchecked if none apply.</p>
-        <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
+        <label class="select-all-option"><input id="select-all-needs-native" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
         <ul class="choice-list needs-grid" id="needs-options">
           <li><label><input type="checkbox" name="needs" value="risk"> <span><strong>High-risk content:</strong> Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="languages"> <span><strong>Bilingual or spoken-language interpretation:</strong> Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.</span></label></li>
@@ -79,7 +92,30 @@
           <li><label><input type="checkbox" name="needs" value="followup"> <span><strong>Sharing follow-up materials:</strong> Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="cultural"> <span><strong>Indigenous, cultural, or community considerations:</strong> Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.</span></label></li>
         </ul>
-      </fieldset>
+        </fieldset>
+        <div class="gcds-checkbox-enhancement">
+        <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-checkboxes"> <span><strong>Select all considerations below</strong></span></label>
+        <gcds-checkboxes
+          class="gcds-checkbox-enhancement needs-grid"
+          id="needs-checkboxes"
+          name="needs"
+          legend="3.  What else applies? (optional)"
+          hint="Select all that apply. Leave them unchecked if none apply."
+          options='[
+            {"id":"need-risk","label":"High-risk content: Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.","value":"risk"},
+            {"id":"need-languages","label":"Bilingual or spoken-language interpretation: Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.","value":"languages"},
+            {"id":"need-supports","label":"Accessibility supports: Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.","value":"supports"},
+            {"id":"need-presenters","label":"Multiple presenters: More than one presenter or speaker will contribute.","value":"presenters"},
+            {"id":"need-visual","label":"Visual content: Slides, charts, demonstrations, physical displays, or screen sharing will be used.","value":"visual"},
+            {"id":"need-prerecorded","label":"Pre-recorded content: Audio-only recordings, silent videos, or videos with audio will be played.","value":"prerecorded"},
+            {"id":"need-interaction","label":"Interaction: Questions, chat, whiteboards, Q&amp;A (questions and answers), polls, breakout groups, raised hands, or reactions.","value":"interaction"},
+            {"id":"need-recording","label":"Recording the session: The live session will be recorded. Select this even if you do not plan to share the recording.","value":"recording"},
+            {"id":"need-followup","label":"Sharing follow-up materials: Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.","value":"followup"},
+            {"id":"need-cultural","label":"Indigenous, cultural, or community considerations: Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.","value":"cultural"}
+          ]'
+        ></gcds-checkboxes>
+        </div>
+      </div>
 
       <div class="button-group">
         <button type="submit">Show my planning path</button>

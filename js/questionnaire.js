@@ -15,17 +15,32 @@ const form = document.getElementById("planning-form");
 const errors = document.getElementById("questionnaire-errors");
 const status = document.getElementById("questionnaire-status");
 const selectAll = document.getElementById("select-all-needs");
+const nativeSelectAll = document.getElementById("select-all-needs-native");
 let lastSearch = null;
 let changeStatusAnnounced = false;
+let checkboxHostsReady = false;
 
 document.documentElement.classList.remove("no-js");
 document.documentElement.classList.add("js");
 
 function updateSelectAll() {
-  const needs = [...form.querySelectorAll('input[name="needs"]')];
-  const selected = needs.filter((input) => input.checked).length;
-  selectAll.checked = selected === needs.length;
-  selectAll.indeterminate = selected > 0 && selected < needs.length;
+  const needsHost = form.querySelector("#needs-checkboxes");
+  const needs = checkboxHostsReady
+    ? [...needsHost.value]
+    : [...form.querySelectorAll('input[name="needs"]:checked')];
+  const selected = needs.length;
+  const total = 10;
+  selectAll.checked = selected === total;
+  selectAll.indeterminate = selected > 0 && selected < total;
+  nativeSelectAll.checked = selectAll.checked;
+  nativeSelectAll.indeterminate = selectAll.indeterminate;
+}
+
+function syncNativeCheckboxes(host) {
+  const values = Array.isArray(host.value) ? host.value : [];
+  form.querySelectorAll(`input[name="${host.name}"]`).forEach((input) => {
+    input.checked = values.includes(input.value);
+  });
 }
 
 function setGroupError(name, errorId, invalid) {
@@ -39,6 +54,44 @@ function setGroupError(name, errorId, invalid) {
     }
   });
   document.getElementById(errorId).hidden = !invalid;
+}
+
+async function enhanceCheckboxes() {
+  await customElements.whenDefined("gcds-checkboxes");
+  const hosts = [...form.querySelectorAll("gcds-checkboxes")];
+  await Promise.all(
+    hosts.map((host) => host.componentOnReady?.() || Promise.resolve()),
+  );
+  const answers = readFormAnswers(form);
+  hosts.forEach((host) => {
+    host.value = [...(answers[host.name] || [])];
+    syncNativeCheckboxes(host);
+  });
+  const fallback = document.activeElement.closest?.(
+    ".native-checkbox-fallback",
+  );
+  if (fallback) {
+    await new Promise((resolve) => {
+      const finish = () => {
+        requestAnimationFrame(() => {
+          if (document.activeElement.closest?.(".native-checkbox-fallback")) {
+            return;
+          }
+          form.removeEventListener("focusout", finish);
+          resolve();
+        });
+      };
+      form.addEventListener("focusout", finish);
+    });
+    const latestAnswers = readFormAnswers(form);
+    hosts.forEach((host) => {
+      host.value = [...(latestAnswers[host.name] || [])];
+      syncNativeCheckboxes(host);
+    });
+  }
+  checkboxHostsReady = true;
+  document.documentElement.classList.add("gcds-checkboxes-ready");
+  updateSelectAll();
 }
 
 function validate(answers) {
@@ -121,8 +174,24 @@ form.addEventListener("submit", (event) => {
 
 form.addEventListener("change", (event) => {
   if (event.target === selectAll) {
+    const values = selectAll.checked
+      ? [
+          "risk", "languages", "supports", "presenters", "visual",
+          "prerecorded", "interaction", "recording", "followup",
+          "cultural",
+        ]
+      : [];
+    if (checkboxHostsReady) {
+      form.querySelector("#needs-checkboxes").value = [...values];
+      syncNativeCheckboxes(form.querySelector("#needs-checkboxes"));
+    } else {
+      form.querySelectorAll('input[name="needs"]').forEach((input) => {
+        input.checked = selectAll.checked;
+      });
+    }
+  } else if (event.target === nativeSelectAll) {
     form.querySelectorAll('input[name="needs"]').forEach((input) => {
-      input.checked = selectAll.checked;
+      input.checked = nativeSelectAll.checked;
     });
   }
   updateSelectAll();
@@ -151,8 +220,27 @@ form.addEventListener("change", (event) => {
   }
 });
 
+form.addEventListener("gcdsChange", (event) => {
+  const host = event.target.closest?.("gcds-checkboxes");
+  if (host) syncNativeCheckboxes(host);
+  updateSelectAll();
+  if (!changeStatusAnnounced) {
+    setStatus(status, "Answers changed. Select Show my planning path when ready.");
+    changeStatusAnnounced = true;
+  }
+});
+
 form.addEventListener("reset", () => {
   queueMicrotask(() => {
+    if (checkboxHostsReady) {
+      requestAnimationFrame(() => {
+        form.querySelectorAll("gcds-checkboxes").forEach((host) => {
+          host.value = [];
+          syncNativeCheckboxes(host);
+        });
+        updateSelectAll();
+      });
+    }
     showErrors(errors, []);
     setGroupError("deliveryFormat", "delivery-error", false);
     setGroupError("eventType", "size-error", false);
@@ -176,3 +264,4 @@ window.addEventListener("popstate", () => {
 });
 loadFromUrl();
 updateSelectAll();
+enhanceCheckboxes();
