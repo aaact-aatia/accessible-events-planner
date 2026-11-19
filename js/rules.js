@@ -68,6 +68,24 @@ export const CORE_CHECKLISTS = Object.freeze([
 ]);
 
 const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+const PLANNER_PARAMETER_NAMES = Object.freeze([
+  "v",
+  "delivery",
+  "size",
+  "features",
+  "needs",
+]);
+
+export function isTrackingParameter(name) {
+  return name.startsWith("utm_")
+    || name === "gclid"
+    || name === "fbclid";
+}
+
+export function hasPlannerParameters(input) {
+  const url = input instanceof URL ? input : new URL(input, "https://example.invalid");
+  return PLANNER_PARAMETER_NAMES.some((name) => url.searchParams.has(name));
+}
 
 export function computePlanningPath(answers) {
   if (
@@ -205,10 +223,10 @@ export function parseAnswersUrl(input) {
   const url = input instanceof URL ? input : new URL(input, "https://example.invalid");
   const params = url.searchParams;
   const errors = [];
-  const allowedNames = new Set(["v", "delivery", "size", "features", "needs"]);
+  const allowedNames = new Set(PLANNER_PARAMETER_NAMES);
 
   params.forEach((_value, name) => {
-    if (!allowedNames.has(name)) {
+    if (!allowedNames.has(name) && !isTrackingParameter(name)) {
       errors.push(`The ${name} parameter is not supported.`);
     }
   });

@@ -12,6 +12,7 @@ import {
   editUrl,
   guideUrl,
   isActionApplicable,
+  hasPlannerParameters,
   parseAnswersUrl,
   serializeAnswers,
 } from "../js/rules.js";
@@ -324,4 +325,26 @@ test("unsupported, duplicate and malformed URL values are reported", () => {
       search,
     );
   }
+});
+
+test("tracking parameters do not invalidate questionnaire or guide state", () => {
+  const trackingOnly = new URL(
+    "https://example.test/index.html?utm_source=chatgpt.com",
+  );
+  assert.equal(hasPlannerParameters(trackingOnly), false);
+  assert.deepEqual(
+    parseAnswersUrl(
+      new URL(
+        "https://example.test/guide.html?v=1&delivery=virtual&size=small&utm_source=chatgpt.com&gclid=test",
+      ),
+    ).errors,
+    [],
+  );
+  assert.ok(
+    parseAnswersUrl(
+      new URL(
+        "https://example.test/guide.html?v=1&delivery=virtual&size=small&personal=secret",
+      ),
+    ).errors.length,
+  );
 });

@@ -1,6 +1,7 @@
 import {
   editUrl,
   guideUrl,
+  hasPlannerParameters,
   parseAnswersUrl,
 } from "./rules.js";
 import {
@@ -71,6 +72,10 @@ function loadFromUrl() {
       sessionFeatures: [],
       needs: [],
     });
+    updateSelectAll();
+    return;
+  }
+  if (!hasPlannerParameters(location.href)) {
     updateSelectAll();
     return;
   }
