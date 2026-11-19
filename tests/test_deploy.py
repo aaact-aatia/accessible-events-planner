@@ -129,6 +129,12 @@ class DeploymentPreparationTests(unittest.TestCase):
                 "html.parser",
             )
             self.assertIsNotNone(deployed.select_one("dialog.preview-gate-dialog"))
+            self.assertEqual(
+                deployed.select_one("#preview-gate-description").get_text(
+                    " ", strip=True
+                ),
+                "Enter the shared preview password to continue.",
+            )
             self.assertIsNotNone(
                 deployed.select_one('script[src="js/preview-gate.js"]')
             )
