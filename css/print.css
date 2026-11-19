@@ -3,6 +3,8 @@
 body { color: #000; background: #fff; }
 header, main, footer { max-width: none; padding: 0; }
 .site-header,
+.gcds-shell,
+.native-shell-fallback,
 .page-controls,
 .skip-link,
 .return-to-contents {

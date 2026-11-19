@@ -121,7 +121,12 @@ class PrototypeTests(unittest.TestCase):
                 name,
             )
             self.assertIsNotNone(page.select_one("main#main-content"), name)
-            self.assertIsNotNone(page.select_one("nav"), name)
+            self.assertIsNotNone(
+                page.select_one(
+                    'gcds-header[skip-to-href="#main-content"]'
+                ),
+                name,
+            )
             self.assertFalse(page.select(".guide-action input"), name)
 
     def test_personalized_page_has_expected_progressive_enhancement_fallback(self) -> None:
@@ -203,15 +208,18 @@ class PrototypeTests(unittest.TestCase):
             )
             self.assertIsNotNone(
                 page.select_one(
-                    '[data-personalized-guide-link][hidden] '
-                    'a[href="guide.html"]'
+                    'gcds-header.gcds-shell[skip-to-href="#main-content"]'
                 )
             )
+            self.assertIsNotNone(page.select_one("gcds-footer.gcds-shell"))
+            self.assertEqual(len(page.select("gcds-header.gcds-shell")), 1)
+            self.assertEqual(len(page.select("gcds-footer.gcds-shell")), 1)
             self.assertIsNotNone(
                 page.select_one(
-                    'a[href="https://design-system.canada.ca/en/"]'
+                    ".native-shell-fallback"
                 )
             )
+            self.assertIsNone(page.select_one('nav[aria-label="Prototype pages"]'))
         full_guide = BeautifulSoup(
             (ROOT / "full-guide.html").read_text(encoding="utf-8"),
             "html.parser",
@@ -229,6 +237,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertEqual(len(questionnaire_list.select(":scope > li")), 10)
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
+        self.assertIn(".gcds-ready .native-shell-fallback", styles)
         self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(
@@ -243,6 +252,7 @@ class PrototypeTests(unittest.TestCase):
             "  display: block;",
             print_styles,
         )
+        self.assertIn(".gcds-shell", print_styles)
         navigation = (ROOT / "js/navigation.js").read_text(encoding="utf-8")
         self.assertIn('window.addEventListener("beforeprint"', navigation)
         self.assertIn('grid.setAttribute("columns-desktop", "1fr")', navigation)

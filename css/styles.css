@@ -54,6 +54,15 @@ gcds-container > main {
   box-sizing: border-box;
   width: 100%;
 }
+.gcds-shell {
+  display: none;
+}
+.gcds-ready .gcds-shell {
+  display: block;
+}
+.gcds-ready .native-shell-fallback {
+  display: none;
+}
 .question-group,
 .error-summary {
   margin-block: 1.5rem;

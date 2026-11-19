@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js gcds-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,22 +8,16 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/print.css" media="print">
   <script type="module" src="https://cdn.design-system.canada.ca/@gcds-core/components@1.7.0/dist/gcds/gcds.esm.js"></script>
+  <script type="module" src="js/shell.js"></script>
   <script type="module" src="js/navigation.js"></script>
   <script type="module" src="js/questionnaire.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
+  <a class="skip-link native-shell-fallback" href="#main-content">Skip to main content</a>
+  <header class="site-header native-shell-fallback">
     <p class="project-name">Accessible meetings and events planning tool</p>
-    <nav aria-label="Prototype pages">
-      <ul>
-        <li><a href="index.html" aria-current="page">Questionnaire</a></li>
-        <li data-personalized-guide-link hidden><a href="guide.html">Personalized guide</a></li>
-        <li><a href="full-guide.html">Complete guide</a></li>
-        <li><a href="https://design-system.canada.ca/en/">GC Design System</a></li>
-      </ul>
-    </nav>
   </header>
+  <gcds-header class="gcds-shell" skip-to-href="#main-content"></gcds-header>
   <gcds-container layout="page">
   <main id="main-content" tabindex="-1">
     <h1>Accessibility planning tool for meetings and events</h1>
@@ -95,8 +89,9 @@
     </form>
   </main>
   </gcds-container>
-  <footer class="site-footer">
+  <footer class="site-footer native-shell-fallback">
     <p>Development prototype. Not ready for publication.</p>
   </footer>
+  <gcds-footer class="gcds-shell" display="compact"></gcds-footer>
 </body>
 </html>

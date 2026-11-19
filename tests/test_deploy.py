@@ -24,6 +24,7 @@ EXPECTED_FILES = {
     "css/styles.css",
     "js/export.js",
     "js/navigation.js",
+    "js/shell.js",
     "js/shared.js",
     "js/content.js",
     "js/full-guide.js",
