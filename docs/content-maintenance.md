@@ -33,7 +33,7 @@ Update the regression tests whenever applicability changes. Add a positive test 
 
 ## Test environment
 
-The prototype has no production JavaScript or Python package dependencies. Python 3.10 or later, Node.js 18 or later and BeautifulSoup 4.13.4 are required only for extraction auditing and automated tests. See [tests/README.md](../tests/README.md) for virtual-environment and installation commands.
+The prototype has no production JavaScript or Python package dependencies. Python 3.10 or later, Node.js 22 or later and BeautifulSoup 4.13.4 are required only for extraction auditing and automated tests. See [tests/README.md](../tests/README.md) for virtual-environment and installation commands.
 
 ## Verification boundaries
 

@@ -9,7 +9,11 @@ import {
   SIZE_CHECKLISTS,
   appliesToPath,
   computePlanningPath,
+  editUrl,
+  guideUrl,
   isActionApplicable,
+  parseAnswersUrl,
+  serializeAnswers,
 } from "../js/rules.js";
 
 const inventory = JSON.parse(
@@ -270,4 +274,54 @@ test("unsupported and missing answers fail visibly", () => {
     }).needs,
     ["visual"],
   );
+});
+
+test("versioned URLs round-trip in canonical order", () => {
+  const answers = {
+    deliveryFormat: "hybrid",
+    eventType: "townhall",
+    sessionFeatures: ["formal", "training"],
+    needs: ["visual", "risk", "recording"],
+  };
+  const params = serializeAnswers(answers);
+  assert.equal(
+    params.toString(),
+    "v=1&delivery=hybrid&size=townhall&features=training%2Cformal&needs=risk%2Cvisual%2Crecording",
+  );
+  const parsed = parseAnswersUrl(new URL(`https://example.test/guide.html?${params}`));
+  assert.deepEqual(parsed.errors, []);
+  assert.deepEqual(parsed.answers, {
+    ...answers,
+    sessionFeatures: ["training", "formal"],
+    needs: ["risk", "visual", "recording"],
+  });
+  assert.equal(
+    guideUrl("https://example.test/planner/index.html", answers).pathname,
+    "/planner/guide.html",
+  );
+  assert.equal(
+    editUrl("https://example.test/planner/guide.html", answers).pathname,
+    "/planner/index.html",
+  );
+});
+
+test("unsupported, duplicate and malformed URL values are reported", () => {
+  const cases = [
+    "?delivery=virtual&size=small",
+    "?v=2&delivery=virtual&size=small",
+    "?v=1&delivery=virtual&delivery=hybrid&size=small",
+    "?v=1&delivery=invalid&size=small",
+    "?v=1&delivery=virtual&size=small&features=training,training",
+    "?v=1&delivery=virtual&size=small&needs=visual,unknown",
+    "?v=1&delivery=virtual&size=small&features=",
+    "?v=1&delivery=virtual&size=small&needs=",
+    "?v=1&delivery=virtual&size=small&personal=secret",
+  ];
+  for (const search of cases) {
+    assert.ok(
+      parseAnswersUrl(new URL(`https://example.test/guide.html${search}`))
+        .errors.length,
+      search,
+    );
+  }
 });

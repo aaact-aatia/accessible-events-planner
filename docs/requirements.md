@@ -26,10 +26,10 @@ Retain existing question groups and values. Explicitly submit or update answers;
 
 ## Open details
 
-- Exact URL parameter schema and versioning.
+- Version 1 URL schema is documented in [url-parameters.md](url-parameters.md). Preserve compatibility if later versions are introduced.
 - Question of how the complete guide should render repeated applicability context without excessive print length.
 - Final page controls, print layout, and design-system integration.
 - Manual Netlify production/Deploy Preview, VoiceOver and print verification.
 - Hosting release and eventual removal of the preview deterrent.
 
-Step 2 preserves the supplied source and applicability rules, and Step 3 refines the complete static guide. The questionnaire, personalized guide, bookmarking and exports are not implemented. Do not publish until content preservation, routing, and accessibility have been tested, including manual assistive-technology and print checks.
+The supplied source and applicability rules are preserved. The prototype includes the questionnaire, complete and personalized guides, versioned bookmarkable URLs, answer editing, printing, and standalone HTML downloads. Do not claim accessibility conformance without the documented manual assistive-technology and print checks.
