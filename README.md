@@ -29,6 +29,8 @@ The prototype now includes the original questionnaire, a personalized guide gene
 
 Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 
+The pages load pinned GC Design System 1.7.0 presentation assets from the official CDN. Essential controls and content retain native HTML and project CSS fallbacks; the complete guide and downloaded HTML do not depend on custom-element JavaScript.
+
 ## Hosting
 
 Prototype hosting uses the existing Netlify site. A deployment-preparation script copies only approved website files into `dist/` and applies a removable shared-password deterrent to those deployed copies. Production and Deploy Previews receive noindex headers.

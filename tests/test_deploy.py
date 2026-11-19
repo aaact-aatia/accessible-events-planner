@@ -23,6 +23,7 @@ EXPECTED_FILES = {
     "css/print.css",
     "css/styles.css",
     "js/export.js",
+    "js/navigation.js",
     "js/shared.js",
     "js/content.js",
     "js/full-guide.js",
@@ -221,6 +222,8 @@ class DeploymentPreparationTests(unittest.TestCase):
         )
         self.assertIn("Content-Security-Policy", config)
         self.assertIn("https://cdn.design-system.canada.ca", config)
+        self.assertIn("https://fonts.googleapis.com", config)
+        self.assertIn("https://fonts.gstatic.com", config)
         self.assertNotIn("'unsafe-inline'", config)
 
 

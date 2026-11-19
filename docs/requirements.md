@@ -14,7 +14,7 @@
 
 ## Implementation approach
 
-Static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide works without JavaScript and is the canonical content source; the personalized route will derive from that source. Preserve source variants, applicability metadata and support provenance even if the complete view deduplicates displayed content. Use the GC Design System for presentation after checking integration details; native semantics and functionality must not depend on its scripts.
+Static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide works without JavaScript and is the canonical content source; the personalized route derives from that source. Preserve source variants, applicability metadata and support provenance even if the complete view deduplicates displayed content. Use pinned GC Design System 1.7.0 assets for presentation where compatible; native semantics and functionality must not depend on its scripts. Container and responsive grid components have native CSS fallbacks and print single-column rules.
 
 Development is organized in feature branches and reviewed pull requests. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow and [AGENTS.md](../AGENTS.md) for repository instructions. Python dependencies are test-only and documented in [tests/README.md](../tests/README.md). Development fixtures, tests and development-only documentation must be excluded from a future public deployment.
 

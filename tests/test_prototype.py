@@ -184,6 +184,60 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn("if (routeKey() === currentRoute)", guide)
         self.assertNotIn("requestedUrl !== location.href", guide)
 
+    def test_gc_design_system_assets_and_desktop_grids_are_progressively_enhanced(self) -> None:
+        expected_component_url = (
+            "https://cdn.design-system.canada.ca/"
+            "@gcds-core/components@1.7.0/dist/gcds/"
+        )
+        for page_name in ("index.html", "guide.html", "full-guide.html"):
+            page = BeautifulSoup(
+                (ROOT / page_name).read_text(encoding="utf-8"),
+                "html.parser",
+            )
+            self.assertIsNotNone(page.select_one("gcds-container[layout=page]"))
+            self.assertIsNotNone(
+                page.select_one(f'link[href^="{expected_component_url}"]')
+            )
+            self.assertIsNotNone(
+                page.select_one(f'script[src^="{expected_component_url}"]')
+            )
+            self.assertIsNotNone(
+                page.select_one(
+                    '[data-personalized-guide-link][hidden] '
+                    'a[href="guide.html"]'
+                )
+            )
+            self.assertIsNotNone(
+                page.select_one(
+                    'a[href="https://design-system.canada.ca/en/"]'
+                )
+            )
+        full_guide = BeautifulSoup(
+            (ROOT / "full-guide.html").read_text(encoding="utf-8"),
+            "html.parser",
+        )
+        grids = full_guide.select(
+            "gcds-grid.action-grid[columns='1fr']"
+            "[columns-desktop='1fr 1fr']"
+        )
+        self.assertEqual(len(grids), 3)
+        self.assertEqual(len(full_guide.select(".action-grid > .guide-action")), 117)
+        questionnaire_list = self.questionnaire.select_one(
+            "ul#needs-options.choice-list.needs-grid"
+        )
+        self.assertIsNotNone(questionnaire_list)
+        self.assertEqual(len(questionnaire_list.select(":scope > li")), 10)
+        styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
+        self.assertIn(".action-grid:not(:defined)", styles)
+        self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
+        self.assertLess(
+            styles.index("@media (forced-colors: active)"),
+            styles.index("  grid-template-columns: repeat(2"),
+            "fallback desktop grid must not be nested in forced colors"
+        )
+        print_styles = (ROOT / "css/print.css").read_text(encoding="utf-8")
+        self.assertIn(".action-grid,\n.needs-grid {\n  display: block;", print_styles)
+
     def test_validation_and_download_focus_states_are_managed(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
         self.assertIn('setGroupError("deliveryFormat", "delivery-error"', questionnaire)
