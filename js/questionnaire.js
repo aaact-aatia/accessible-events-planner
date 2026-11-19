@@ -143,6 +143,7 @@ async function enhanceRadios() {
   radioHostsReady = true;
   setGroupError("deliveryFormat", "delivery-error", false);
   setGroupError("eventType", "size-error", false);
+  refreshActiveErrors();
   document.documentElement.classList.add("gcds-radios-ready");
 }
 
