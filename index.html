@@ -29,10 +29,18 @@
     <p class="no-js-only">The interactive questionnaire needs JavaScript. Use the <a href="full-guide.html">complete guide</a>, which is available without JavaScript.</p>
     <form id="planning-form" class="questionnaire-js-only" aria-describedby="wizard-instructions" novalidate>
       <p id="wizard-instructions">Answer the three questions, then select Show my planning path. Questions 1 and 2 require an answer; additional session features in question 2 and quesion 3 are optional. You can edit your answers and rebuild the checklist at any time.</p>
-      <div id="questionnaire-errors" class="error-summary" tabindex="-1" hidden></div>
+      <div id="questionnaire-errors" class="error-summary native-error-fallback" tabindex="-1" hidden></div>
+      <gcds-error-summary
+        id="questionnaire-gcds-errors"
+        class="gcds-error-enhancement"
+        heading="There is a problem"
+        listen="false"
+        tabindex="-1"
+        hidden
+      ></gcds-error-summary>
 
       <div class="question-group">
-      <fieldset class="native-control-fallback">
+      <fieldset class="native-radio-fallback">
         <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
         <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
         <ul class="choice-list">
@@ -42,7 +50,7 @@
         </ul>
       </fieldset>
       <gcds-radios
-        class="gcds-control-enhancement"
+        class="gcds-radio-enhancement"
         id="delivery-format-radios"
         name="deliveryFormat"
         tabindex="-1"
@@ -60,7 +68,7 @@
 
       <div class="question-group" role="group" aria-labelledby="q2-heading">
         <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
-        <fieldset class="native-control-fallback">
+        <fieldset class="native-radio-fallback">
           <legend>Expected total audience size (required)</legend>
           <p id="size-error" class="field-error" hidden>Choose the expected audience size.</p>
           <ul class="choice-list">
@@ -70,7 +78,7 @@
           </ul>
         </fieldset>
         <gcds-radios
-          class="gcds-control-enhancement"
+          class="gcds-radio-enhancement"
           id="event-type-radios"
           name="eventType"
           tabindex="-1"
@@ -150,12 +158,19 @@
       </div>
 
       <div class="button-group">
-        <button type="submit">Show my planning path</button>
-        <button type="reset" class="secondary">Clear answers</button>
+        <button class="native-control-fallback" type="submit">Show my planning path</button>
+        <button class="native-control-fallback secondary" type="reset">Clear answers</button>
+        <gcds-button class="gcds-control-enhancement" type="submit" form="planning-form" button-id="gcds-submit">Show my planning path</gcds-button>
+        <gcds-button class="gcds-control-enhancement" type="reset" form="planning-form" button-role="secondary" button-id="gcds-reset">Clear answers</gcds-button>
       </div>
       <p id="questionnaire-status" role="status" aria-live="polite"></p>
     </form>
   </main>
+  </gcds-container>
+  <gcds-container layout="page">
+    <gcds-notice notice-role="warning" notice-title="Development prototype" notice-title-tag="h2">
+      Not ready for publication.
+    </gcds-notice>
   </gcds-container>
   <div class="page-meta">
     <gcds-date-modified>2026-11-19</gcds-date-modified>

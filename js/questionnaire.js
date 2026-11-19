@@ -119,13 +119,13 @@ async function enhanceRadios() {
     syncNativeRadio(host);
   });
   const fallback = document.activeElement.closest?.(
-    ".native-control-fallback",
+    ".native-radio-fallback",
   );
   if (fallback) {
     await new Promise((resolve) => {
       const finish = () => {
         requestAnimationFrame(() => {
-          if (document.activeElement.closest?.(".native-control-fallback")) {
+          if (document.activeElement.closest?.(".native-radio-fallback")) {
             return;
           }
           form.removeEventListener("focusout", finish);

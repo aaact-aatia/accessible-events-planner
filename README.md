@@ -31,7 +31,7 @@ The prototype now includes the original questionnaire, a personalized guide gene
 
 Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 
-The pages load pinned GC Design System 1.7.0 presentation assets from the official CDN. Essential controls and content retain native HTML and project CSS fallbacks; the complete guide and downloaded HTML do not depend on custom-element JavaScript.
+The pages load pinned GC Design System 1.7.0 presentation assets from the official CDN. The prototype uses GCDS header, footer, container, grid, radio, checkbox, button, error-summary, notice and date-modified components. Essential controls and content retain native HTML and project CSS fallbacks; each enhanced component family activates only after its GCDS hosts are ready. The complete guide and downloaded HTML do not depend on custom-element JavaScript.
 
 ## Hosting
 

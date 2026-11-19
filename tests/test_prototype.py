@@ -313,8 +313,10 @@ class PrototypeTests(unittest.TestCase):
         self.assertEqual(len(json.loads(gcds_needs["options"])), 10)
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
-        self.assertIn(".gcds-ready .native-shell-fallback", styles)
-        self.assertIn("@media screen {\n  .gcds-ready .gcds-shell", styles)
+        self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
+        self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell", styles)
+        self.assertIn(".gcds-controls-ready .gcds-control-enhancement", styles)
+        self.assertIn(".gcds-errors-ready .gcds-error-enhancement", styles)
         self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(

@@ -53,16 +53,29 @@ ul.needs-grid {
 .gcds-control-enhancement {
   display: none;
 }
+.gcds-radio-enhancement {
+  display: none;
+}
+.gcds-error-enhancement {
+  display: none;
+}
 .gcds-checkboxes-ready .gcds-checkbox-enhancement {
   display: block;
 }
 .gcds-checkboxes-ready .native-checkbox-fallback {
   display: none;
 }
-.gcds-radios-ready .gcds-control-enhancement {
+.gcds-radios-ready .gcds-radio-enhancement {
   display: block;
 }
-.gcds-radios-ready .native-control-fallback {
+.gcds-radios-ready .native-radio-fallback {
+  display: none;
+}
+.gcds-controls-ready .gcds-control-enhancement,
+.gcds-errors-ready .gcds-error-enhancement {
+  display: block;
+}
+.gcds-controls-ready .native-control-fallback {
   display: none;
 }
 gcds-container {
@@ -99,11 +112,11 @@ gcds-container > main {
   display: none;
 }
 @media screen {
-  .gcds-ready .gcds-shell {
+  .gcds-shell-ready .gcds-shell {
     display: block;
   }
 }
-.gcds-ready .native-shell-fallback {
+.gcds-shell-ready .native-shell-fallback {
   display: none;
 }
 .question-group,

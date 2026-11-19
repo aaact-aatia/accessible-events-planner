@@ -22,12 +22,22 @@
   <main id="main-content" tabindex="-1">
     <h1 id="guide-title" tabindex="-1">Personalized planning guide</h1>
     <p class="complete-guide-recovery"><a href="full-guide.html">Use the complete guide</a> if you cannot create a personalized guide.</p>
-    <div id="guide-errors" class="error-summary" tabindex="-1" hidden></div>
+    <div id="guide-errors" class="error-summary native-error-fallback" tabindex="-1" hidden></div>
+    <gcds-error-summary
+      id="guide-gcds-errors"
+      class="gcds-error-enhancement"
+      heading="There is a problem"
+      listen="false"
+      tabindex="-1"
+      hidden
+    ></gcds-error-summary>
     <div id="selection-summary" hidden></div>
     <div class="button-group page-controls" id="guide-controls" hidden>
       <a class="button-link" id="edit-answers" href="index.html">Edit answers</a>
-      <button type="button" id="print-guide">Print guide</button>
-      <button type="button" id="download-guide">Download HTML</button>
+      <button class="native-control-fallback" type="button" id="print-guide-native">Print guide</button>
+      <button class="native-control-fallback" type="button" id="download-guide-native">Download HTML</button>
+      <gcds-button id="print-guide" class="gcds-control-enhancement" button-role="secondary" type="button" button-id="print-guide-control">Print guide</gcds-button>
+      <gcds-button id="download-guide" class="gcds-control-enhancement" button-role="secondary" type="button" button-id="download-guide-control">Download HTML</gcds-button>
     </div>
     <p id="guide-status" role="status" aria-live="polite"></p>
     <nav class="guide-contents" id="contents" aria-labelledby="contents-heading" hidden>
@@ -43,6 +53,11 @@
       <p>The personalized guide needs JavaScript.</p>
     </noscript>
   </main>
+  </gcds-container>
+  <gcds-container layout="page">
+    <gcds-notice notice-role="warning" notice-title="Development prototype" notice-title-tag="h2">
+      Not ready for publication.
+    </gcds-notice>
   </gcds-container>
   <div class="page-meta">
     <gcds-date-modified>2026-11-19</gcds-date-modified>

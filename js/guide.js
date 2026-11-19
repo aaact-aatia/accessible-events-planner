@@ -23,7 +23,9 @@ const output = document.getElementById("personalized-content");
 const status = document.getElementById("guide-status");
 const edit = document.getElementById("edit-answers");
 const printButton = document.getElementById("print-guide");
+const nativePrintButton = document.getElementById("print-guide-native");
 const downloadButton = document.getElementById("download-guide");
+const nativeDownloadButton = document.getElementById("download-guide-native");
 let currentAnswers = null;
 let renderGeneration = 0;
 let currentRoute = null;
@@ -113,7 +115,9 @@ async function render() {
   if (parsed.errors.length) {
     controls.hidden = false;
     printButton.hidden = true;
+    nativePrintButton.hidden = true;
     downloadButton.hidden = true;
+    nativeDownloadButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -156,7 +160,9 @@ async function render() {
     document.title = "Personalized accessible meetings and events planning guide";
     setStatus(status, `Personalized guide created with ${model.applicableSourceActions.size} applicable source actions.`);
     printButton.hidden = false;
+    nativePrintButton.hidden = false;
     downloadButton.hidden = false;
+    nativeDownloadButton.hidden = false;
     focusCurrentFragment();
   } catch (error) {
     if (
@@ -168,7 +174,9 @@ async function render() {
     setStatus(status, "");
     controls.hidden = false;
     printButton.hidden = true;
+    nativePrintButton.hidden = true;
     downloadButton.hidden = true;
+    nativeDownloadButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -190,8 +198,10 @@ async function render() {
   }
 }
 
-printButton.addEventListener("click", () => printGuide());
-downloadButton.addEventListener("click", async () => {
+nativePrintButton.addEventListener("click", () => printGuide());
+printButton.addEventListener("gcdsClick", () => printGuide());
+
+async function downloadCurrentGuide() {
   if (downloadButton.getAttribute("aria-disabled") === "true") return;
   try {
     setStatus(status, "Preparing standalone guide.");
@@ -209,7 +219,10 @@ downloadButton.addEventListener("click", async () => {
   } finally {
     downloadButton.removeAttribute("aria-disabled");
   }
-});
+}
+
+nativeDownloadButton.addEventListener("click", downloadCurrentGuide);
+downloadButton.addEventListener("gcdsClick", downloadCurrentGuide);
 
 window.addEventListener("popstate", () => {
   if (routeKey() === currentRoute) {

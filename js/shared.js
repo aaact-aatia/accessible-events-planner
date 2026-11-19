@@ -4,6 +4,32 @@ export function showErrors(
   prefix = "Review the following:",
   moveFocus = true,
 ) {
+  const gcdsSummary = container.parentElement?.querySelector(
+    `.gcds-error-enhancement`,
+  );
+  if (
+    gcdsSummary
+    && document.documentElement.classList.contains("gcds-errors-ready")
+    && errors.every(({ target }) => target)
+  ) {
+    if (!errors.length) {
+      gcdsSummary.hidden = true;
+      gcdsSummary.errorLinks = {};
+      container.hidden = true;
+      return;
+    }
+    gcdsSummary.errorLinks = Object.fromEntries(
+      errors.map(({ message, target }) => [
+        `#${target}`,
+        message,
+      ]),
+    );
+    gcdsSummary.hidden = false;
+    container.hidden = true;
+    if (moveFocus) gcdsSummary.focus();
+    return;
+  }
+  if (gcdsSummary) gcdsSummary.hidden = true;
   container.replaceChildren();
   if (!errors.length) {
     container.hidden = true;

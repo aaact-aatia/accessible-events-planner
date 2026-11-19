@@ -29,8 +29,10 @@
     </div>
     <p class="no-export"><a href="index.html">Return to the questionnaire</a></p>
     <div class="button-group page-controls" id="complete-guide-controls" hidden>
-      <button type="button" id="print-complete-guide">Print guide</button>
-      <button type="button" id="download-complete-guide">Download HTML</button>
+      <button class="native-control-fallback" type="button" id="print-complete-guide-native">Print guide</button>
+      <button class="native-control-fallback" type="button" id="download-complete-guide-native">Download HTML</button>
+      <gcds-button id="print-complete-guide" class="gcds-control-enhancement" button-role="secondary" type="button" button-id="print-complete-guide-control">Print guide</gcds-button>
+      <gcds-button id="download-complete-guide" class="gcds-control-enhancement" button-role="secondary" type="button" button-id="download-complete-guide-control">Download HTML</gcds-button>
     </div>
     <p id="complete-guide-status" role="status" aria-live="polite"></p>
     <nav class="guide-contents" id="contents" aria-labelledby="contents-heading">
@@ -3852,6 +3854,11 @@
     <p class="return-to-contents"><a href="#contents">Return to contents</a></p>
   </section>
   </main>
+  </gcds-container>
+  <gcds-container layout="page">
+    <gcds-notice notice-role="warning" notice-title="Development prototype" notice-title-tag="h2">
+      Not ready for publication.
+    </gcds-notice>
   </gcds-container>
   <div class="page-meta">
     <gcds-date-modified>2026-11-19</gcds-date-modified>

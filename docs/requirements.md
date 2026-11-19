@@ -14,7 +14,7 @@
 
 ## Implementation approach
 
-Static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide works without JavaScript and is the canonical content source; the personalized route derives from that source. Preserve source variants, applicability metadata and support provenance even if the complete view deduplicates displayed content. Use pinned GC Design System 1.7.0 assets for presentation where compatible; native semantics and functionality must not depend on its scripts. Container and responsive grid components have native CSS fallbacks and print single-column rules.
+Static HTML, CSS and vanilla JavaScript, with no production dependencies or build step. Use relative paths for repository-subpath hosting. The complete guide works without JavaScript and is the canonical content source; the personalized route derives from that source. Preserve source variants, applicability metadata and support provenance even if the complete view deduplicates displayed content. Use pinned GC Design System 1.7.0 assets for presentation where compatible; native semantics and functionality must not depend on its scripts. The prototype uses the header, footer, container, grid, radio, checkbox, button, error summary, notice and date-modified components. Component families switch from native fallbacks only after their own GCDS hosts are ready, including when the CDN fails or hydrates partially. Container and responsive grid components retain native CSS fallbacks and print single-column rules.
 
 Development is organized in feature branches and reviewed pull requests. See [CONTRIBUTING.md](../CONTRIBUTING.md) for the workflow and [AGENTS.md](../AGENTS.md) for repository instructions. Python dependencies are test-only and documented in [tests/README.md](../tests/README.md). Development fixtures, tests and development-only documentation must be excluded from a future public deployment.
 
@@ -28,7 +28,6 @@ Retain existing question groups and values. Explicitly submit or update answers;
 
 - Version 1 URL schema is documented in [url-parameters.md](url-parameters.md). Preserve compatibility if later versions are introduced.
 - Question of how the complete guide should render repeated applicability context without excessive print length.
-- Final page controls, print layout, and design-system integration.
 - Manual Netlify production/Deploy Preview, VoiceOver and print verification.
 - Hosting release and eventual removal of the preview deterrent.
 

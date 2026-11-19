@@ -40,6 +40,13 @@ main > * { max-width: none; }
 .gcds-control-enhancement {
   display: none !important;
 }
+.gcds-error-enhancement,
+gcds-notice {
+  display: none !important;
+}
+.native-error-fallback {
+  display: none !important;
+}
 .native-control-fallback {
   display: block !important;
 }

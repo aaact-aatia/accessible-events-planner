@@ -4,7 +4,9 @@ import { setStatus } from "./shared.js";
 const controls = document.getElementById("complete-guide-controls");
 const status = document.getElementById("complete-guide-status");
 const downloadButton = document.getElementById("download-complete-guide");
+const nativeDownloadButton = document.getElementById("download-complete-guide-native");
 const printButton = document.getElementById("print-complete-guide");
+const nativePrintButton = document.getElementById("print-complete-guide-native");
 
 controls.hidden = false;
 
@@ -27,8 +29,10 @@ function focusFragment() {
   target.focus({ preventScroll: true });
 }
 
-printButton.addEventListener("click", () => printGuide());
-downloadButton.addEventListener("click", async () => {
+nativePrintButton.addEventListener("click", () => printGuide());
+printButton.addEventListener("gcdsClick", () => printGuide());
+
+async function downloadCurrentGuide() {
   if (downloadButton.getAttribute("aria-disabled") === "true") return;
   try {
     setStatus(status, "Preparing standalone guide.");
@@ -45,7 +49,10 @@ downloadButton.addEventListener("click", async () => {
   } finally {
     downloadButton.removeAttribute("aria-disabled");
   }
-});
+}
+
+nativeDownloadButton.addEventListener("click", downloadCurrentGuide);
+downloadButton.addEventListener("gcdsClick", downloadCurrentGuide);
 
 window.addEventListener("hashchange", focusFragment);
 window.addEventListener("load", focusFragment, { once: true });
