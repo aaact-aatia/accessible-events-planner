@@ -6,6 +6,8 @@ A web-based tool for generating personalized, accessible meeting and event plann
 
 **Status:** English-only development prototype. Not ready for publication.
 
+**Prototype version:** v0.9.0
+
 ## Development
 
 The prototype uses native HTML, CSS and vanilla JavaScript. No build step, framework, database or account is required. Serve the repository root through a local static HTTP server (for example, VS Code Live Server or `python3 -m http.server 8000` if Python is installed). Open the local server's index page. Use HTTP rather than opening files directly when testing the future guide fetch logic.

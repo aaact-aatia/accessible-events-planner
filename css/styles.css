@@ -63,6 +63,29 @@ gcds-container > main {
   box-sizing: border-box;
   width: 100%;
 }
+.page-meta {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1rem;
+}
+.page-meta gcds-date-modified:not(:defined) {
+  display: block;
+  font: inherit;
+}
+.page-meta gcds-date-modified:not(:defined)::before {
+  font-weight: 700;
+}
+.page-meta gcds-date-modified:not([type]):not(:defined)::before {
+  content: "Date modified: ";
+}
+.page-meta gcds-date-modified[type="version"]:not(:defined)::before {
+  content: "Version: ";
+}
 .gcds-shell {
   display: none;
 }

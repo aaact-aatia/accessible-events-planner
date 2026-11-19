@@ -239,6 +239,13 @@ class PrototypeTests(unittest.TestCase):
                 )
             )
             self.assertIsNone(page.select_one('nav[aria-label="Prototype pages"]'))
+            page_meta = page.select_one(".page-meta")
+            self.assertIsNotNone(page_meta)
+            values = page_meta.select("gcds-date-modified")
+            self.assertEqual(len(values), 2)
+            self.assertEqual(values[0].get_text(" ", strip=True), "2026-11-19")
+            self.assertEqual(values[1].get("type"), "version")
+            self.assertEqual(values[1].get_text(" ", strip=True), "v0.9.0")
         full_guide = BeautifulSoup(
             (ROOT / "full-guide.html").read_text(encoding="utf-8"),
             "html.parser",
