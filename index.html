@@ -40,7 +40,7 @@
       ></gcds-error-summary>
 
       <div class="question-group">
-      <fieldset class="native-radio-fallback">
+      <fieldset class="native-radio-fallback native-questionnaire-control-fallback">
         <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
         <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
         <ul class="choice-list">
@@ -66,9 +66,11 @@
       ></gcds-radios>
       </div>
 
-      <div class="question-group" role="group" aria-labelledby="q2-heading">
-        <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
-        <fieldset class="native-radio-fallback">
+      <div class="question-group">
+        <h2 class="gcds-fieldset-heading-enhancement wb-inv">2.&nbsp;&nbsp;What are you planning?</h2>
+        <div class="native-fieldset-fallback">
+          <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
+          <fieldset class="native-questionnaire-control-fallback">
           <legend>Expected total audience size (required)</legend>
           <p id="size-error" class="field-error" hidden>Choose the expected audience size.</p>
           <ul class="choice-list">
@@ -76,32 +78,38 @@
             <li><label for="size-large"><input id="size-large" type="radio" name="eventType" value="large" required> <span>Medium: 26–100 participants</span></label></li>
             <li><label for="size-townhall"><input id="size-townhall" type="radio" name="eventType" value="townhall" required> <span>Large: 101 or more participants</span></label></li>
           </ul>
-        </fieldset>
-        <gcds-radios
-          class="gcds-radio-enhancement"
-          id="event-type-radios"
-          name="eventType"
-          tabindex="-1"
-          legend="Expected total audience size"
-          required
-          validate-on="other"
-          error-message="Choose the expected audience size."
-          options='[
-            {"id":"size-small-gcds","label":"Small: 1–25 participants","value":"small"},
-            {"id":"size-large-gcds","label":"Medium: 26–100 participants","value":"large"},
-            {"id":"size-townhall-gcds","label":"Large: 101 or more participants","value":"townhall"}
-          ]'
-        ></gcds-radios>
-        <fieldset class="native-checkbox-fallback">
-          <legend>Session features (optional)</legend>
-          <p>Select all that apply. Leave them unchecked if none apply.</p>
-          <ul class="choice-list native-checkbox-fallback">
-            <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
-            <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
-            <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
-          </ul>
-        </fieldset>
-        <gcds-checkboxes
+          </fieldset>
+          <fieldset class="native-questionnaire-control-fallback">
+            <legend>Session features (optional)</legend>
+            <p>Select all that apply. Leave them unchecked if none apply.</p>
+            <ul class="choice-list">
+              <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
+              <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
+              <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
+            </ul>
+          </fieldset>
+        </div>
+        <gcds-fieldset
+          class="gcds-fieldset-enhancement"
+          legend="2. What are you planning?"
+          legend-size="h2"
+        >
+          <gcds-radios
+            class="gcds-radio-enhancement"
+            id="event-type-radios"
+            name="eventType"
+            tabindex="-1"
+            legend="Expected total audience size"
+            required
+            validate-on="other"
+            error-message="Choose the expected audience size."
+            options='[
+              {"id":"size-small-gcds","label":"Small: 1–25 participants","value":"small"},
+              {"id":"size-large-gcds","label":"Medium: 26–100 participants","value":"large"},
+              {"id":"size-townhall-gcds","label":"Large: 101 or more participants","value":"townhall"}
+            ]'
+          ></gcds-radios>
+          <gcds-checkboxes
             class="gcds-checkbox-enhancement"
             id="session-features-checkboxes"
             name="sessionFeatures"
@@ -112,11 +120,12 @@
               {"id":"feature-formal","label":"Public, formal, technical, legal, or high-profile event","value":"formal"},
               {"id":"feature-organization-wide","label":"Town hall or organization-wide session, regardless of size","value":"organizationWide"}
             ]'
-        ></gcds-checkboxes>
+          ></gcds-checkboxes>
+        </gcds-fieldset>
       </div>
 
       <div class="question-group">
-        <fieldset class="native-checkbox-fallback">
+        <fieldset class="native-fieldset-fallback native-questionnaire-control-fallback">
         <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
         <p>Select all that apply. Leave them unchecked if none apply.</p>
         <label class="select-all-option"><input id="select-all-needs-native" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
@@ -133,28 +142,32 @@
           <li><label><input type="checkbox" name="needs" value="cultural"> <span><strong>Indigenous, cultural, or community considerations:</strong> Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.</span></label></li>
         </ul>
         </fieldset>
-        <div class="gcds-checkbox-enhancement">
-        <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-checkboxes"> <span><strong>Select all considerations below</strong></span></label>
-        <gcds-checkboxes
-          class="gcds-checkbox-enhancement needs-grid"
-          id="needs-checkboxes"
-          name="needs"
-          legend="3.  What else applies? (optional)"
+        <gcds-fieldset
+          class="gcds-fieldset-enhancement"
+          legend="3. What else applies? (optional)"
+          legend-size="h2"
           hint="Select all that apply. Leave them unchecked if none apply."
-          options='[
-            {"id":"need-risk","label":"High-risk content: Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.","value":"risk"},
-            {"id":"need-languages","label":"Bilingual or spoken-language interpretation: Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.","value":"languages"},
-            {"id":"need-supports","label":"Accessibility supports: Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.","value":"supports"},
-            {"id":"need-presenters","label":"Multiple presenters: More than one presenter or speaker will contribute.","value":"presenters"},
-            {"id":"need-visual","label":"Visual content: Slides, charts, demonstrations, physical displays, or screen sharing will be used.","value":"visual"},
-            {"id":"need-prerecorded","label":"Pre-recorded content: Audio-only recordings, silent videos, or videos with audio will be played.","value":"prerecorded"},
-            {"id":"need-interaction","label":"Interaction: Questions, chat, whiteboards, Q&amp;A (questions and answers), polls, breakout groups, raised hands, or reactions.","value":"interaction"},
-            {"id":"need-recording","label":"Recording the session: The live session will be recorded. Select this even if you do not plan to share the recording.","value":"recording"},
-            {"id":"need-followup","label":"Sharing follow-up materials: Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.","value":"followup"},
-            {"id":"need-cultural","label":"Indigenous, cultural, or community considerations: Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.","value":"cultural"}
-          ]'
-        ></gcds-checkboxes>
-        </div>
+        >
+          <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-checkboxes"> <span><strong>Select all considerations below</strong></span></label>
+          <gcds-checkboxes
+            class="gcds-checkbox-enhancement needs-grid"
+            id="needs-checkboxes"
+            name="needs"
+            legend="Additional considerations"
+            options='[
+              {"id":"need-risk","label":"High-risk content: Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.","value":"risk"},
+              {"id":"need-languages","label":"Bilingual or spoken-language interpretation: Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.","value":"languages"},
+              {"id":"need-supports","label":"Accessibility supports: Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.","value":"supports"},
+              {"id":"need-presenters","label":"Multiple presenters: More than one presenter or speaker will contribute.","value":"presenters"},
+              {"id":"need-visual","label":"Visual content: Slides, charts, demonstrations, physical displays, or screen sharing will be used.","value":"visual"},
+              {"id":"need-prerecorded","label":"Pre-recorded content: Audio-only recordings, silent videos, or videos with audio will be played.","value":"prerecorded"},
+              {"id":"need-interaction","label":"Interaction: Questions, chat, whiteboards, Q&amp;A (questions and answers), polls, breakout groups, raised hands, or reactions.","value":"interaction"},
+              {"id":"need-recording","label":"Recording the session: The live session will be recorded. Select this even if you do not plan to share the recording.","value":"recording"},
+              {"id":"need-followup","label":"Sharing follow-up materials: Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.","value":"followup"},
+              {"id":"need-cultural","label":"Indigenous, cultural, or community considerations: Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.","value":"cultural"}
+            ]'
+          ></gcds-checkboxes>
+        </gcds-fieldset>
       </div>
 
       <div class="button-group">

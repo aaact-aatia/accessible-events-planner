@@ -20,13 +20,14 @@ let lastSearch = null;
 let changeStatusAnnounced = false;
 let checkboxHostsReady = false;
 let radioHostsReady = false;
+let fieldsetHostsReady = false;
 
 document.documentElement.classList.remove("no-js");
 document.documentElement.classList.add("js");
 
 function updateSelectAll() {
   const needsHost = form.querySelector("#needs-checkboxes");
-  const needs = checkboxHostsReady
+  const needs = checkboxHostsReady && fieldsetHostsReady
     ? [...needsHost.value]
     : [...form.querySelectorAll('input[name="needs"]:checked')];
   const selected = needs.length;
@@ -81,13 +82,15 @@ async function enhanceCheckboxes() {
     syncNativeCheckboxes(host);
   });
   const fallback = document.activeElement.closest?.(
-    ".native-checkbox-fallback",
+    ".native-questionnaire-control-fallback",
   );
   if (fallback) {
     await new Promise((resolve) => {
       const finish = () => {
         requestAnimationFrame(() => {
-          if (document.activeElement.closest?.(".native-checkbox-fallback")) {
+          if (document.activeElement.closest?.(
+            ".native-questionnaire-control-fallback",
+          )) {
             return;
           }
           form.removeEventListener("focusout", finish);
@@ -119,13 +122,15 @@ async function enhanceRadios() {
     syncNativeRadio(host);
   });
   const fallback = document.activeElement.closest?.(
-    ".native-radio-fallback",
+    ".native-questionnaire-control-fallback",
   );
   if (fallback) {
     await new Promise((resolve) => {
       const finish = () => {
         requestAnimationFrame(() => {
-          if (document.activeElement.closest?.(".native-radio-fallback")) {
+          if (document.activeElement.closest?.(
+            ".native-questionnaire-control-fallback",
+          )) {
             return;
           }
           form.removeEventListener("focusout", finish);
@@ -147,6 +152,36 @@ async function enhanceRadios() {
   document.documentElement.classList.add("gcds-radios-ready");
 }
 
+async function enhanceFieldsets() {
+  await customElements.whenDefined("gcds-fieldset");
+  const hosts = [...form.querySelectorAll("gcds-fieldset")];
+  await Promise.all(
+    hosts.map((host) => host.componentOnReady?.() || Promise.resolve()),
+  );
+  if (document.activeElement.closest?.(
+    ".native-questionnaire-control-fallback",
+  )) {
+    await new Promise((resolve) => {
+      const finish = () => {
+        requestAnimationFrame(() => {
+          if (document.activeElement.closest?.(
+            ".native-questionnaire-control-fallback",
+          )) {
+            return;
+          }
+          form.removeEventListener("focusout", finish);
+          resolve();
+        });
+      };
+      form.addEventListener("focusout", finish);
+    });
+  }
+  restoreFormAnswers(form, readFormAnswers(form));
+  fieldsetHostsReady = true;
+  document.documentElement.classList.add("gcds-fieldsets-ready");
+  refreshActiveErrors();
+}
+
 function validate(answers) {
   const problems = [];
   if (!answers.deliveryFormat) {
@@ -160,7 +195,7 @@ function validate(answers) {
   if (!answers.eventType) {
     problems.push({
       message: "Choose the expected audience size.",
-      target: radioHostsReady ? "event-type-radios" : "size-small",
+      target: fieldsetHostsReady ? "event-type-radios" : "size-small",
     });
   }
   return problems;
@@ -355,5 +390,8 @@ window.addEventListener("popstate", () => {
 });
 loadFromUrl();
 updateSelectAll();
-enhanceCheckboxes();
-enhanceRadios();
+Promise.all([enhanceCheckboxes(), enhanceRadios()])
+  .then(enhanceFieldsets)
+  .catch((error) => {
+    console.error("The GC Design System questionnaire could not be loaded.", error);
+  });

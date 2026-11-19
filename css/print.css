@@ -37,6 +37,15 @@ main > * { max-width: none; }
 .gcds-checkbox-enhancement {
   display: none !important;
 }
+.gcds-radio-enhancement {
+  display: none !important;
+}
+.gcds-fieldset-enhancement {
+  display: none !important;
+}
+.gcds-fieldset-heading-enhancement {
+  display: none !important;
+}
 .gcds-control-enhancement {
   display: none !important;
 }
@@ -51,6 +60,12 @@ gcds-notice {
   display: block !important;
 }
 .native-checkbox-fallback {
+  display: block !important;
+}
+.native-radio-fallback {
+  display: block !important;
+}
+.native-fieldset-fallback {
   display: block !important;
 }
 gcds-container,

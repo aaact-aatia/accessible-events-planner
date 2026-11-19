@@ -56,6 +56,12 @@ ul.needs-grid {
 .gcds-radio-enhancement {
   display: none;
 }
+.gcds-fieldset-enhancement {
+  display: none;
+}
+.gcds-fieldset-heading-enhancement {
+  display: none;
+}
 .gcds-error-enhancement {
   display: none;
 }
@@ -69,6 +75,15 @@ ul.needs-grid {
   display: block;
 }
 .gcds-radios-ready .native-radio-fallback {
+  display: none;
+}
+.gcds-fieldsets-ready .gcds-fieldset-enhancement {
+  display: block;
+}
+.gcds-fieldsets-ready .gcds-fieldset-heading-enhancement {
+  display: block;
+}
+.gcds-fieldsets-ready .native-fieldset-fallback {
   display: none;
 }
 .gcds-controls-ready .gcds-control-enhancement,

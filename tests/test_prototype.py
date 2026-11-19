@@ -94,14 +94,19 @@ class PrototypeTests(unittest.TestCase):
     def test_select_all_exposes_native_mixed_state(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
         self.assertIn("selectAll.indeterminate = selected > 0", questionnaire)
+        self.assertIn(
+            "checkboxHostsReady && fieldsetHostsReady",
+            questionnaire,
+        )
         self.assertIn("const nativeSelectAll", questionnaire)
         self.assertIn('host.value = [...(answers[host.name] || [])]', questionnaire)
         self.assertIn("syncNativeCheckboxes(host)", questionnaire)
         self.assertIn(
-            'document.activeElement.closest?.(".native-checkbox-fallback")',
+            'document.activeElement.closest?.(\n    ".native-questionnaire-control-fallback",\n  )',
             questionnaire,
         )
         self.assertIn("refreshActiveErrors();", questionnaire)
+        self.assertIn("restoreFormAnswers(form, readFormAnswers(form));", questionnaire)
         self.assertIn("location.search !== lastSearch", questionnaire)
         self.assertIn("lastSearch = location.search", questionnaire)
         self.assertNotIn('role="alert"', (ROOT / "index.html").read_text())
@@ -312,6 +317,25 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertEqual(len(json.loads(gcds_features["options"])), 3)
         self.assertEqual(len(json.loads(gcds_needs["options"])), 10)
+        fieldsets = self.questionnaire.select("gcds-fieldset")
+        self.assertEqual(len(fieldsets), 2)
+        self.assertEqual(
+            [fieldset["legend-size"] for fieldset in fieldsets],
+            ["h2", "h2"],
+        )
+        self.assertIsNotNone(
+            self.questionnaire.select_one(
+                "h2.gcds-fieldset-heading-enhancement.wb-inv"
+            )
+        )
+        self.assertIsNotNone(
+            fieldsets[0].select_one(
+                "gcds-checkboxes#session-features-checkboxes"
+            )
+        )
+        self.assertIsNotNone(
+            fieldsets[1].select_one("gcds-checkboxes#needs-checkboxes")
+        )
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
@@ -319,6 +343,14 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn(".gcds-shell-visible .gcds-shell", styles)
         self.assertIn(".gcds-controls-ready .gcds-control-enhancement", styles)
         self.assertIn(".gcds-errors-ready .gcds-error-enhancement", styles)
+        self.assertIn(
+            ".gcds-fieldsets-ready .gcds-fieldset-enhancement",
+            styles,
+        )
+        self.assertIn(
+            ".gcds-fieldsets-ready .native-fieldset-fallback",
+            styles,
+        )
         shell = (ROOT / "js/shell.js").read_text(encoding="utf-8")
         self.assertIn("waitForNativeFocusToLeave", shell)
         self.assertIn(
@@ -344,6 +376,8 @@ class PrototypeTests(unittest.TestCase):
             print_styles,
         )
         self.assertIn(".gcds-shell", print_styles)
+        self.assertIn(".gcds-radio-enhancement", print_styles)
+        self.assertIn(".native-radio-fallback", print_styles)
         navigation = (ROOT / "js/navigation.js").read_text(encoding="utf-8")
         self.assertIn('window.addEventListener("beforeprint"', navigation)
         self.assertIn('grid.setAttribute("columns-desktop", "1fr")', navigation)
@@ -353,6 +387,10 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn('setGroupError("deliveryFormat", "delivery-error"', questionnaire)
         self.assertIn('setGroupError("eventType", "size-error"', questionnaire)
         self.assertIn("if (errors.hidden && gcdsSummary.hidden) return;", questionnaire)
+        self.assertIn(
+            "target: fieldsetHostsReady ? \"event-type-radios\" : \"size-small\"",
+            questionnaire,
+        )
         for script_name in ("js/guide.js", "js/full-guide.js"):
             script = (ROOT / script_name).read_text(encoding="utf-8")
             self.assertIn('aria-disabled", "true"', script)
