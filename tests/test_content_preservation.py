@@ -26,6 +26,22 @@ def canonical_markup(markup: str) -> str:
     return normalized_markup(BeautifulSoup(markup, "html.parser"))
 
 
+def same_window_markup(markup: str) -> str:
+    soup = BeautifulSoup(markup, "html.parser")
+    for link in soup.select('a[target="_blank"]'):
+        del link["target"]
+    for notice in soup.select(".wb-inv"):
+        if "opens in a new tab" in notice.get_text(" ", strip=True).lower():
+            notice.decompose()
+    return normalized_markup(soup)
+
+
+def same_window_text(markup: str) -> str:
+    return BeautifulSoup(same_window_markup(markup), "html.parser").get_text(
+        " ", strip=True
+    )
+
+
 class IdCollector(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
@@ -112,7 +128,8 @@ class ContentPreservationTests(unittest.TestCase):
                     matching = [
                         node
                         for node in matches
-                        if node.get_text(" ", strip=True) == entry["text"]
+                        if node.get_text(" ", strip=True)
+                        == same_window_text(entry["markup"])
                     ]
                     self.assertTrue(
                         matching,
@@ -121,8 +138,8 @@ class ContentPreservationTests(unittest.TestCase):
                     copied = BeautifulSoup(str(matching[0]), "html.parser").find("li")
                     del copied["data-source-actions"]
                     self.assertEqual(
-                        canonical_markup(str(copied)),
-                        canonical_markup(entry["markup"]),
+                        same_window_markup(str(copied)),
+                        same_window_markup(entry["markup"]),
                         f"{source_id}: {entry['text']}",
                     )
 
@@ -147,9 +164,10 @@ class ContentPreservationTests(unittest.TestCase):
     def test_support_markup_and_links_are_preserved(self) -> None:
         source_links = {
             (
-                link.get_text(" ", strip=True),
+                link.get_text(" ", strip=True).removesuffix(
+                    " (opens in a new tab)"
+                ),
                 link.get("href"),
-                link.get("target"),
                 tuple(link.get("rel") or []),
             )
             for link in self.fixture.select(
@@ -160,12 +178,13 @@ class ContentPreservationTests(unittest.TestCase):
             (
                 link.get_text(" ", strip=True),
                 link.get("href"),
-                link.get("target"),
                 tuple(link.get("rel") or []),
             )
             for link in self.guide.select(".guide-action a[href]")
         }
         self.assertEqual(guide_links, source_links)
+        self.assertFalse(self.guide.select('a[target="_blank"]'))
+        self.assertFalse(self.guide.select(".wb-inv"))
 
     def test_complete_guide_has_required_semantic_structure_without_controls(self) -> None:
         self.assertEqual(len(self.guide.select("h1")), 1)
@@ -391,7 +410,7 @@ class ContentPreservationTests(unittest.TestCase):
             for source_id in source_ids:
                 for visible_name, source_name in category_names.items():
                     for entry in records[source_id]["support"][source_name]:
-                        markup = canonical_markup(entry["markup"])
+                        markup = same_window_markup(entry["markup"])
                         if markup not in expected[visible_name]:
                             expected[visible_name].append(markup)
             for section in article.select(".action-support"):
@@ -400,7 +419,7 @@ class ContentPreservationTests(unittest.TestCase):
                 for item in section.select(":scope > ul > li"):
                     copied = BeautifulSoup(str(item), "html.parser").find("li")
                     del copied["data-source-actions"]
-                    rendered.append(canonical_markup(str(copied)))
+                    rendered.append(same_window_markup(str(copied)))
                 self.assertEqual(rendered, expected[heading], article["id"])
 
     def test_screen_styles_include_reflow_and_forced_colors_support(self) -> None:
