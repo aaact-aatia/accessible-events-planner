@@ -135,7 +135,9 @@ class PrototypeTests(unittest.TestCase):
             "html.parser",
         )
         self.assertIsNotNone(
-            page.select_one('noscript a[href="full-guide.html"]')
+            page.select_one(
+                'main > .complete-guide-recovery a[href="full-guide.html"]'
+            )
         )
         self.assertIsNotNone(page.select_one("#guide-errors[tabindex='-1']"))
         self.assertIsNotNone(page.select_one("#guide-status[role=status]"))
@@ -238,6 +240,7 @@ class PrototypeTests(unittest.TestCase):
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".gcds-ready .native-shell-fallback", styles)
+        self.assertIn("@media screen {\n  .gcds-ready .gcds-shell", styles)
         self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(

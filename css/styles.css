@@ -57,8 +57,10 @@ gcds-container > main {
 .gcds-shell {
   display: none;
 }
-.gcds-ready .gcds-shell {
-  display: block;
+@media screen {
+  .gcds-ready .gcds-shell {
+    display: block;
+  }
 }
 .gcds-ready .native-shell-fallback {
   display: none;

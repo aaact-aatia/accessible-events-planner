@@ -5,6 +5,7 @@ header, main, footer { max-width: none; padding: 0; }
 .site-header,
 .gcds-shell,
 .native-shell-fallback,
+.complete-guide-recovery,
 .page-controls,
 .skip-link,
 .return-to-contents {
