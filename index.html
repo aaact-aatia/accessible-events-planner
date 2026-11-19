@@ -31,7 +31,8 @@
       <p id="wizard-instructions">Answer the three questions, then select Show my planning path. Questions 1 and 2 require an answer; additional session features in question 2 and quesion 3 are optional. You can edit your answers and rebuild the checklist at any time.</p>
       <div id="questionnaire-errors" class="error-summary" tabindex="-1" hidden></div>
 
-      <fieldset class="question-group">
+      <div class="question-group">
+      <fieldset class="native-control-fallback">
         <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
         <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
         <ul class="choice-list">
@@ -40,10 +41,26 @@
           <li><label for="delivery-hybrid"><input id="delivery-hybrid" type="radio" name="deliveryFormat" value="hybrid" required> <span>Hybrid (both in-person and remote participants)</span></label></li>
         </ul>
       </fieldset>
+      <gcds-radios
+        class="gcds-control-enhancement"
+        id="delivery-format-radios"
+        name="deliveryFormat"
+        tabindex="-1"
+        legend="1. How will participants attend?"
+        required
+        validate-on="other"
+        error-message="Choose how participants will attend."
+        options='[
+          {"id":"delivery-in-person-gcds","label":"In-person only (everyone attends at the location)","value":"inPerson"},
+          {"id":"delivery-virtual-gcds","label":"Virtual only (everyone attends remotely)","value":"virtual"},
+          {"id":"delivery-hybrid-gcds","label":"Hybrid (both in-person and remote participants)","value":"hybrid"}
+        ]'
+      ></gcds-radios>
+      </div>
 
       <div class="question-group" role="group" aria-labelledby="q2-heading">
         <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
-        <fieldset>
+        <fieldset class="native-control-fallback">
           <legend>Expected total audience size (required)</legend>
           <p id="size-error" class="field-error" hidden>Choose the expected audience size.</p>
           <ul class="choice-list">
@@ -52,6 +69,21 @@
             <li><label for="size-townhall"><input id="size-townhall" type="radio" name="eventType" value="townhall" required> <span>Large: 101 or more participants</span></label></li>
           </ul>
         </fieldset>
+        <gcds-radios
+          class="gcds-control-enhancement"
+          id="event-type-radios"
+          name="eventType"
+          tabindex="-1"
+          legend="Expected total audience size"
+          required
+          validate-on="other"
+          error-message="Choose the expected audience size."
+          options='[
+            {"id":"size-small-gcds","label":"Small: 1–25 participants","value":"small"},
+            {"id":"size-large-gcds","label":"Medium: 26–100 participants","value":"large"},
+            {"id":"size-townhall-gcds","label":"Large: 101 or more participants","value":"townhall"}
+          ]'
+        ></gcds-radios>
         <fieldset class="native-checkbox-fallback">
           <legend>Session features (optional)</legend>
           <p>Select all that apply. Leave them unchecked if none apply.</p>

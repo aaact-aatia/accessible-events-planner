@@ -52,12 +52,23 @@ export function readFormAnswers(form) {
       `input[name="${name}"]:checked`,
     )].map((input) => input.value);
   };
-  const selected = (name) => enhanced(name);
+  const selectedRadio = (name) => {
+    const host = form.querySelector(`gcds-radios[name="${name}"]`);
+    if (
+      document.documentElement.classList.contains("gcds-radios-ready")
+      && host
+    ) {
+      return host.value || "";
+    }
+    return [...form.querySelectorAll(
+      `input[name="${name}"]:checked`,
+    )].map((input) => input.value)[0] || "";
+  };
   return {
-    deliveryFormat: selected("deliveryFormat")[0] || "",
-    eventType: selected("eventType")[0] || "",
-    sessionFeatures: selected("sessionFeatures"),
-    needs: selected("needs"),
+    deliveryFormat: selectedRadio("deliveryFormat"),
+    eventType: selectedRadio("eventType"),
+    sessionFeatures: enhanced("sessionFeatures"),
+    needs: enhanced("needs"),
   };
 }
 
@@ -72,5 +83,8 @@ export function restoreFormAnswers(form, answers) {
   });
   form.querySelectorAll("gcds-checkboxes").forEach((host) => {
     host.value = [...(answers[host.name] || [])];
+  });
+  form.querySelectorAll("gcds-radios").forEach((host) => {
+    host.value = answers[host.name] || "";
   });
 }

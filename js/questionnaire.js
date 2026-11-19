@@ -19,6 +19,7 @@ const nativeSelectAll = document.getElementById("select-all-needs-native");
 let lastSearch = null;
 let changeStatusAnnounced = false;
 let checkboxHostsReady = false;
+let radioHostsReady = false;
 
 document.documentElement.classList.remove("no-js");
 document.documentElement.classList.add("js");
@@ -43,6 +44,12 @@ function syncNativeCheckboxes(host) {
   });
 }
 
+function syncNativeRadio(host) {
+  form.querySelectorAll(`input[name="${host.name}"]`).forEach((input) => {
+    input.checked = input.value === host.value;
+  });
+}
+
 function setGroupError(name, errorId, invalid) {
   form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
     if (invalid) {
@@ -54,6 +61,12 @@ function setGroupError(name, errorId, invalid) {
     }
   });
   document.getElementById(errorId).hidden = !invalid;
+  const radioHost = form.querySelector(`gcds-radios[name="${name}"]`);
+  if (radioHostsReady && radioHost) {
+    radioHost.errorMessage = invalid
+      ? document.getElementById(errorId).textContent
+      : "";
+  }
 }
 
 async function enhanceCheckboxes() {
@@ -94,18 +107,59 @@ async function enhanceCheckboxes() {
   updateSelectAll();
 }
 
+async function enhanceRadios() {
+  await customElements.whenDefined("gcds-radios");
+  const hosts = [...form.querySelectorAll("gcds-radios")];
+  await Promise.all(
+    hosts.map((host) => host.componentOnReady?.() || Promise.resolve()),
+  );
+  const answers = readFormAnswers(form);
+  hosts.forEach((host) => {
+    host.value = answers[host.name] || "";
+    syncNativeRadio(host);
+  });
+  const fallback = document.activeElement.closest?.(
+    ".native-control-fallback",
+  );
+  if (fallback) {
+    await new Promise((resolve) => {
+      const finish = () => {
+        requestAnimationFrame(() => {
+          if (document.activeElement.closest?.(".native-control-fallback")) {
+            return;
+          }
+          form.removeEventListener("focusout", finish);
+          resolve();
+        });
+      };
+      form.addEventListener("focusout", finish);
+    });
+    const latestAnswers = readFormAnswers(form);
+    hosts.forEach((host) => {
+      host.value = latestAnswers[host.name] || "";
+      syncNativeRadio(host);
+    });
+  }
+  radioHostsReady = true;
+  setGroupError("deliveryFormat", "delivery-error", false);
+  setGroupError("eventType", "size-error", false);
+  document.documentElement.classList.add("gcds-radios-ready");
+}
+
 function validate(answers) {
   const problems = [];
   if (!answers.deliveryFormat) {
     problems.push({
       message: "Choose how participants will attend.",
-      target: "delivery-in-person",
+      target: radioHostsReady
+        ? "delivery-format-radios"
+        : "delivery-in-person",
     });
   }
   if (!answers.eventType) {
     problems.push({
       message: "Choose the expected audience size.",
-      target: "size-small",
+      target: radioHostsReady ? "event-type-radios" : "size-small",
     });
   }
   return problems;
@@ -172,6 +226,16 @@ form.addEventListener("submit", (event) => {
   location.assign(next);
 });
 
+errors.addEventListener("click", (event) => {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link || !radioHostsReady) return;
+  const target = document.querySelector(link.hash);
+  if (!target?.matches("gcds-radios")) return;
+  event.preventDefault();
+  history.pushState(null, "", link.hash);
+  target.focus();
+});
+
 form.addEventListener("change", (event) => {
   if (event.target === selectAll) {
     const values = selectAll.checked
@@ -223,6 +287,15 @@ form.addEventListener("change", (event) => {
 form.addEventListener("gcdsChange", (event) => {
   const host = event.target.closest?.("gcds-checkboxes");
   if (host) syncNativeCheckboxes(host);
+  const radioHost = event.target.closest?.("gcds-radios");
+  if (radioHost) {
+    syncNativeRadio(radioHost);
+    setGroupError(
+      radioHost.name,
+      radioHost.name === "deliveryFormat" ? "delivery-error" : "size-error",
+      false,
+    );
+  }
   updateSelectAll();
   if (!changeStatusAnnounced) {
     setStatus(status, "Answers changed. Select Show my planning path when ready.");
@@ -241,6 +314,14 @@ form.addEventListener("reset", () => {
         updateSelectAll();
       });
     }
+    if (radioHostsReady) {
+      requestAnimationFrame(() => {
+        form.querySelectorAll("gcds-radios").forEach((host) => {
+          host.value = "";
+          syncNativeRadio(host);
+        });
+      });
+    }
     showErrors(errors, []);
     setGroupError("deliveryFormat", "delivery-error", false);
     setGroupError("eventType", "size-error", false);
@@ -255,7 +336,11 @@ form.addEventListener("reset", () => {
     }).pathname);
     lastSearch = "";
     window.dispatchEvent(new Event("planner-statechange"));
-    form.querySelector("#delivery-in-person").focus();
+    if (radioHostsReady) {
+      form.querySelector("#delivery-format-radios").focus();
+    } else {
+      form.querySelector("#delivery-in-person").focus();
+    }
   });
 });
 
@@ -265,3 +350,4 @@ window.addEventListener("popstate", () => {
 loadFromUrl();
 updateSelectAll();
 enhanceCheckboxes();
+enhanceRadios();

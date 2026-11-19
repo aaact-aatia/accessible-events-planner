@@ -37,6 +37,12 @@ main > * { max-width: none; }
 .gcds-checkbox-enhancement {
   display: none !important;
 }
+.gcds-control-enhancement {
+  display: none !important;
+}
+.native-control-fallback {
+  display: block !important;
+}
 .native-checkbox-fallback {
   display: block !important;
 }

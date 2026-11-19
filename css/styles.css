@@ -50,10 +50,19 @@ ul.needs-grid {
 .gcds-checkbox-enhancement {
   display: none;
 }
+.gcds-control-enhancement {
+  display: none;
+}
 .gcds-checkboxes-ready .gcds-checkbox-enhancement {
   display: block;
 }
 .gcds-checkboxes-ready .native-checkbox-fallback {
+  display: none;
+}
+.gcds-radios-ready .gcds-control-enhancement {
+  display: block;
+}
+.gcds-radios-ready .native-control-fallback {
   display: none;
 }
 gcds-container {

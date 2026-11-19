@@ -53,6 +53,20 @@ class PrototypeTests(unittest.TestCase):
                 )
             ]
         self.assertEqual(actual, expected)
+        for name, host_id in (
+            ("deliveryFormat", "delivery-format-radios"),
+            ("eventType", "event-type-radios"),
+        ):
+            host = self.questionnaire.select_one(
+                f'gcds-radios#{host_id}[name="{name}"]'
+            )
+            self.assertIsNotNone(host)
+            self.assertEqual(host.get("tabindex"), "-1")
+            options = json.loads(host["options"])
+            self.assertEqual(
+                [(option["value"], option["label"]) for option in options],
+                expected[name],
+            )
 
     def test_questionnaire_preserves_legend_and_instruction_wording(self) -> None:
         expected_legends = [
