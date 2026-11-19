@@ -1,24 +1,96 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Accessibility planning tool for meetings and events — Development prototype</title>
+  <title>Accessibility planning tool for meetings and events</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/print.css" media="print">
   <script type="module" src="js/questionnaire.js"></script>
 </head>
 <body>
-  <main id="main-content">
-    <h1>Accessibility planning tool for meetings and events</h1>
-    <p>Development prototype. The questionnaire has not been implemented yet.</p>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <p class="project-name">Accessible meetings and events planning tool</p>
     <nav aria-label="Prototype pages">
       <ul>
-        <li><a href="index.html">Questionnaire</a></li>
+        <li><a href="index.html" aria-current="page">Questionnaire</a></li>
         <li><a href="guide.html">Personalized guide</a></li>
         <li><a href="full-guide.html">Complete guide</a></li>
       </ul>
     </nav>
+  </header>
+  <main id="main-content" tabindex="-1">
+    <h1>Accessibility planning tool for meetings and events</h1>
+    <p>Use this tool to create an accessibility planning path for your meeting or event.</p>
+    <p>This tool is for organizers, hosts, moderators, presenters, facilitators, and technical support staff.</p>
+    <p><strong>Need detailed guidance?</strong> See the <a href="https://a11y.canada.ca/en/best-practices-for-accessible-virtual-events/" target="_blank" rel="noopener noreferrer">Best practices for accessible meetings and events<span class="wb-inv"> (opens in a new tab)</span></a> guide.</p>
+    <p>You can use the <a href="full-guide.html">complete guide</a> without completing this questionnaire.</p>
+
+    <p class="no-js-only">The interactive questionnaire needs JavaScript. Use the <a href="full-guide.html">complete guide</a>, which is available without JavaScript.</p>
+    <form id="planning-form" class="questionnaire-js-only" aria-describedby="wizard-instructions" novalidate>
+      <p id="wizard-instructions">Answer the three questions, then select Show my planning path. Questions 1 and 2 require an answer; additional session features in question 2 and quesion 3 are optional. You can edit your answers and rebuild the checklist at any time.</p>
+      <div id="questionnaire-errors" class="error-summary" tabindex="-1" hidden></div>
+
+      <fieldset class="question-group">
+        <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
+        <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
+        <ul class="choice-list">
+          <li><label for="delivery-in-person"><input id="delivery-in-person" type="radio" name="deliveryFormat" value="inPerson" required> <span>In-person only (everyone attends at the location)</span></label></li>
+          <li><label for="delivery-virtual"><input id="delivery-virtual" type="radio" name="deliveryFormat" value="virtual" required> <span>Virtual only (everyone attends remotely)</span></label></li>
+          <li><label for="delivery-hybrid"><input id="delivery-hybrid" type="radio" name="deliveryFormat" value="hybrid" required> <span>Hybrid (both in-person and remote participants)</span></label></li>
+        </ul>
+      </fieldset>
+
+      <div class="question-group" role="group" aria-labelledby="q2-heading">
+        <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
+        <fieldset>
+          <legend>Expected total audience size (required)</legend>
+          <p id="size-error" class="field-error" hidden>Choose the expected audience size.</p>
+          <ul class="choice-list">
+            <li><label for="size-small"><input id="size-small" type="radio" name="eventType" value="small" required> <span>Small: 1–25 participants</span></label></li>
+            <li><label for="size-large"><input id="size-large" type="radio" name="eventType" value="large" required> <span>Medium: 26–100 participants</span></label></li>
+            <li><label for="size-townhall"><input id="size-townhall" type="radio" name="eventType" value="townhall" required> <span>Large: 101 or more participants</span></label></li>
+          </ul>
+        </fieldset>
+        <fieldset>
+          <legend>Session features (optional)</legend>
+          <p>Select all that apply. Leave them unchecked if none apply.</p>
+          <ul class="choice-list">
+            <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
+            <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
+            <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
+          </ul>
+        </fieldset>
+      </div>
+
+      <fieldset class="question-group">
+        <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
+        <p>Select all that apply. Leave them unchecked if none apply.</p>
+        <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
+        <ul class="choice-list" id="needs-options">
+          <li><label><input type="checkbox" name="needs" value="risk"> <span><strong>High-risk content:</strong> Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="languages"> <span><strong>Bilingual or spoken-language interpretation:</strong> Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="supports"> <span><strong>Accessibility supports:</strong> Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="presenters"> <span><strong>Multiple presenters:</strong> More than one presenter or speaker will contribute.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="visual"> <span><strong>Visual content:</strong> Slides, charts, demonstrations, physical displays, or screen sharing will be used.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="prerecorded"> <span><strong>Pre-recorded content:</strong> Audio-only recordings, silent videos, or videos with audio will be played.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="interaction"> <span><strong>Interaction:</strong> Questions, chat, whiteboards, Q&amp;A (questions and answers), polls, breakout groups, raised hands, or reactions.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="recording"> <span><strong>Recording the session:</strong> The live session will be recorded. Select this even if you do not plan to share the recording.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="followup"> <span><strong>Sharing follow-up materials:</strong> Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.</span></label></li>
+          <li><label><input type="checkbox" name="needs" value="cultural"> <span><strong>Indigenous, cultural, or community considerations:</strong> Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.</span></label></li>
+        </ul>
+      </fieldset>
+
+      <div class="button-group">
+        <button type="submit">Show my planning path</button>
+        <button type="reset" class="secondary">Clear answers</button>
+      </div>
+      <p id="questionnaire-status" role="status" aria-live="polite"></p>
+    </form>
   </main>
+  <footer class="site-footer">
+    <p>Development prototype. Not ready for publication.</p>
+  </footer>
 </body>
 </html>

@@ -3,8 +3,15 @@
 body { color: #000; background: #fff; }
 header, main, footer { max-width: none; padding: 0; }
 .site-header,
+.page-controls,
 .skip-link,
 .return-to-contents {
+  display: none;
+}
+#questionnaire-status,
+#guide-status,
+#complete-guide-status,
+.error-summary {
   display: none;
 }
 .site-footer {
@@ -13,6 +20,13 @@ header, main, footer { max-width: none; padding: 0; }
   border-block-start: 1px solid #000;
 }
 main > * { max-width: none; }
+button,
+.button-link {
+  border-color: #000;
+  color: #000;
+  background: #fff;
+  box-shadow: none;
+}
 .planning-phase > h2,
 .guide-action > h3,
 .action-support > h4 {

@@ -23,6 +23,9 @@ EXPECTED_FILES = {
     "css/print.css",
     "css/styles.css",
     "js/export.js",
+    "js/shared.js",
+    "js/content.js",
+    "js/full-guide.js",
     "js/guide.js",
     "js/preview-gate-config.js",
     "js/preview-gate.js",
@@ -192,6 +195,7 @@ class DeploymentPreparationTests(unittest.TestCase):
         self.assertNotIn("history.replaceState", script)
         self.assertIn("location.hash", script)
         self.assertNotIn("secure authentication", script)
+        self.assertIn("queueMicrotask", script)
         self.assertIn("box-sizing: border-box", (DIST / "css/preview-gate.css").read_text())
         self.assertIn(
             "This browser could not clear remembered preview access.",
@@ -200,7 +204,8 @@ class DeploymentPreparationTests(unittest.TestCase):
 
     def test_future_exports_do_not_include_preview_gate_assets(self) -> None:
         export_source = (ROOT / "js/export.js").read_text(encoding="utf-8")
-        self.assertNotIn("preview-gate", export_source)
+        self.assertNotIn('src="js/preview-gate', export_source)
+        self.assertNotIn("import", export_source.split("export")[0])
         for name in ("full-guide.html", "guide.html"):
             self.assertNotIn(
                 "preview-gate",

@@ -7,6 +7,7 @@
   <title>Complete accessible meetings and events planning guide</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="module" src="js/full-guide.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -27,6 +28,11 @@
       <p> This tool is for organizers, hosts, moderators, presenters, facilitators, and technical support staff. </p>
       <p>See the <a href="https://a11y.canada.ca/en/best-practices-for-accessible-virtual-events/" rel="noopener noreferrer" target="_blank">Best practices for accessible meetings and events<span class="wb-inv"> (opens in a new tab)</span></a> guide for examples, timelines, budget considerations, and platform or venue guidance that go beyond this checklist tool.</p>
     </div>
+    <div class="button-group page-controls" id="complete-guide-controls" hidden>
+      <button type="button" id="print-complete-guide">Print guide</button>
+      <button type="button" id="download-complete-guide">Download HTML</button>
+    </div>
+    <p id="complete-guide-status" role="status" aria-live="polite"></p>
     <nav class="guide-contents" id="contents" aria-labelledby="contents-heading">
       <h2 id="contents-heading">Contents</h2>
       <ul>

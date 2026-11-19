@@ -1,3 +1,5 @@
+export const URL_VERSION = "1";
+
 export const DELIVERY_LABELS = Object.freeze({
   inPerson: "In-person only",
   virtual: "Virtual only",
@@ -66,6 +68,24 @@ export const CORE_CHECKLISTS = Object.freeze([
 ]);
 
 const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+const PLANNER_PARAMETER_NAMES = Object.freeze([
+  "v",
+  "delivery",
+  "size",
+  "features",
+  "needs",
+]);
+
+export function isTrackingParameter(name) {
+  return name.startsWith("utm_")
+    || name === "gclid"
+    || name === "fbclid";
+}
+
+export function hasPlannerParameters(input) {
+  const url = input instanceof URL ? input : new URL(input, "https://example.invalid");
+  return PLANNER_PARAMETER_NAMES.some((name) => url.searchParams.has(name));
+}
 
 export function computePlanningPath(answers) {
   if (
@@ -133,4 +153,113 @@ export function isActionApplicable(action, path) {
       },
       path,
     );
+}
+
+function ordered(values, allowed) {
+  return Object.keys(allowed).filter((value) => values.includes(value));
+}
+
+export function serializeAnswers(answers) {
+  const path = computePlanningPath(answers);
+  const params = new URLSearchParams();
+  params.set("v", URL_VERSION);
+  params.set("delivery", path.deliveryFormat);
+  params.set("size", path.eventType);
+  const features = ordered(path.sessionFeatures, FEATURE_LABELS);
+  const needs = ordered(path.needs, NEED_LABELS);
+  if (features.length) params.set("features", features.join(","));
+  if (needs.length) params.set("needs", needs.join(","));
+  return params;
+}
+
+export function guideUrl(base, answers) {
+  const url = new URL("guide.html", base);
+  url.search = serializeAnswers(answers);
+  return url;
+}
+
+export function editUrl(base, answers) {
+  const url = new URL("index.html", base);
+  url.search = serializeAnswers(answers);
+  return url;
+}
+
+function readUnique(params, name, errors) {
+  const values = params.getAll(name);
+  if (values.length > 1) {
+    errors.push(`The ${name} parameter appears more than once.`);
+    return null;
+  }
+  return values[0] ?? null;
+}
+
+function readList(params, name, allowed, errors) {
+  const raw = readUnique(params, name, errors);
+  if (raw === null) return [];
+  if (raw === "") {
+    errors.push(`The ${name} parameter contains an empty value.`);
+    return [];
+  }
+  if (raw.includes(",,")) {
+    errors.push(`The ${name} parameter contains an empty value.`);
+  }
+  const values = raw.split(",");
+  if (values.some((value) => !value)) {
+    errors.push(`The ${name} parameter contains an empty value.`);
+  }
+  if (values.length !== new Set(values).size) {
+    errors.push(`The ${name} parameter contains a duplicate value.`);
+  }
+  const unknown = values.filter(
+    (value) => value && !own(allowed, value),
+  );
+  if (unknown.length) {
+    errors.push(`The ${name} parameter contains an unsupported value: ${unknown.join(", ")}.`);
+  }
+  return values.filter((value) => own(allowed, value));
+}
+
+export function parseAnswersUrl(input) {
+  const url = input instanceof URL ? input : new URL(input, "https://example.invalid");
+  const params = url.searchParams;
+  const errors = [];
+  const allowedNames = new Set(PLANNER_PARAMETER_NAMES);
+
+  params.forEach((_value, name) => {
+    if (!allowedNames.has(name) && !isTrackingParameter(name)) {
+      errors.push(`The ${name} parameter is not supported.`);
+    }
+  });
+
+  const version = readUnique(params, "v", errors);
+  if (version !== URL_VERSION) {
+    errors.push(version
+      ? `URL version ${version} is not supported.`
+      : `The URL version is missing; version ${URL_VERSION} is required.`);
+  }
+  const deliveryFormat = readUnique(params, "delivery", errors);
+  const eventType = readUnique(params, "size", errors);
+  if (!deliveryFormat || !own(DELIVERY_LABELS, deliveryFormat)) {
+    errors.push("Choose a supported delivery format.");
+  }
+  if (!eventType || !own(SIZE_LABELS, eventType)) {
+    errors.push("Choose a supported audience size.");
+  }
+  const sessionFeatures = readList(
+    params,
+    "features",
+    FEATURE_LABELS,
+    errors,
+  );
+  const needs = readList(params, "needs", NEED_LABELS, errors);
+
+  return {
+    answers: {
+      deliveryFormat,
+      eventType,
+      sessionFeatures: ordered(sessionFeatures, FEATURE_LABELS),
+      needs: ordered(needs, NEED_LABELS),
+    },
+    errors: [...new Set(errors)],
+  };
 }

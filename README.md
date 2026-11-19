@@ -20,11 +20,12 @@ The prototype uses native HTML, CSS and vanilla JavaScript. No build step, frame
 - `docs/requirements.md`: agreed scope and implementation requirements.
 - `docs/content-maintenance.md`: canonical-content maintenance workflow.
 - `docs/source-content-inventory.md`: preservation inventory and review notes.
+- `docs/url-parameters.md`: versioned personalized-guide URL schema.
 - `tests/README.md`: test setup and verification plan.
 - [CONTRIBUTING.md](CONTRIBUTING.md): feature-branch, test, pull-request and review workflow.
 - [AGENTS.md](AGENTS.md): instructions for automated coding assistants and contributors.
 
-The initial scaffold and Step 2 content extraction are complete. Step 3 refines the complete static guide with stable navigation, visible applicability context and readable screen/print presentation. The questionnaire and personalized guide generation remain future development stages.
+The prototype now includes the original questionnaire, a personalized guide generated from the canonical static guide, versioned bookmarkable URLs, editing and browser history, printing, and standalone HTML downloads. The complete guide remains readable without JavaScript.
 
 Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 

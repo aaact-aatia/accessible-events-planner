@@ -31,6 +31,9 @@ const files = [
   ["js/guide.js", "js/guide.js"],
   ["js/rules.js", "js/rules.js"],
   ["js/export.js", "js/export.js"],
+  ["js/shared.js", "js/shared.js"],
+  ["js/content.js", "js/content.js"],
+  ["js/full-guide.js", "js/full-guide.js"],
   ["hosting/preview-gate.css", "css/preview-gate.css"],
   ["hosting/preview-gate.js", "js/preview-gate.js"],
 ];
@@ -116,6 +119,9 @@ const expectedFiles = [
   "js/guide.js",
   "js/rules.js",
   "js/export.js",
+  "js/shared.js",
+  "js/content.js",
+  "js/full-guide.js",
   "js/preview-gate.js",
   "js/preview-gate-config.js",
 ].sort();
