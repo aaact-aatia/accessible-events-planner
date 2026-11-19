@@ -166,6 +166,7 @@ form.addEventListener("reset", () => {
       needs: [],
     }).pathname);
     lastSearch = "";
+    window.dispatchEvent(new Event("planner-statechange"));
     form.querySelector("#delivery-in-person").focus();
   });
 });

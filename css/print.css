@@ -20,6 +20,12 @@ header, main, footer { max-width: none; padding: 0; }
   border-block-start: 1px solid #000;
 }
 main > * { max-width: none; }
+gcds-container,
+.action-grid,
+.needs-grid {
+  display: block;
+  width: 100%;
+}
 button,
 .button-link {
   border-color: #000;

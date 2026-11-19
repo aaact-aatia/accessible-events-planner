@@ -4,8 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Accessibility planning tool for meetings and events</title>
+  <link rel="stylesheet" href="https://cdn.design-system.canada.ca/@gcds-core/components@1.7.0/dist/gcds/gcds.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="module" src="https://cdn.design-system.canada.ca/@gcds-core/components@1.7.0/dist/gcds/gcds.esm.js"></script>
+  <script type="module" src="js/navigation.js"></script>
   <script type="module" src="js/questionnaire.js"></script>
 </head>
 <body>
@@ -15,11 +18,13 @@
     <nav aria-label="Prototype pages">
       <ul>
         <li><a href="index.html" aria-current="page">Questionnaire</a></li>
-        <li><a href="guide.html">Personalized guide</a></li>
+        <li data-personalized-guide-link hidden><a href="guide.html">Personalized guide</a></li>
         <li><a href="full-guide.html">Complete guide</a></li>
+        <li><a href="https://design-system.canada.ca/en/">GC Design System</a></li>
       </ul>
     </nav>
   </header>
+  <gcds-container layout="page">
   <main id="main-content" tabindex="-1">
     <h1>Accessibility planning tool for meetings and events</h1>
     <p>Use this tool to create an accessibility planning path for your meeting or event.</p>
@@ -68,7 +73,7 @@
         <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
         <p>Select all that apply. Leave them unchecked if none apply.</p>
         <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
-        <ul class="choice-list" id="needs-options">
+        <ul class="choice-list needs-grid" id="needs-options">
           <li><label><input type="checkbox" name="needs" value="risk"> <span><strong>High-risk content:</strong> Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="languages"> <span><strong>Bilingual or spoken-language interpretation:</strong> Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="supports"> <span><strong>Accessibility supports:</strong> Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.</span></label></li>
@@ -89,6 +94,7 @@
       <p id="questionnaire-status" role="status" aria-live="polite"></p>
     </form>
   </main>
+  </gcds-container>
   <footer class="site-footer">
     <p>Development prototype. Not ready for publication.</p>
   </footer>

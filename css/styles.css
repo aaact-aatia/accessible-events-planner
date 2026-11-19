@@ -38,6 +38,22 @@ footer {
 main > * {
   max-width: 75ch;
 }
+.action-grid:not(:defined),
+.needs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+.needs-grid {
+  row-gap: 0.75rem;
+}
+gcds-container {
+  display: block;
+}
+gcds-container > main {
+  box-sizing: border-box;
+  width: 100%;
+}
 .question-group,
 .error-summary {
   margin-block: 1.5rem;
@@ -132,6 +148,9 @@ input[aria-invalid="true"] {
 .guide-introduction {
   margin-block-end: 2rem;
 }
+.planning-phase {
+  max-width: none;
+}
 .guide-contents {
   margin-block: 2rem 3rem;
   padding-block: 1rem;
@@ -206,6 +225,7 @@ button:focus-visible,
     background: Canvas;
     border: 2px solid CanvasText;
   }
+
   .guide-action,
   .guide-contents,
   .action-context {
@@ -232,5 +252,19 @@ button:focus-visible,
   input:focus-visible {
     outline-color: Highlight;
     box-shadow: none;
+  }
+}
+
+@media (min-width: 64em) {
+  .action-grid:not(:defined),
+  .needs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .action-grid {
+    align-items: start;
+    column-gap: 2rem;
+  }
+  .action-grid > .guide-action {
+    max-width: 100%;
   }
 }

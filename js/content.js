@@ -42,7 +42,7 @@ export function parseCanonicalGuide(document) {
     phases: PHASES.map((phase) => ({
       phase,
       articles: [...document.querySelectorAll(
-        `#${phase} > .guide-action`,
+        `#${phase} .guide-action`,
       )].map((article) => ({
         id: article.id,
         legacyId: article.querySelector(".legacy-fragment")?.id || null,
@@ -195,7 +195,15 @@ export function renderGuideInto(container, model) {
     const heading = document.createElement("h2");
     heading.textContent = PHASE_LABELS[phase];
     section.append(heading);
-    articles.forEach((article) => section.append(article));
+    const grid = document.createElement("gcds-grid");
+    grid.className = "action-grid";
+    grid.setAttribute("tag", "div");
+    grid.setAttribute("columns", "1fr");
+    grid.setAttribute("columns-desktop", "1fr 1fr");
+    grid.setAttribute("gap", "400");
+    grid.setAttribute("align-items", "start");
+    articles.forEach((article) => grid.append(article));
+    section.append(grid);
     section.setAttribute("tabindex", "-1");
     articles.forEach((article) => article.setAttribute("tabindex", "-1"));
     const contents = document.createElement("p");
