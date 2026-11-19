@@ -34,6 +34,8 @@ Prototype hosting uses the existing Netlify site. A deployment-preparation scrip
 
 The preview gate is not secure authentication and is not part of the canonical guide or future downloaded documents. See [docs/hosting.md](docs/hosting.md) for architecture, Netlify environment-variable setup and verification instructions.
 
+For local hosting preparation, copy `.env.example` to `.env`, replace the example with a local-only password, and run `npm run prepare:local`. The local script uses Node.js 22's native `--env-file` support; no dotenv package is used. Netlify continues to use `npm run prepare:deploy`.
+
 ## Publication
 
 The repository is private. Do not enable GitHub Pages or create another hosting site. Development fixtures, tests and development-only documentation are excluded from `dist/` and must remain excluded from public deployment. Eventual integration into the Digital Accessibility Toolkit must support both official languages. No licence has been selected.

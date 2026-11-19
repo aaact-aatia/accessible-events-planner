@@ -25,6 +25,25 @@ The command recreates `dist/` and copies an explicit allowlist containing only:
 
 Tests, source fixtures, documentation, repository instructions, package/configuration files and GitHub workflows do not enter `dist/`. The gate is injected only into prepared deployment copies. Canonical source pages and future standalone downloads do not inherit the gate.
 
+## Prepare a local preview
+
+Node.js 22 or later is required.
+
+1. Copy `.env.example` to `.env`.
+2. Replace `local-preview-password` with a local-only shared preview password.
+3. Run `npm run prepare:local`.
+4. Serve `dist/` through a local static HTTP server.
+
+The local script is:
+
+```sh
+node --env-file=.env scripts/prepare-deploy.mjs
+```
+
+This uses Node's native environment-file support; the repository does not install `dotenv`. `.env` and `.env.*` files are ignored, except the committed `.env.example`. Environment files are outside the deployment allowlist and cannot be copied into `dist/`.
+
+Netlify continues to use `npm run prepare:deploy`, which reads `AEP_PREVIEW_PASSWORD` from its build environment rather than loading `.env`.
+
 ## Set the shared preview password in Netlify
 
 Do not commit, log or share the password in chat.
@@ -40,7 +59,7 @@ Do not commit, log or share the password in chat.
 7. Save the variable.
 8. Trigger a new production deployment after the hosting pull request is merged, and create or refresh a Deploy Preview to verify preview access.
 
-The variable must be present and non-empty. Deployment preparation fails with a clear error if `AEP_PREVIEW_PASSWORD` is missing, including for a preview build. GitHub Actions uses its own dummy test password internally and never needs the real Netlify password.
+The variable must be present and non-whitespace. Deployment preparation fails with a clear error if `AEP_PREVIEW_PASSWORD` is missing, empty or whitespace-only, including for a preview build. GitHub Actions uses its own dummy test password internally, calls `prepare:deploy` without loading local environment files and never needs the real Netlify password.
 
 After changing the password, redeploy. New pages use the new verifier, and previously unlocked sessions must enter the password again after reload.
 

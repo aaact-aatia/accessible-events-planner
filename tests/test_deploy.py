@@ -85,9 +85,37 @@ class DeploymentPreparationTests(unittest.TestCase):
             "package.json",
             "netlify.toml",
             "requirements.txt",
+            ".env",
+            ".env.example",
         )
         for path in files:
             self.assertFalse(path.startswith(prohibited), path)
+        self.assertFalse(any(Path(path).name.startswith(".env") for path in files))
+
+    def test_local_script_uses_node_env_file_without_dependency_packages(self) -> None:
+        package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            package["scripts"]["prepare:local"],
+            "node --env-file=.env scripts/prepare-deploy.mjs",
+        )
+        self.assertEqual(
+            package["scripts"]["prepare:deploy"],
+            "node scripts/prepare-deploy.mjs",
+        )
+        dependencies = {
+            **package.get("dependencies", {}),
+            **package.get("devDependencies", {}),
+        }
+        self.assertNotIn("dotenv", dependencies)
+
+        ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+        self.assertIn(".env", ignore.splitlines())
+        self.assertIn(".env.*", ignore.splitlines())
+        self.assertIn("!.env.example", ignore.splitlines())
+        self.assertEqual(
+            (ROOT / ".env.example").read_text(encoding="utf-8").strip(),
+            "AEP_PREVIEW_PASSWORD=local-preview-password",
+        )
 
     def test_all_deployed_pages_have_the_gate_and_canonical_sources_do_not(self) -> None:
         for name in HOSTED_HTML:

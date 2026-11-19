@@ -54,13 +54,15 @@ The tests verify:
 - Deployed pages preserve session-storage, inert/ARIA-hidden and URL behavior.
 - Netlify noindex and Content Security Policy configuration covers the current assets and the approved GCDS CDN origin.
 
-For a local deployment preparation check, use a disposable test password:
+For a local deployment preparation check, copy the committed example and use a disposable password in the ignored `.env` file:
 
 ```sh
-AEP_PREVIEW_PASSWORD='local-test-only-not-a-real-password' npm run prepare:deploy
+cp .env.example .env
+# Replace the example value in .env with a local test password.
+npm run prepare:local
 ```
 
-Never use or paste the actual Netlify preview password in terminal history, issues, pull requests, chat or repository files.
+The local command uses Node.js 22's native `--env-file` support. It does not install or use `dotenv`. Tests continue to call `prepare:deploy` with their own dummy value, so they never load `.env`. Never use or paste the actual Netlify preview password in terminal history, issues, pull requests, chat or repository files.
 
 ## Development-session browser validation
 
