@@ -140,6 +140,13 @@ class DeploymentPreparationTests(unittest.TestCase):
                     'button#preview-gate-sign-out[type="button"]'
                 )
             )
+            session = deployed.select_one(".preview-gate-session")
+            self.assertIsNotNone(session.find_parent(id="preview-gate-content"))
+            header = deployed.select_one("gcds-header")
+            self.assertTrue(
+                header.find_next_sibling(class_="preview-gate-session")
+                is not None
+            )
             self.assertIsNotNone(
                 deployed.select_one(
                     'dialog a[href="https://a11y.canada.ca/en/"]'

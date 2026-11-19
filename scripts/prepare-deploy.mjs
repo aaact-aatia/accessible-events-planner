@@ -72,12 +72,20 @@ for (const htmlFile of htmlFiles) {
   const bodyOpenEnd = bodyStart.index + bodyStart[0].length;
   const bodyAttributes = bodyStart[1] || "";
   const bodyContent = original.slice(bodyOpenEnd, bodyEnd);
-  const gatedBody = `<body${bodyAttributes}>
-  <div class="preview-gate-session" hidden>
+  const headerEnd = bodyContent.indexOf("</gcds-header>");
+  if (headerEnd === -1) {
+    throw new Error(`Cannot prepare preview gate for ${htmlFile}: missing GCDS header.`);
+  }
+  const session = `<div class="preview-gate-session" hidden>
     <button type="button" id="preview-gate-sign-out">Sign out of this preview tab</button>
     <p id="preview-gate-storage-message" role="status" hidden></p>
-  </div>
-  <div id="preview-gate-content">${bodyContent}</div>
+  </div>`;
+  const insertionPoint = headerEnd + "</gcds-header>".length;
+  const contentWithSession = `${bodyContent.slice(0, insertionPoint)}
+${session}
+${bodyContent.slice(insertionPoint)}`;
+  const gatedBody = `<body${bodyAttributes}>
+  <div id="preview-gate-content">${contentWithSession}</div>
 ${gateTemplate}
 </body>`;
   const prepared = `${original.slice(0, headEnd)}${gateAssets}
