@@ -229,6 +229,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertEqual(len(questionnaire_list.select(":scope > li")), 10)
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
+        self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(
             styles.index("@media (forced-colors: active)"),
@@ -236,7 +237,15 @@ class PrototypeTests(unittest.TestCase):
             "fallback desktop grid must not be nested in forced colors"
         )
         print_styles = (ROOT / "css/print.css").read_text(encoding="utf-8")
-        self.assertIn(".action-grid,\n.needs-grid {\n  display: block;", print_styles)
+        self.assertIn(".action-grid:not(:defined),", print_styles)
+        self.assertIn(
+            ".action-grid:not(:defined),\n.needs-grid {\n"
+            "  display: block;",
+            print_styles,
+        )
+        navigation = (ROOT / "js/navigation.js").read_text(encoding="utf-8")
+        self.assertIn('window.addEventListener("beforeprint"', navigation)
+        self.assertIn('grid.setAttribute("columns-desktop", "1fr")', navigation)
 
     def test_validation_and_download_focus_states_are_managed(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")

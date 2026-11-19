@@ -255,7 +255,7 @@ button:focus-visible,
   }
 }
 
-@media (min-width: 64em) {
+@media screen and (min-width: 64em) {
   .action-grid:not(:defined),
   .needs-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
