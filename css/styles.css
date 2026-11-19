@@ -112,7 +112,8 @@ gcds-container > main {
   display: none;
 }
 @media screen {
-  .gcds-shell-ready .gcds-shell {
+  .gcds-shell-ready .gcds-shell,
+  .gcds-shell-visible .gcds-shell {
     display: block;
   }
 }

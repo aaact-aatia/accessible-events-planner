@@ -315,12 +315,20 @@ class PrototypeTests(unittest.TestCase):
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
-        self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell", styles)
+        self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell,", styles)
+        self.assertIn(".gcds-shell-visible .gcds-shell", styles)
         self.assertIn(".gcds-controls-ready .gcds-control-enhancement", styles)
         self.assertIn(".gcds-errors-ready .gcds-error-enhancement", styles)
         shell = (ROOT / "js/shell.js").read_text(encoding="utf-8")
-        self.assertIn("waitForNativeControlFocusToLeave", shell)
-        self.assertIn('closest?.(".native-control-fallback")', shell)
+        self.assertIn("waitForNativeFocusToLeave", shell)
+        self.assertIn(
+            'waitForNativeFocusToLeave(".native-shell-fallback")',
+            shell,
+        )
+        self.assertIn(
+            'waitForNativeFocusToLeave(".native-control-fallback")',
+            shell,
+        )
         self.assertIn("@media screen and (min-width: 64em)", styles)
         self.assertIn("grid-template-columns: repeat(2, minmax(0, 1fr))", styles)
         self.assertLess(

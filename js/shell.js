@@ -9,20 +9,39 @@ async function readyComponents(tagName) {
   }));
 }
 
-async function waitForNativeControlFocusToLeave() {
-  if (!document.activeElement.closest?.(".native-control-fallback")) return;
+async function waitForNativeFocusToLeave(selector) {
+  if (!document.activeElement.closest?.(selector)) return;
   await new Promise((resolve) => {
     const finish = () => {
-      requestAnimationFrame(() => {
-        if (document.activeElement.closest?.(".native-control-fallback")) {
+      queueMicrotask(() => {
+        if (document.activeElement.closest?.(selector)) {
           return;
         }
+        document.removeEventListener("focusin", finish);
         document.removeEventListener("focusout", finish);
         resolve();
       });
     };
+    document.addEventListener("focusin", finish);
     document.addEventListener("focusout", finish);
   });
+}
+
+async function preserveShellFocus() {
+  const fallback = document.activeElement.closest?.(".native-shell-fallback");
+  if (!fallback) return;
+  const href = fallback.getAttribute?.("href");
+  const enhanced = href
+    ? document.querySelector("gcds-header")
+      ?.shadowRoot?.querySelector(`a[href="${href}"]`)
+    : null;
+  if (enhanced) {
+    document.documentElement.classList.add("gcds-shell-visible");
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    enhanced.focus();
+    return;
+  }
+  await waitForNativeFocusToLeave(".native-shell-fallback");
 }
 
 async function enhanceGcShell() {
@@ -30,7 +49,9 @@ async function enhanceGcShell() {
     readyComponents("gcds-header"),
     readyComponents("gcds-footer"),
   ]);
+  await preserveShellFocus();
   document.documentElement.classList.add("gcds-shell-ready");
+  document.documentElement.classList.remove("gcds-shell-visible");
   document.documentElement.classList.remove("gcds-pending");
 }
 
@@ -40,7 +61,7 @@ enhanceGcShell().catch((error) => {
 
 readyComponents("gcds-button")
   .then(async () => {
-    await waitForNativeControlFocusToLeave();
+    await waitForNativeFocusToLeave(".native-control-fallback");
     document.documentElement.classList.add("gcds-controls-ready");
   })
   .catch((error) => {
