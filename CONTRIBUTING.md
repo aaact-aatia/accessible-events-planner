@@ -11,7 +11,7 @@ Read [AGENTS.md](AGENTS.md) and the project documentation before significant cha
 
 ## Setup and tests
 
-The production prototype has no package or build dependencies. Test setup requires Python 3.10 or later, Node.js 18 or later and the pinned Python dependency in [tests/requirements.txt](tests/requirements.txt).
+The production prototype has no package or framework dependencies. Test and deployment preparation use Node.js 22 or later and Python 3.10 or later, plus the pinned test-only Python dependency in [tests/requirements.txt](tests/requirements.txt).
 
 ```sh
 python3 -m venv .venv
@@ -22,6 +22,8 @@ npm test
 ```
 
 Run `git diff --check` as well. Add focused regression tests for changed behavior, preserving the 132-action fixture and its applicability metadata.
+
+Hosting preparation is limited to `npm run prepare:deploy`. It requires `AEP_PREVIEW_PASSWORD`; tests provide a dedicated dummy value and must never use the real Netlify password. See [docs/hosting.md](docs/hosting.md).
 
 ## Content and accessibility
 

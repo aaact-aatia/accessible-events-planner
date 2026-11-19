@@ -1,0 +1,16 @@
+  <dialog class="preview-gate-dialog" aria-labelledby="preview-gate-title" aria-describedby="preview-gate-description">
+    <form id="preview-gate-form" novalidate>
+      <h2 id="preview-gate-title">Development preview</h2>
+      <p id="preview-gate-description">Enter the shared preview password to continue. This gate is a casual-access deterrent, not secure authentication.</p>
+      <p id="preview-gate-hint">A password is shared with authorized prototype reviewers. It is not stored in your browser.</p>
+      <div class="preview-gate-field">
+        <label for="preview-gate-password">Shared preview password</label>
+        <input id="preview-gate-password" name="preview-password" type="password" required autofocus autocomplete="current-password" aria-describedby="preview-gate-hint preview-gate-error">
+      </div>
+      <p id="preview-gate-error" class="preview-gate-error" role="alert" hidden></p>
+      <div class="preview-gate-actions">
+        <button type="submit">Enter preview</button>
+        <a href="https://a11y.canada.ca/en/">Leave this preview</a>
+      </div>
+    </form>
+  </dialog>
