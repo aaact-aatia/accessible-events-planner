@@ -213,6 +213,11 @@ class PrototypeTests(unittest.TestCase):
                     'gcds-header.gcds-shell[skip-to-href="#main-content"]'
                 )
             )
+            self.assertIsNotNone(
+                page.select_one(".no-export")
+                if page_name == "full-guide.html"
+                else True
+            )
             self.assertIsNotNone(page.select_one("gcds-footer.gcds-shell"))
             self.assertEqual(len(page.select("gcds-header.gcds-shell")), 1)
             self.assertEqual(len(page.select("gcds-footer.gcds-shell")), 1)
