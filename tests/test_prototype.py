@@ -391,6 +391,8 @@ class PrototypeTests(unittest.TestCase):
             "target: fieldsetHostsReady ? \"event-type-radios\" : \"size-small\"",
             questionnaire,
         )
+        self.assertIn('if (errorSummarySource !== "validation") return;', questionnaire)
+        self.assertIn('errorSummarySource = "url";', questionnaire)
         for script_name in ("js/guide.js", "js/full-guide.js"):
             script = (ROOT / script_name).read_text(encoding="utf-8")
             self.assertIn('aria-disabled", "true"', script)

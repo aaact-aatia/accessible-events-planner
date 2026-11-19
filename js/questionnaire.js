@@ -21,6 +21,7 @@ let changeStatusAnnounced = false;
 let checkboxHostsReady = false;
 let radioHostsReady = false;
 let fieldsetHostsReady = false;
+let errorSummarySource = null;
 
 document.documentElement.classList.remove("no-js");
 document.documentElement.classList.add("js");
@@ -202,6 +203,7 @@ function validate(answers) {
 }
 
 function refreshActiveErrors() {
+  if (errorSummarySource !== "validation") return;
   const gcdsSummary = document.getElementById("questionnaire-gcds-errors");
   if (errors.hidden && gcdsSummary.hidden) return;
   showErrors(
@@ -217,6 +219,7 @@ function loadFromUrl() {
   setStatus(status, "");
   setGroupError("deliveryFormat", "delivery-error", false);
   setGroupError("eventType", "size-error", false);
+  errorSummarySource = null;
   showErrors(errors, [], undefined, false);
   changeStatusAnnounced = false;
   if (!location.search) {
@@ -244,6 +247,7 @@ function loadFromUrl() {
       parsed.errors.map((message) => ({ message })),
       "This shared URL needs review. Valid selections were restored:",
     );
+    errorSummarySource = "url";
   }
   updateSelectAll();
 }
@@ -256,6 +260,7 @@ form.addEventListener("submit", (event) => {
     (input) => input.removeAttribute("aria-invalid"),
   );
   if (problems.length) {
+    errorSummarySource = "validation";
     showErrors(errors, problems, "Complete the required answers:");
     setGroupError(
       "deliveryFormat",
@@ -267,6 +272,7 @@ form.addEventListener("submit", (event) => {
   }
   setGroupError("deliveryFormat", "delivery-error", false);
   setGroupError("eventType", "size-error", false);
+  errorSummarySource = null;
   showErrors(errors, []);
   const next = guideUrl(location.href, answers);
   setStatus(status, "Building your personalized guide.");
@@ -363,9 +369,10 @@ form.addEventListener("reset", () => {
         });
       });
     }
-    showErrors(errors, []);
     setGroupError("deliveryFormat", "delivery-error", false);
     setGroupError("eventType", "size-error", false);
+    errorSummarySource = null;
+    showErrors(errors, []);
     updateSelectAll();
     changeStatusAnnounced = false;
     setStatus(status, "Answers cleared.");
