@@ -144,6 +144,10 @@ class PrototypeTests(unittest.TestCase):
         self.assertIsNotNone(page.select_one("#edit-answers"))
         self.assertIsNotNone(page.select_one("#download-guide"))
         self.assertIsNotNone(page.select_one("#print-guide"))
+        guide_script = (ROOT / "js/guide.js").read_text(encoding="utf-8")
+        self.assertIn("function renderContents(model)", guide_script)
+        self.assertIn("if (!articles.length) return;", guide_script)
+        self.assertIn("contents.hidden = list.children.length === 0;", guide_script)
         self.assertIsNotNone(
             self.questionnaire.select_one(
                 '.no-js-only a[href="full-guide.html"]'

@@ -84,6 +84,26 @@ function focusCurrentFragment() {
   target.focus({ preventScroll: true });
 }
 
+function renderContents(model) {
+  const list = contents.querySelector("ul");
+  const labels = {
+    before: "Before the meeting or event",
+    during: "During the meeting or event",
+    after: "After the meeting or event",
+  };
+  list.replaceChildren();
+  model.phases.forEach(({ phase, articles }) => {
+    if (!articles.length) return;
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = `#${phase}`;
+    link.textContent = labels[phase];
+    item.append(link);
+    list.append(item);
+  });
+  contents.hidden = list.children.length === 0;
+}
+
 async function render() {
   const generation = ++renderGeneration;
   const requestedRoute = routeKey();
@@ -128,10 +148,10 @@ async function render() {
       throw new Error("No applicable actions were found.");
     }
     renderGuideInto(output, model);
+    renderContents(model);
     renderSummary(currentAnswers);
     edit.href = editUrl(location.href, currentAnswers);
     controls.hidden = false;
-    contents.hidden = false;
     showErrors(errors, []);
     document.title = "Personalized accessible meetings and events planning guide";
     setStatus(status, `Personalized guide created with ${model.applicableSourceActions.size} applicable source actions.`);
