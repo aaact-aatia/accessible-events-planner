@@ -148,7 +148,13 @@
           legend-size="h2"
           hint="Select all that apply. Leave them unchecked if none apply."
         >
-          <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-checkboxes"> <span><strong>Select all considerations below</strong></span></label>
+          <gcds-checkboxes
+            id="select-all-needs"
+            name="selectAllNeeds"
+            options='[
+              {"id":"select-all-needs-control","label":"Select all considerations below","value":"all"}
+            ]'
+          ></gcds-checkboxes>
           <gcds-checkboxes
             class="gcds-checkbox-enhancement needs-grid"
             id="needs-checkboxes"

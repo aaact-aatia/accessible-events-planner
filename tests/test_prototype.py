@@ -93,7 +93,14 @@ class PrototypeTests(unittest.TestCase):
 
     def test_select_all_exposes_native_mixed_state(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
-        self.assertIn("selectAll.indeterminate = selected > 0", questionnaire)
+        self.assertIn(
+            "nativeSelectAll.indeterminate = selected > 0",
+            questionnaire,
+        )
+        self.assertIn(
+            'selectAll.value = selected === total ? ["all"] : []',
+            questionnaire,
+        )
         self.assertIn(
             "checkboxHostsReady && fieldsetHostsReady",
             questionnaire,
@@ -304,11 +311,17 @@ class PrototypeTests(unittest.TestCase):
             )
         )
         self.assertEqual(
-            self.questionnaire.select_one("#select-all-needs")[
-                "aria-controls"
-            ],
-            "needs-checkboxes",
+            self.questionnaire.select_one("#select-all-needs")["name"],
+            "selectAllNeeds",
         )
+        select_all_options = json.loads(
+            self.questionnaire.select_one("#select-all-needs")["options"]
+        )
+        self.assertEqual(select_all_options, [{
+            "id": "select-all-needs-control",
+            "label": "Select all considerations below",
+            "value": "all",
+        }])
         self.assertEqual(
             self.questionnaire.select_one("#select-all-needs-native")[
                 "aria-controls"

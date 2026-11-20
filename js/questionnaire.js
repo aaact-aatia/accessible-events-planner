@@ -33,10 +33,9 @@ function updateSelectAll() {
     : [...form.querySelectorAll('input[name="needs"]:checked')];
   const selected = needs.length;
   const total = 10;
-  selectAll.checked = selected === total;
-  selectAll.indeterminate = selected > 0 && selected < total;
-  nativeSelectAll.checked = selectAll.checked;
-  nativeSelectAll.indeterminate = selectAll.indeterminate;
+  selectAll.value = selected === total ? ["all"] : [];
+  nativeSelectAll.checked = selected === total;
+  nativeSelectAll.indeterminate = selected > 0 && selected < total;
 }
 
 function syncNativeCheckboxes(host) {
@@ -290,23 +289,7 @@ errors.addEventListener("click", (event) => {
 });
 
 form.addEventListener("change", (event) => {
-  if (event.target === selectAll) {
-    const values = selectAll.checked
-      ? [
-          "risk", "languages", "supports", "presenters", "visual",
-          "prerecorded", "interaction", "recording", "followup",
-          "cultural",
-        ]
-      : [];
-    if (checkboxHostsReady) {
-      form.querySelector("#needs-checkboxes").value = [...values];
-      syncNativeCheckboxes(form.querySelector("#needs-checkboxes"));
-    } else {
-      form.querySelectorAll('input[name="needs"]').forEach((input) => {
-        input.checked = selectAll.checked;
-      });
-    }
-  } else if (event.target === nativeSelectAll) {
+  if (event.target === nativeSelectAll) {
     form.querySelectorAll('input[name="needs"]').forEach((input) => {
       input.checked = nativeSelectAll.checked;
     });
@@ -332,7 +315,19 @@ form.addEventListener("change", (event) => {
 
 form.addEventListener("gcdsChange", (event) => {
   const host = event.target.closest?.("gcds-checkboxes");
-  if (host) syncNativeCheckboxes(host);
+  if (host === selectAll) {
+    const values = host.value.includes("all")
+      ? [
+          "risk", "languages", "supports", "presenters", "visual",
+          "prerecorded", "interaction", "recording", "followup",
+          "cultural",
+        ]
+      : [];
+    form.querySelector("#needs-checkboxes").value = [...values];
+    syncNativeCheckboxes(form.querySelector("#needs-checkboxes"));
+  } else if (host) {
+    syncNativeCheckboxes(host);
+  }
   const radioHost = event.target.closest?.("gcds-radios");
   if (radioHost) {
     syncNativeRadio(radioHost);
