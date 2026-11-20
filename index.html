@@ -1,39 +1,54 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js gcds-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Accessibility planning tool for meetings and events</title>
+  <link rel="stylesheet" href="https://cdn.design-system.canada.ca/@gcds-core/components@1.7.0/dist/gcds/gcds.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/print.css" media="print">
+  <script type="module" src="https://cdn.design-system.canada.ca/@gcds-core/components@1.7.0/dist/gcds/gcds.esm.js"></script>
+  <script type="module" src="js/shell.js"></script>
+  <script type="module" src="js/navigation.js"></script>
   <script type="module" src="js/questionnaire.js"></script>
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
+<body class="questionnaire-page">
+  <a class="skip-link native-shell-fallback" href="#main-content">Skip to main content</a>
+  <header class="site-header native-shell-fallback">
     <p class="project-name">Accessible meetings and events planning tool</p>
-    <nav aria-label="Prototype pages">
-      <ul>
-        <li><a href="index.html" aria-current="page">Questionnaire</a></li>
-        <li><a href="guide.html">Personalized guide</a></li>
-        <li><a href="full-guide.html">Complete guide</a></li>
-      </ul>
-    </nav>
   </header>
+  <gcds-header class="gcds-shell" skip-to-href="#main-content"></gcds-header>
+  <gcds-container layout="page">
   <main id="main-content" tabindex="-1">
     <h1>Accessibility planning tool for meetings and events</h1>
+    <div class="prototype-notice native-notice-fallback">
+      <h2>Development prototype</h2>
+      <p>Not ready for publication.</p>
+    </div>
+    <gcds-notice class="gcds-notice-enhancement" notice-role="warning" notice-title="Development prototype" notice-title-tag="h2">
+      Not ready for publication.
+    </gcds-notice>
     <p>Use this tool to create an accessibility planning path for your meeting or event.</p>
     <p>This tool is for organizers, hosts, moderators, presenters, facilitators, and technical support staff.</p>
-    <p><strong>Need detailed guidance?</strong> See the <a href="https://a11y.canada.ca/en/best-practices-for-accessible-virtual-events/" target="_blank" rel="noopener noreferrer">Best practices for accessible meetings and events<span class="wb-inv"> (opens in a new tab)</span></a> guide.</p>
+    <p><strong>Need detailed guidance?</strong> See the <a href="https://a11y.canada.ca/en/best-practices-for-accessible-virtual-events/" rel="noopener noreferrer">Best practices for accessible meetings and events</a> guide.</p>
     <p>You can use the <a href="full-guide.html">complete guide</a> without completing this questionnaire.</p>
 
     <p class="no-js-only">The interactive questionnaire needs JavaScript. Use the <a href="full-guide.html">complete guide</a>, which is available without JavaScript.</p>
     <form id="planning-form" class="questionnaire-js-only" aria-describedby="wizard-instructions" novalidate>
       <p id="wizard-instructions">Answer the three questions, then select Show my planning path. Questions 1 and 2 require an answer; additional session features in question 2 and quesion 3 are optional. You can edit your answers and rebuild the checklist at any time.</p>
-      <div id="questionnaire-errors" class="error-summary" tabindex="-1" hidden></div>
+      <div id="questionnaire-errors" class="error-summary native-error-fallback" tabindex="-1" hidden></div>
+      <gcds-error-summary
+        id="questionnaire-gcds-errors"
+        class="gcds-error-enhancement"
+        heading="There is a problem"
+        listen="false"
+        tabindex="-1"
+        hidden
+      ></gcds-error-summary>
 
-      <fieldset class="question-group">
-        <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
+      <div class="question-group">
+      <fieldset class="native-fieldset-fallback native-questionnaire-control-fallback">
+        <legend class="question-title-legend">1.&nbsp;&nbsp;How will participants attend? (required)</legend>
         <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
         <ul class="choice-list">
           <li><label for="delivery-in-person"><input id="delivery-in-person" type="radio" name="deliveryFormat" value="inPerson" required> <span>In-person only (everyone attends at the location)</span></label></li>
@@ -41,10 +56,34 @@
           <li><label for="delivery-hybrid"><input id="delivery-hybrid" type="radio" name="deliveryFormat" value="hybrid" required> <span>Hybrid (both in-person and remote participants)</span></label></li>
         </ul>
       </fieldset>
+      <gcds-fieldset
+        class="gcds-fieldset-enhancement"
+        legend="1. How will participants attend? (required)"
+        legend-size="h6"
+      >
+        <gcds-radios
+          class="gcds-radio-enhancement"
+          id="delivery-format-radios"
+          name="deliveryFormat"
+          tabindex="-1"
+          legend="Attendance format"
+          hide-legend
+          required
+          validate-on="other"
+          error-message="Choose how participants will attend."
+          options='[
+            {"id":"delivery-in-person-gcds","label":"In-person only (everyone attends at the location)","value":"inPerson"},
+            {"id":"delivery-virtual-gcds","label":"Virtual only (everyone attends remotely)","value":"virtual"},
+            {"id":"delivery-hybrid-gcds","label":"Hybrid (both in-person and remote participants)","value":"hybrid"}
+          ]'
+        ></gcds-radios>
+      </gcds-fieldset>
+      </div>
 
-      <div class="question-group" role="group" aria-labelledby="q2-heading">
-        <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
-        <fieldset>
+      <div class="question-group">
+        <div class="native-fieldset-fallback">
+          <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
+          <fieldset class="native-questionnaire-control-fallback">
           <legend>Expected total audience size (required)</legend>
           <p id="size-error" class="field-error" hidden>Choose the expected audience size.</p>
           <ul class="choice-list">
@@ -52,23 +91,58 @@
             <li><label for="size-large"><input id="size-large" type="radio" name="eventType" value="large" required> <span>Medium: 26–100 participants</span></label></li>
             <li><label for="size-townhall"><input id="size-townhall" type="radio" name="eventType" value="townhall" required> <span>Large: 101 or more participants</span></label></li>
           </ul>
-        </fieldset>
-        <fieldset>
-          <legend>Session features (optional)</legend>
-          <p>Select all that apply. Leave them unchecked if none apply.</p>
-          <ul class="choice-list">
-            <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
-            <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
-            <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
-          </ul>
-        </fieldset>
+          </fieldset>
+          <fieldset class="native-questionnaire-control-fallback">
+            <legend>Session features (optional)</legend>
+            <p>Select all that apply. Leave them unchecked if none apply.</p>
+            <ul class="choice-list">
+              <li><label><input type="checkbox" name="sessionFeatures" value="training"> <span>Training, workshop, or presentation</span></label></li>
+              <li><label><input type="checkbox" name="sessionFeatures" value="formal"> <span>Public, formal, technical, legal, or high-profile event</span></label></li>
+              <li><label><input type="checkbox" name="sessionFeatures" value="organizationWide"> <span>Town hall or organization-wide session, regardless of size</span></label></li>
+            </ul>
+          </fieldset>
+        </div>
+        <gcds-fieldset
+          class="gcds-fieldset-enhancement"
+          legend="2. What are you planning?"
+          legend-size="h6"
+        >
+          <gcds-radios
+            class="gcds-radio-enhancement"
+            id="event-type-radios"
+            name="eventType"
+            tabindex="-1"
+            legend="Expected total audience size"
+            required
+            validate-on="other"
+            error-message="Choose the expected audience size."
+            options='[
+              {"id":"size-small-gcds","label":"Small: 1–25 participants","value":"small"},
+              {"id":"size-large-gcds","label":"Medium: 26–100 participants","value":"large"},
+              {"id":"size-townhall-gcds","label":"Large: 101 or more participants","value":"townhall"}
+            ]'
+          ></gcds-radios>
+          <gcds-checkboxes
+            class="gcds-checkbox-enhancement"
+            id="session-features-checkboxes"
+            name="sessionFeatures"
+            legend="Session features (optional)"
+            hint="Select all that apply. Leave them unchecked if none apply."
+            options='[
+              {"id":"feature-training","label":"Training, workshop, or presentation","value":"training"},
+              {"id":"feature-formal","label":"Public, formal, technical, legal, or high-profile event","value":"formal"},
+              {"id":"feature-organization-wide","label":"Town hall or organization-wide session, regardless of size","value":"organizationWide"}
+            ]'
+          ></gcds-checkboxes>
+        </gcds-fieldset>
       </div>
 
-      <fieldset class="question-group">
-        <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
+      <div class="question-group">
+        <fieldset class="native-fieldset-fallback native-questionnaire-control-fallback">
+        <legend class="question-title-legend">3.&nbsp;&nbsp;What else applies? (optional)</legend>
         <p>Select all that apply. Leave them unchecked if none apply.</p>
-        <label class="select-all-option"><input id="select-all-needs" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
-        <ul class="choice-list" id="needs-options">
+        <label class="select-all-option"><input id="select-all-needs-native" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
+        <ul class="choice-list needs-grid" id="needs-options">
           <li><label><input type="checkbox" name="needs" value="risk"> <span><strong>High-risk content:</strong> Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="languages"> <span><strong>Bilingual or spoken-language interpretation:</strong> Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="supports"> <span><strong>Accessibility supports:</strong> Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.</span></label></li>
@@ -80,17 +154,58 @@
           <li><label><input type="checkbox" name="needs" value="followup"> <span><strong>Sharing follow-up materials:</strong> Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.</span></label></li>
           <li><label><input type="checkbox" name="needs" value="cultural"> <span><strong>Indigenous, cultural, or community considerations:</strong> Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.</span></label></li>
         </ul>
-      </fieldset>
+        </fieldset>
+        <gcds-fieldset
+          class="gcds-fieldset-enhancement"
+          legend="3. What else applies? (optional)"
+          legend-size="h6"
+          hint="Select all that apply. Leave them unchecked if none apply."
+        >
+          <gcds-checkboxes
+            id="select-all-needs"
+            name="selectAllNeeds"
+            options='[
+              {"id":"select-all-needs-control","label":"Select all considerations below","value":"all"}
+            ]'
+          ></gcds-checkboxes>
+          <gcds-checkboxes
+            class="gcds-checkbox-enhancement needs-grid"
+            id="needs-checkboxes"
+            name="needs"
+            legend="Additional considerations"
+            options='[
+              {"id":"need-risk","label":"High-risk content: Sensitive topics, public participation, senior leaders, legal or policy issues, media interest, or a high need for accuracy.","value":"risk"},
+              {"id":"need-languages","label":"Bilingual or spoken-language interpretation: Both official languages or interpretation between spoken languages. Select accessibility supports below for sign-language interpretation.","value":"languages"},
+              {"id":"need-supports","label":"Accessibility supports: Captions, CART (Communication Access Realtime Translation), ASL (American Sign Language), LSQ (Langue des signes québécoise), or other accommodations.","value":"supports"},
+              {"id":"need-presenters","label":"Multiple presenters: More than one presenter or speaker will contribute.","value":"presenters"},
+              {"id":"need-visual","label":"Visual content: Slides, charts, demonstrations, physical displays, or screen sharing will be used.","value":"visual"},
+              {"id":"need-prerecorded","label":"Pre-recorded content: Audio-only recordings, silent videos, or videos with audio will be played.","value":"prerecorded"},
+              {"id":"need-interaction","label":"Interaction: Questions, chat, whiteboards, Q&amp;A (questions and answers), polls, breakout groups, raised hands, or reactions.","value":"interaction"},
+              {"id":"need-recording","label":"Recording the session: The live session will be recorded. Select this even if you do not plan to share the recording.","value":"recording"},
+              {"id":"need-followup","label":"Sharing follow-up materials: Notes, summaries, slides, transcripts, or other materials will be shared afterward. Recording is not required.","value":"followup"},
+              {"id":"need-cultural","label":"Indigenous, cultural, or community considerations: Indigenous participants or communities, Elders, Knowledge Keepers, Indigenous languages, community protocols, or community-specific accessibility considerations.","value":"cultural"}
+            ]'
+          ></gcds-checkboxes>
+        </gcds-fieldset>
+      </div>
 
       <div class="button-group">
-        <button type="submit">Show my planning path</button>
-        <button type="reset" class="secondary">Clear answers</button>
+        <button class="native-control-fallback" type="submit">Show my planning path</button>
+        <button class="native-control-fallback secondary" type="reset">Clear answers</button>
+        <gcds-button class="gcds-control-enhancement" type="submit" form="planning-form" button-id="gcds-submit">Show my planning path</gcds-button>
+        <gcds-button class="gcds-control-enhancement" type="reset" form="planning-form" button-role="secondary" button-id="gcds-reset">Clear answers</gcds-button>
       </div>
       <p id="questionnaire-status" role="status" aria-live="polite"></p>
     </form>
   </main>
-  <footer class="site-footer">
-    <p>Development prototype. Not ready for publication.</p>
+  </gcds-container>
+  <div class="page-meta">
+    <gcds-date-modified>2026-11-19</gcds-date-modified>
+    <gcds-date-modified type="version">v0.9.0</gcds-date-modified>
+  </div>
+  <footer class="site-footer native-shell-fallback">
+    <p>Accessible meetings and events planning tool.</p>
   </footer>
+  <gcds-footer class="gcds-shell" display="compact"></gcds-footer>
 </body>
 </html>

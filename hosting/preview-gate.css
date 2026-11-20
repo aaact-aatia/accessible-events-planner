@@ -1,9 +1,12 @@
 .preview-gate-session {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
   max-width: 72rem;
   margin-inline: auto;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #697078;
-  background: #f8f8f8;
 }
 
 .preview-gate-session button,

@@ -1,10 +1,8 @@
-import { downloadGuide, printGuide } from "./export.js";
-import { setStatus } from "./shared.js";
+import { printGuide } from "./export.js";
 
 const controls = document.getElementById("complete-guide-controls");
-const status = document.getElementById("complete-guide-status");
-const downloadButton = document.getElementById("download-complete-guide");
 const printButton = document.getElementById("print-complete-guide");
+const nativePrintButton = document.getElementById("print-complete-guide-native");
 
 controls.hidden = false;
 
@@ -20,32 +18,20 @@ function focusFragment() {
     target = target.closest(".guide-action");
   }
   if (!target) return;
-  if (!target.hasAttribute("tabindex")) {
-    target.setAttribute("tabindex", "-1");
-  }
+  const heading = target.matches("h1, h2, h3, h4, h5, h6")
+    ? target
+    : target.querySelector("h1, h2, h3, h4, h5, h6");
+  if (!heading) return;
+  heading.setAttribute("tabindex", "-1");
   target.scrollIntoView({ block: "start" });
-  target.focus({ preventScroll: true });
+  heading.focus({ preventScroll: true });
+  heading.addEventListener("blur", () => {
+    heading.removeAttribute("tabindex");
+  }, { once: true });
 }
 
-printButton.addEventListener("click", () => printGuide());
-downloadButton.addEventListener("click", async () => {
-  if (downloadButton.getAttribute("aria-disabled") === "true") return;
-  try {
-    setStatus(status, "Preparing standalone guide.");
-    downloadButton.setAttribute("aria-disabled", "true");
-    await downloadGuide(
-      "complete-accessible-events-guide.html",
-      "Complete accessible meetings and events planning guide",
-      document.querySelector("main"),
-    );
-    setStatus(status, "Standalone complete guide downloaded.");
-  } catch (error) {
-    setStatus(status, "The standalone guide could not be prepared.");
-    console.error(error);
-  } finally {
-    downloadButton.removeAttribute("aria-disabled");
-  }
-});
+nativePrintButton.addEventListener("click", () => printGuide());
+printButton.addEventListener("gcdsClick", () => printGuide());
 
 window.addEventListener("hashchange", focusFragment);
 window.addEventListener("load", focusFragment, { once: true });

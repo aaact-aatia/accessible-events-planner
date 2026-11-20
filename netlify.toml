@@ -12,4 +12,4 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://cdn.design-system.canada.ca; style-src 'self' https://cdn.design-system.canada.ca; font-src 'self' https://cdn.design-system.canada.ca; img-src 'self' data: https://cdn.design-system.canada.ca; connect-src 'self' https://cdn.design-system.canada.ca; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://cdn.design-system.canada.ca; style-src 'self' https://cdn.design-system.canada.ca https://fonts.googleapis.com; font-src 'self' https://cdn.design-system.canada.ca https://fonts.gstatic.com; img-src 'self' data: https://cdn.design-system.canada.ca; connect-src 'self' https://cdn.design-system.canada.ca; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

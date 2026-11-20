@@ -11,10 +11,9 @@ import {
   editUrl,
   parseAnswersUrl,
 } from "./rules.js";
-import { downloadGuide, printGuide } from "./export.js";
+import { printGuide } from "./export.js";
 import { setStatus, showErrors } from "./shared.js";
 
-const title = document.getElementById("guide-title");
 const errors = document.getElementById("guide-errors");
 const summary = document.getElementById("selection-summary");
 const controls = document.getElementById("guide-controls");
@@ -22,8 +21,9 @@ const contents = document.getElementById("contents");
 const output = document.getElementById("personalized-content");
 const status = document.getElementById("guide-status");
 const edit = document.getElementById("edit-answers");
+const editGcds = document.getElementById("edit-answers-gcds");
 const printButton = document.getElementById("print-guide");
-const downloadButton = document.getElementById("download-guide");
+const nativePrintButton = document.getElementById("print-guide-native");
 let currentAnswers = null;
 let renderGeneration = 0;
 let currentRoute = null;
@@ -59,29 +59,49 @@ function renderSummary(answers) {
 
 function focusCurrentFragment() {
   if (!errors.hidden) return;
-  if (!location.hash) {
-    title.focus();
-    return;
-  }
+  if (!location.hash) return;
   let target = null;
   try {
     target = document.querySelector(location.hash);
   } catch {
-    title.focus();
     return;
   }
   if (target?.classList.contains("source-fragment")) {
     target = target.closest(".guide-action");
   }
   if (!target) {
-    title.focus();
     return;
   }
-  if (!target.hasAttribute("tabindex")) {
-    target.setAttribute("tabindex", "-1");
-  }
+  const heading = target.matches("h1, h2, h3, h4, h5, h6")
+    ? target
+    : target.querySelector("h1, h2, h3, h4, h5, h6");
+  if (!heading) return;
+  heading.setAttribute("tabindex", "-1");
   target.scrollIntoView({ block: "start" });
-  target.focus({ preventScroll: true });
+  heading.focus({ preventScroll: true });
+  heading.addEventListener("blur", () => {
+    heading.removeAttribute("tabindex");
+  }, { once: true });
+}
+
+function renderContents(model) {
+  const list = contents.querySelector("ul");
+  const labels = {
+    before: "Before the meeting or event",
+    during: "During the meeting or event",
+    after: "After the meeting or event",
+  };
+  list.replaceChildren();
+  model.phases.forEach(({ phase, articles }) => {
+    if (!articles.length) return;
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = `#${phase}`;
+    link.textContent = labels[phase];
+    item.append(link);
+    list.append(item);
+  });
+  contents.hidden = list.children.length === 0;
 }
 
 async function render() {
@@ -93,7 +113,7 @@ async function render() {
   if (parsed.errors.length) {
     controls.hidden = false;
     printButton.hidden = true;
-    downloadButton.hidden = true;
+    nativePrintButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -104,7 +124,7 @@ async function render() {
     );
     const recovery = new URL("index.html", location.href);
     recovery.search = location.search;
-    edit.href = recovery;
+    setEditHref(recovery);
     const fallback = document.createElement("p");
     const link = document.createElement("a");
     link.href = "full-guide.html";
@@ -128,15 +148,15 @@ async function render() {
       throw new Error("No applicable actions were found.");
     }
     renderGuideInto(output, model);
+    renderContents(model);
     renderSummary(currentAnswers);
-    edit.href = editUrl(location.href, currentAnswers);
+    setEditHref(editUrl(location.href, currentAnswers));
     controls.hidden = false;
-    contents.hidden = false;
     showErrors(errors, []);
     document.title = "Personalized accessible meetings and events planning guide";
     setStatus(status, `Personalized guide created with ${model.applicableSourceActions.size} applicable source actions.`);
     printButton.hidden = false;
-    downloadButton.hidden = false;
+    nativePrintButton.hidden = false;
     focusCurrentFragment();
   } catch (error) {
     if (
@@ -148,7 +168,7 @@ async function render() {
     setStatus(status, "");
     controls.hidden = false;
     printButton.hidden = true;
-    downloadButton.hidden = true;
+    nativePrintButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -165,31 +185,19 @@ async function render() {
     output.append(fallback);
     const recovery = new URL("index.html", location.href);
     recovery.search = location.search;
-    edit.href = recovery;
+    setEditHref(recovery);
     console.error(error);
+  }
+
+  function setEditHref(href) {
+    edit.href = href;
+    editGcds.href = href;
+    editGcds.setAttribute("href", href);
   }
 }
 
-printButton.addEventListener("click", () => printGuide());
-downloadButton.addEventListener("click", async () => {
-  if (downloadButton.getAttribute("aria-disabled") === "true") return;
-  try {
-    setStatus(status, "Preparing standalone guide.");
-    downloadButton.setAttribute("aria-disabled", "true");
-    await downloadGuide(
-      "personalized-accessible-events-guide.html",
-      "Personalized accessible meetings and events planning guide",
-      document.querySelector("main"),
-    );
-    setStatus(status, "Standalone personalized guide downloaded.");
-  } catch (error) {
-    setStatus(status, "The standalone guide could not be prepared.");
-    showErrors(errors, [{ message: `The HTML guide could not be downloaded. ${error.message}` }]);
-    console.error(error);
-  } finally {
-    downloadButton.removeAttribute("aria-disabled");
-  }
-});
+nativePrintButton.addEventListener("click", () => printGuide());
+printButton.addEventListener("gcdsClick", () => printGuide());
 
 window.addEventListener("popstate", () => {
   if (routeKey() === currentRoute) {

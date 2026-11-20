@@ -23,6 +23,8 @@ EXPECTED_FILES = {
     "css/print.css",
     "css/styles.css",
     "js/export.js",
+    "js/navigation.js",
+    "js/shell.js",
     "js/shared.js",
     "js/content.js",
     "js/full-guide.js",
@@ -127,6 +129,12 @@ class DeploymentPreparationTests(unittest.TestCase):
                 "html.parser",
             )
             self.assertIsNotNone(deployed.select_one("dialog.preview-gate-dialog"))
+            self.assertEqual(
+                deployed.select_one("#preview-gate-description").get_text(
+                    " ", strip=True
+                ),
+                "Enter the shared preview password to continue.",
+            )
             self.assertIsNotNone(
                 deployed.select_one('script[src="js/preview-gate.js"]')
             )
@@ -137,6 +145,13 @@ class DeploymentPreparationTests(unittest.TestCase):
                 deployed.select_one(
                     'button#preview-gate-sign-out[type="button"]'
                 )
+            )
+            session = deployed.select_one(".preview-gate-session")
+            self.assertIsNotNone(session.find_parent(id="preview-gate-content"))
+            header = deployed.select_one("gcds-header")
+            self.assertTrue(
+                header.find_next_sibling(class_="preview-gate-session")
+                is not None
             )
             self.assertIsNotNone(
                 deployed.select_one(
@@ -197,12 +212,18 @@ class DeploymentPreparationTests(unittest.TestCase):
         self.assertNotIn("secure authentication", script)
         self.assertIn("queueMicrotask", script)
         self.assertIn("box-sizing: border-box", (DIST / "css/preview-gate.css").read_text())
+        gate_styles = (DIST / "css/preview-gate.css").read_text()
+        session_rule = gate_styles.split(".preview-gate-session {", 1)[1].split(
+            "}", 1
+        )[0]
+        self.assertNotIn("border-bottom", session_rule)
+        self.assertNotIn("background:", session_rule)
         self.assertIn(
             "This browser could not clear remembered preview access.",
             script,
         )
 
-    def test_future_exports_do_not_include_preview_gate_assets(self) -> None:
+    def test_print_module_does_not_include_preview_gate_assets(self) -> None:
         export_source = (ROOT / "js/export.js").read_text(encoding="utf-8")
         self.assertNotIn('src="js/preview-gate', export_source)
         self.assertNotIn("import", export_source.split("export")[0])
@@ -221,6 +242,13 @@ class DeploymentPreparationTests(unittest.TestCase):
         )
         self.assertIn("Content-Security-Policy", config)
         self.assertIn("https://cdn.design-system.canada.ca", config)
+        self.assertIn("https://fonts.googleapis.com", config)
+        self.assertIn("https://fonts.gstatic.com", config)
+        self.assertIn(
+            "font-src 'self' https://cdn.design-system.canada.ca "
+            "https://fonts.gstatic.com",
+            config,
+        )
         self.assertNotIn("'unsafe-inline'", config)
 
 

@@ -27,7 +27,6 @@ The source fixture is preserved byte-for-byte. Current automated checks:
 - Inventory page introductions, questionnaire content, checklist introductions and applicability notes outside individual actions.
 - Preserve the original questionnaire controls and wording exactly.
 - Exercise versioned URL round trips, invalid/duplicate parameters, content filtering and browser Back/Forward editing.
-- Verify standalone guide exports have semantic structure, embedded styles, no scripts, no gate assets and no application controls.
 
 The extraction script was a one-time migration and source-audit helper. After migration, [full-guide.html](../full-guide.html) and the inventories are canonical checked-in files; maintain content directly in those files rather than rerunning generation as part of normal work.
 
@@ -41,7 +40,7 @@ An explicit `--overwrite-generated-files` option can repeat the initial migratio
 
 Content authors should follow [the content maintenance guide](../docs/content-maintenance.md).
 
-Automated coverage now includes the questionnaire structure, versioned URLs, canonical routing expectations, deployment preparation and static standalone-export contracts. Development-session browser automation should also cover personalized rendering, editing, history, form errors, downloads, 320-pixel reflow and forced colors. Automated checks and source-code review are not substitutes for manual accessibility testing and do not establish accessibility conformance.
+Automated coverage now includes the questionnaire structure, versioned URLs, canonical routing expectations, deployment preparation and print controls. Development-session browser automation should also cover personalized rendering, editing, history, form errors, 320-pixel reflow and forced colors. Automated checks and source-code review are not substitutes for manual accessibility testing and do not establish accessibility conformance.
 
 ## Complete prototype browser checks
 
@@ -54,11 +53,10 @@ Development-session browser automation for the completed prototype covered:
 - Editing/restoration, Back navigation, malformed URL errors and the parameter-preserving recovery link.
 - Canonical and legacy action fragments resolving to visible, focused actions.
 - Contents and return-to-contents hash navigation.
-- Standalone complete and personalized HTML with embedded CSS, zero scripts, zero gate assets, zero controls and no broken internal links.
 - JavaScript-disabled complete-guide content and the no-JavaScript questionnaire fallback.
 - A 320-pixel-equivalent viewport without horizontal page overflow, forced-colors styles and print-control hiding.
 
-These are automated browser checks performed in the development session, not manual screen-reader testing. Manual VoiceOver, NVDA/JAWS, 400% zoom, Windows High Contrast, real print/PDF and opening downloaded files offline remain outstanding.
+These are automated browser checks performed in the development session, not manual screen-reader testing. Manual VoiceOver, NVDA/JAWS, 400% zoom, Windows High Contrast, and real print/PDF checks remain outstanding.
 
 ## Netlify deployment tests
 

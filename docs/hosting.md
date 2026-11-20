@@ -23,7 +23,7 @@ The command recreates `dist/` and copies an explicit allowlist containing only:
 - Preview-gate CSS and JavaScript
 - Generated preview-gate configuration
 
-Tests, source fixtures, documentation, repository instructions, package/configuration files and GitHub workflows do not enter `dist/`. The gate is injected only into prepared deployment copies. Canonical source pages and future standalone downloads do not inherit the gate.
+Tests, source fixtures, documentation, repository instructions, package/configuration files and GitHub workflows do not enter `dist/`. The gate is injected only into prepared deployment copies. Canonical source pages do not inherit the gate.
 
 ## Prepare a local preview
 
@@ -81,7 +81,7 @@ Native modal behavior contains focus while the dialog is open. The leave link re
 
 ## Headers and approved presentation assets
 
-`netlify.toml` applies noindex headers to every deployed path. It also permits only self-hosted scripts, styles and data, plus the approved Government of Canada Design System CDN host for future presentation integration. If new approved GCDS asset origins are introduced, review and update the CSP explicitly. Do not add broad wildcard origins or `unsafe-inline`.
+`netlify.toml` applies noindex headers to every deployed path. It also permits only self-hosted scripts, styles and data, plus the approved Government of Canada Design System CDN host for component scripts, styles, images and fonts. Google Fonts origins are limited to the official stylesheet and font hosts. If new approved GCDS asset origins are introduced, review and update the CSP explicitly. Do not add broad wildcard origins or `unsafe-inline`.
 
 ## Verification
 

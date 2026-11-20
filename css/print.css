@@ -3,6 +3,10 @@
 body { color: #000; background: #fff; }
 header, main, footer { max-width: none; padding: 0; }
 .site-header,
+.gcds-shell,
+.native-shell-fallback,
+.complete-guide-recovery,
+.website-navigation,
 .page-controls,
 .skip-link,
 .return-to-contents {
@@ -10,7 +14,6 @@ header, main, footer { max-width: none; padding: 0; }
 }
 #questionnaire-status,
 #guide-status,
-#complete-guide-status,
 .error-summary {
   display: none;
 }
@@ -20,6 +23,63 @@ header, main, footer { max-width: none; padding: 0; }
   border-block-start: 1px solid #000;
 }
 main > * { max-width: none; }
+.page-meta {
+  display: block;
+  max-width: none;
+  padding: 0.5rem 0 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.page-meta gcds-date-modified {
+  display: block !important;
+  margin-block: 0.25rem;
+}
+.gcds-checkbox-enhancement {
+  display: none !important;
+}
+.gcds-radio-enhancement {
+  display: none !important;
+}
+.gcds-fieldset-enhancement {
+  display: none !important;
+}
+.gcds-fieldset-heading-enhancement {
+  display: none !important;
+}
+.gcds-control-enhancement {
+  display: none !important;
+}
+.gcds-error-enhancement,
+.gcds-notice-enhancement {
+  display: none !important;
+}
+.native-error-fallback {
+  display: none !important;
+}
+.native-control-fallback {
+  display: block !important;
+}
+.native-notice-fallback {
+  display: block !important;
+}
+.native-checkbox-fallback {
+  display: block !important;
+}
+.native-radio-fallback {
+  display: block !important;
+}
+.native-fieldset-fallback {
+  display: block !important;
+}
+gcds-container,
+.action-grid,
+.action-grid:not(:defined),
+.needs-grid,
+ul.needs-grid {
+  display: block;
+  grid-template-columns: 1fr !important;
+  width: 100%;
+}
 button,
 .button-link {
   border-color: #000;

@@ -38,23 +38,155 @@ footer {
 main > * {
   max-width: 75ch;
 }
-.question-group,
+.questionnaire-page main > *,
+.questionnaire-page #planning-form {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+}
+.questionnaire-page main > p,
+.questionnaire-page #wizard-instructions,
+.questionnaire-page .choice-list label,
+.questionnaire-page .select-all-option,
+.questionnaire-page .no-js-only {
+  font-size: 1.25rem;
+}
+.action-grid:not(:defined),
+ul.needs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+ul.needs-grid {
+  row-gap: 0.75rem;
+}
+.gcds-checkbox-enhancement {
+  display: none;
+}
+.gcds-control-enhancement {
+  display: none;
+}
+.gcds-radio-enhancement {
+  display: none;
+}
+.gcds-fieldset-enhancement {
+  display: none;
+}
+.gcds-error-enhancement {
+  display: none;
+}
+.gcds-notice-enhancement {
+  display: none;
+}
+.gcds-checkboxes-ready .gcds-checkbox-enhancement {
+  display: block;
+}
+.gcds-checkboxes-ready .native-checkbox-fallback {
+  display: none;
+}
+.gcds-radios-ready .gcds-radio-enhancement {
+  display: block;
+}
+.gcds-radios-ready .native-radio-fallback {
+  display: none;
+}
+.gcds-fieldsets-ready .gcds-fieldset-enhancement {
+  display: block;
+}
+.gcds-fieldsets-ready .native-fieldset-fallback {
+  display: none;
+}
+.gcds-fieldset-enhancement {
+  --gcds-fieldset-legend-size-h6-desktop: 700 1.25rem/160% "Noto Sans", sans-serif;
+  --gcds-fieldset-legend-size-h6-mobile: 700 1.25rem/160% "Noto Sans", sans-serif;
+}
+.gcds-controls-ready .gcds-control-enhancement,
+.gcds-errors-ready .gcds-error-enhancement,
+.gcds-notices-ready .gcds-notice-enhancement {
+  display: block;
+}
+.gcds-controls-ready .native-control-fallback {
+  display: none;
+}
+.gcds-notices-ready .native-notice-fallback {
+  display: none;
+}
+gcds-container {
+  display: block;
+}
+gcds-container > main {
+  box-sizing: border-box;
+  width: 100%;
+}
+.page-meta {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1rem;
+}
+.page-meta gcds-date-modified:not(:defined) {
+  display: block;
+  font: inherit;
+}
+.page-meta gcds-date-modified:not(:defined)::before {
+  font-weight: 700;
+}
+.page-meta gcds-date-modified:not([type]):not(:defined)::before {
+  content: "Date modified: ";
+}
+.page-meta gcds-date-modified[type="version"]:not(:defined)::before {
+  content: "Version: ";
+}
+.gcds-shell {
+  display: none;
+}
+@media screen {
+  .gcds-shell-ready .gcds-shell,
+  .gcds-shell-visible .gcds-shell {
+    display: block;
+  }
+}
+.gcds-shell-ready .native-shell-fallback {
+  display: none;
+}
+.question-group {
+  margin-block: 1.5rem;
+  padding: 1rem 0;
+  border: 0;
+}
 .error-summary {
   margin-block: 1.5rem;
   padding: 1rem;
   border: 1px solid #697078;
+}
+.prototype-notice {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 2px solid #26374a;
+}
+.prototype-notice h2 {
+  margin-block-start: 0;
 }
 .question-group h2 {
   margin-block-start: 0;
 }
 .question-group fieldset {
   margin-block: 1rem;
-  padding: 1rem;
-  border: 1px solid #b7bcc1;
+  padding: 0;
+  border: 0;
 }
 .question-group legend {
-  padding-inline: 0.25rem;
+  padding: 0;
   font-weight: 700;
+}
+.question-group .question-title-legend,
+.question-group h2 {
+  font-size: 1.25rem;
+  line-height: 1.6;
 }
 .choice-list {
   padding: 0;
@@ -132,6 +264,16 @@ input[aria-invalid="true"] {
 .guide-introduction {
   margin-block-end: 2rem;
 }
+.planning-phase {
+  width: 100%;
+  max-width: none;
+}
+#personalized-content,
+.guide-contents,
+.action-grid {
+  width: 100%;
+  max-width: none;
+}
 .guide-contents {
   margin-block: 2rem 3rem;
   padding-block: 1rem;
@@ -206,6 +348,7 @@ button:focus-visible,
     background: Canvas;
     border: 2px solid CanvasText;
   }
+
   .guide-action,
   .guide-contents,
   .action-context {
@@ -232,5 +375,19 @@ button:focus-visible,
   input:focus-visible {
     outline-color: Highlight;
     box-shadow: none;
+  }
+}
+
+@media screen and (min-width: 64em) {
+  .action-grid:not(:defined),
+  ul.needs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .action-grid {
+    align-items: start;
+    column-gap: 2rem;
+  }
+  .action-grid > .guide-action {
+    max-width: 100%;
   }
 }
