@@ -27,7 +27,7 @@ The prototype uses native HTML, CSS and vanilla JavaScript. No build step, frame
 - [CONTRIBUTING.md](CONTRIBUTING.md): feature-branch, test, pull-request and review workflow.
 - [AGENTS.md](AGENTS.md): instructions for automated coding assistants and contributors.
 
-The prototype now includes the original questionnaire, a personalized guide generated from the canonical static guide, versioned bookmarkable URLs, editing and browser history, and printing. The complete guide remains readable without JavaScript.
+The prototype now includes the original questionnaire, a personalized guide generated from the canonical static guide, versioned bookmarkable URLs, editing and browser history, and printing. The simplified complete and personalized views display action titles and related guidance while preserving instructions and barriers in the canonical source. The complete guide remains readable without JavaScript.
 
 Content authors should follow [the canonical guide maintenance instructions](docs/content-maintenance.md). The extraction script is a one-time migration and audit tool, not an ongoing content generator.
 

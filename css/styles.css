@@ -313,6 +313,10 @@ input[aria-invalid="true"] {
 .action-support {
   margin-block-start: 1rem;
 }
+.guide-action > .action-support:first-of-type,
+.guide-action > .action-support:last-of-type {
+  display: none;
+}
 .return-to-contents {
   margin-block: 2rem 3rem;
 }

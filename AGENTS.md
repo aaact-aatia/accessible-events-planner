@@ -45,7 +45,7 @@ Before significant work, read:
 - Prefer native HTML and controls; use ARIA only when necessary.
 - Preserve heading hierarchy, reading order, keyboard operation and visible focus.
 - Support 400% reflow, forced-colors mode, meaningful links and progressive enhancement.
-- Keep the complete guide usable without JavaScript and keep all guidance visible.
+- Keep the complete guide usable without JavaScript. Simplified complete and personalized guide views display action titles and related guidance; preserve the omitted instructions and barriers in canonical HTML for source provenance and future restoration.
 - Preserve stable fragment identifiers.
 - Preserve meaningful structure in print and offline output.
 - Distinguish automated tests and browser automation from manual assistive-technology testing. Never infer accessibility conformance from automated checks alone.

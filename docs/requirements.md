@@ -5,11 +5,11 @@
 - English-only prototype; eventual Digital Accessibility Toolkit integration is bilingual.
 - Preserve original questionnaire wording, applicability rules, action wording, instructions, related links and barriers. Do not add, rewrite or summarize accessibility guidance.
 - Provide a complete guide independently of the questionnaire, and a personalized guide based on answers.
-- Organize both guides by Before, During and After the meeting or event, using semantic headings (document H1, phase H2, action H3), lists and meaningful links. All guidance and barriers are visible.
+- Organize both guides by Before, During and After the meeting or event, using semantic headings (document H1, phase H2, action H3), lists and meaningful links. Display action titles and related guidance in the simplified guide views. Retain “How to do this” instructions and “Helps prevent barriers such as” content in the canonical source for provenance and future use, but do not display them in either guide view.
 - No completion checkboxes or completion tracking. Questionnaire checkboxes remain where appropriate.
 - Bookmark and share personalized guides using URL-based answers; allow editing without losing selections. Do not include personal information.
 - Apply existing filtering before deduplication. Within each phase combine exactly identical action wording, preserving all distinct guidance, links and barriers. Remove exact duplicate supporting entries; retain differently worded actions. Preserve the unmodified original source and its applicability metadata.
-- Provide browser printing for both guides. The complete guide remains readable without JavaScript.
+- Provide browser printing for both guides. Screen views retain related guidance; print output is a compact checklist containing the document title, planning-phase headings and action titles with printable checkboxes. The complete guide remains readable without JavaScript.
 - Native Word and accessible PDF exports are deferred. Do not claim browser-generated PDFs are accessible without testing.
 
 ## Implementation approach

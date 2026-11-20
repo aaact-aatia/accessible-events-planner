@@ -433,6 +433,26 @@ class ContentPreservationTests(unittest.TestCase):
         self.assertIn("outline-color: Highlight", styles)
         self.assertNotIn("position: sticky", styles)
         self.assertNotIn("position: fixed", styles)
+        self.assertIn(
+            ".guide-action > .action-support:first-of-type,\n"
+            ".guide-action > .action-support:last-of-type {\n"
+            "  display: none;",
+            styles,
+        )
+        for article in self.guide.select(".guide-action"):
+            headings = [
+                section.find("h4").get_text(" ", strip=True)
+                for section in article.select(":scope > .action-support")
+            ]
+            self.assertEqual(
+                headings,
+                [
+                    "How to do this",
+                    "Related guidance",
+                    "Helps prevent barriers such as",
+                ],
+                article["id"],
+            )
 
     def test_print_styles_hide_chrome_without_forcing_whole_actions_together(
         self,
@@ -442,8 +462,18 @@ class ContentPreservationTests(unittest.TestCase):
         self.assertIn(".site-footer", styles)
         self.assertIn(".site-footer {\n  margin-block-start", styles)
         self.assertIn("break-after: avoid", styles)
-        self.assertIn(".guide-action,\n.action-support {\n  break-inside: auto", styles)
-        self.assertNotIn(".guide-action { break-inside: avoid; }", styles)
+        self.assertIn(
+            ".guide-action > h3::before {\n"
+            '  position: absolute;',
+            styles,
+        )
+        self.assertIn('content: "";', styles)
+        self.assertIn(".action-context,\n.action-applicability,\n.action-support,", styles)
+        self.assertIn(
+            ".guide-action {\n  margin-block: 0.5rem;\n"
+            "  padding: 0;\n  border: 0;\n  break-inside: avoid;",
+            styles,
+        )
 
 
 if __name__ == "__main__":
