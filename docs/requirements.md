@@ -9,7 +9,7 @@
 - No completion checkboxes or completion tracking. Questionnaire checkboxes remain where appropriate.
 - Bookmark and share personalized guides using URL-based answers; allow editing without losing selections. Do not include personal information.
 - Apply existing filtering before deduplication. Within each phase combine exactly identical action wording, preserving all distinct guidance, links and barriers. Remove exact duplicate supporting entries; retain differently worded actions. Preserve the unmodified original source and its applicability metadata.
-- Provide browser printing for both guides. The complete guide remains readable without JavaScript.
+- Provide browser printing for both guides. Screen views retain related guidance; print output is a compact checklist containing the document title, planning-phase headings and action titles with printable checkboxes. The complete guide remains readable without JavaScript.
 - Native Word and accessible PDF exports are deferred. Do not claim browser-generated PDFs are accessible without testing.
 
 ## Implementation approach

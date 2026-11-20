@@ -55,6 +55,7 @@ Development-session browser automation for the completed prototype covered:
 - Contents and return-to-contents hash navigation.
 - JavaScript-disabled complete-guide content and the no-JavaScript questionnaire fallback.
 - A 320-pixel-equivalent viewport without horizontal page overflow, forced-colors styles and print-control hiding.
+- Print-only checklist presentation containing phase headings and action titles with empty printable checkboxes, without supporting guidance.
 
 These are automated browser checks performed in the development session, not manual screen-reader testing. Manual VoiceOver, NVDA/JAWS, 400% zoom, Windows High Contrast, and real print/PDF checks remain outstanding.
 

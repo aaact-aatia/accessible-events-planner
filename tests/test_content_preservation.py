@@ -462,8 +462,18 @@ class ContentPreservationTests(unittest.TestCase):
         self.assertIn(".site-footer", styles)
         self.assertIn(".site-footer {\n  margin-block-start", styles)
         self.assertIn("break-after: avoid", styles)
-        self.assertIn(".guide-action,\n.action-support {\n  break-inside: auto", styles)
-        self.assertNotIn(".guide-action { break-inside: avoid; }", styles)
+        self.assertIn(
+            ".guide-action > h3::before {\n"
+            '  position: absolute;',
+            styles,
+        )
+        self.assertIn('content: "";', styles)
+        self.assertIn(".action-context,\n.action-applicability,\n.action-support,", styles)
+        self.assertIn(
+            ".guide-action {\n  margin-block: 0.5rem;\n"
+            "  padding: 0;\n  border: 0;\n  break-inside: avoid;",
+            styles,
+        )
 
 
 if __name__ == "__main__":
