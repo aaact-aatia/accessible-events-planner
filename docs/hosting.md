@@ -81,7 +81,7 @@ Native modal behavior contains focus while the dialog is open. The leave link re
 
 ## Headers and approved presentation assets
 
-`netlify.toml` applies noindex headers to every deployed path. It also permits only self-hosted scripts, styles and data, plus the approved Government of Canada Design System CDN host for future presentation integration. If new approved GCDS asset origins are introduced, review and update the CSP explicitly. Do not add broad wildcard origins or `unsafe-inline`.
+`netlify.toml` applies noindex headers to every deployed path. It also permits only self-hosted scripts, styles and data, plus the approved Government of Canada Design System CDN host for component scripts, styles, images and fonts. Google Fonts origins are limited to the official stylesheet and font hosts. If new approved GCDS asset origins are introduced, review and update the CSP explicitly. Do not add broad wildcard origins or `unsafe-inline`.
 
 ## Verification
 

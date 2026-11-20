@@ -238,6 +238,11 @@ class DeploymentPreparationTests(unittest.TestCase):
         self.assertIn("https://cdn.design-system.canada.ca", config)
         self.assertIn("https://fonts.googleapis.com", config)
         self.assertIn("https://fonts.gstatic.com", config)
+        self.assertIn(
+            "font-src 'self' https://cdn.design-system.canada.ca "
+            "https://fonts.gstatic.com",
+            config,
+        )
         self.assertNotIn("'unsafe-inline'", config)
 
 
