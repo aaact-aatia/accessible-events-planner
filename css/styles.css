@@ -148,7 +148,11 @@ gcds-container > main {
 .gcds-shell-ready .native-shell-fallback {
   display: none;
 }
-.question-group,
+.question-group {
+  margin-block: 1.5rem;
+  padding: 1rem 0;
+  border: 0;
+}
 .error-summary {
   margin-block: 1.5rem;
   padding: 1rem;
@@ -167,11 +171,11 @@ gcds-container > main {
 }
 .question-group fieldset {
   margin-block: 1rem;
-  padding: 1rem;
-  border: 1px solid #b7bcc1;
+  padding: 0;
+  border: 0;
 }
 .question-group legend {
-  padding-inline: 0.25rem;
+  padding: 0;
   font-weight: 700;
 }
 .choice-list {

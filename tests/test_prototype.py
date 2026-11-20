@@ -374,6 +374,16 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".questionnaire-page main > *,", styles)
         self.assertIn(".questionnaire-page #planning-form", styles)
+        self.assertIn(
+            ".question-group {\n  margin-block: 1.5rem;\n  padding: 1rem 0;\n"
+            "  border: 0;\n}",
+            styles,
+        )
+        self.assertIn(
+            ".question-group fieldset {\n  margin-block: 1rem;\n"
+            "  padding: 0;\n  border: 0;",
+            styles,
+        )
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
         self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell,", styles)
         self.assertIn(".gcds-shell-visible .gcds-shell", styles)
