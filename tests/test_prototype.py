@@ -383,6 +383,9 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn(".action-grid:not(:defined)", styles)
         self.assertIn(".questionnaire-page main > *,", styles)
         self.assertIn(".questionnaire-page #planning-form", styles)
+        self.assertIn(".questionnaire-page main > p,", styles)
+        self.assertIn(".questionnaire-page #wizard-instructions,", styles)
+        self.assertIn(".questionnaire-page .choice-list label,", styles)
         self.assertIn(
             ".question-group {\n  margin-block: 1.5rem;\n  padding: 1rem 0;\n"
             "  border: 0;\n}",

@@ -44,6 +44,13 @@ main > * {
   width: 100%;
   max-width: none;
 }
+.questionnaire-page main > p,
+.questionnaire-page #wizard-instructions,
+.questionnaire-page .choice-list label,
+.questionnaire-page .select-all-option,
+.questionnaire-page .no-js-only {
+  font-size: 1.25rem;
+}
 .action-grid:not(:defined),
 ul.needs-grid {
   display: grid;
