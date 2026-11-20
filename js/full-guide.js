@@ -18,11 +18,16 @@ function focusFragment() {
     target = target.closest(".guide-action");
   }
   if (!target) return;
-  if (!target.hasAttribute("tabindex")) {
-    target.setAttribute("tabindex", "-1");
-  }
+  const heading = target.matches("h1, h2, h3, h4, h5, h6")
+    ? target
+    : target.querySelector("h1, h2, h3, h4, h5, h6");
+  if (!heading) return;
+  heading.setAttribute("tabindex", "-1");
   target.scrollIntoView({ block: "start" });
-  target.focus({ preventScroll: true });
+  heading.focus({ preventScroll: true });
+  heading.addEventListener("blur", () => {
+    heading.removeAttribute("tabindex");
+  }, { once: true });
 }
 
 nativePrintButton.addEventListener("click", () => printGuide());

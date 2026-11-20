@@ -14,7 +14,6 @@ import {
 import { printGuide } from "./export.js";
 import { setStatus, showErrors } from "./shared.js";
 
-const title = document.getElementById("guide-title");
 const errors = document.getElementById("guide-errors");
 const summary = document.getElementById("selection-summary");
 const controls = document.getElementById("guide-controls");
@@ -60,29 +59,29 @@ function renderSummary(answers) {
 
 function focusCurrentFragment() {
   if (!errors.hidden) return;
-  if (!location.hash) {
-    title.focus();
-    return;
-  }
+  if (!location.hash) return;
   let target = null;
   try {
     target = document.querySelector(location.hash);
   } catch {
-    title.focus();
     return;
   }
   if (target?.classList.contains("source-fragment")) {
     target = target.closest(".guide-action");
   }
   if (!target) {
-    title.focus();
     return;
   }
-  if (!target.hasAttribute("tabindex")) {
-    target.setAttribute("tabindex", "-1");
-  }
+  const heading = target.matches("h1, h2, h3, h4, h5, h6")
+    ? target
+    : target.querySelector("h1, h2, h3, h4, h5, h6");
+  if (!heading) return;
+  heading.setAttribute("tabindex", "-1");
   target.scrollIntoView({ block: "start" });
-  target.focus({ preventScroll: true });
+  heading.focus({ preventScroll: true });
+  heading.addEventListener("blur", () => {
+    heading.removeAttribute("tabindex");
+  }, { once: true });
 }
 
 function renderContents(model) {

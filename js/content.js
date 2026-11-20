@@ -204,8 +204,6 @@ export function renderGuideInto(container, model) {
     grid.setAttribute("align-items", "start");
     articles.forEach((article) => grid.append(article));
     section.append(grid);
-    section.setAttribute("tabindex", "-1");
-    articles.forEach((article) => article.setAttribute("tabindex", "-1"));
     const contents = document.createElement("p");
     contents.className = "return-to-contents";
     contents.innerHTML = '<a href="#contents">Return to contents</a>';

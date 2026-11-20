@@ -437,9 +437,15 @@ class PrototypeTests(unittest.TestCase):
             'target?.classList.contains("source-fragment")',
             guide,
         )
-        self.assertIn('target.setAttribute("tabindex", "-1")', guide)
+        self.assertIn('heading.setAttribute("tabindex", "-1")', guide)
+        self.assertIn(
+            'target.querySelector("h1, h2, h3, h4, h5, h6")',
+            guide,
+        )
         self.assertIn('target.scrollIntoView({ block: "start" })', guide)
-        self.assertIn('target.focus({ preventScroll: true })', guide)
+        self.assertIn('heading.focus({ preventScroll: true })', guide)
+        self.assertNotIn('target.setAttribute("tabindex", "-1")', guide)
+        self.assertNotIn('target.focus({ preventScroll: true })', guide)
         self.assertIn("if (!errors.hidden) return;", guide)
 
 

@@ -425,6 +425,9 @@ class ContentPreservationTests(unittest.TestCase):
     def test_screen_styles_include_reflow_and_forced_colors_support(self) -> None:
         styles = STYLES.read_text(encoding="utf-8")
         self.assertIn("max-width: 75ch", styles)
+        self.assertIn("#personalized-content,", styles)
+        self.assertIn(".action-grid {", styles)
+        self.assertIn("width: 100%;\n  max-width: none;", styles)
         self.assertIn("@media (forced-colors: active)", styles)
         self.assertIn("overflow-wrap: anywhere", styles)
         self.assertIn("outline-color: Highlight", styles)

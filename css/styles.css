@@ -245,6 +245,13 @@ input[aria-invalid="true"] {
   margin-block-end: 2rem;
 }
 .planning-phase {
+  width: 100%;
+  max-width: none;
+}
+#personalized-content,
+.guide-contents,
+.action-grid {
+  width: 100%;
   max-width: none;
 }
 .guide-contents {
