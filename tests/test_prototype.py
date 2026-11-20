@@ -114,6 +114,12 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertIn("refreshActiveErrors();", questionnaire)
         self.assertIn("restoreFormAnswers(form, readFormAnswers(form));", questionnaire)
+        self.assertIn(
+            'fieldsetHostsReady = true;\n'
+            '  document.documentElement.classList.add("gcds-fieldsets-ready");\n'
+            "  updateSelectAll();",
+            questionnaire,
+        )
         self.assertIn("location.search !== lastSearch", questionnaire)
         self.assertIn("lastSearch = location.search", questionnaire)
         self.assertNotIn('role="alert"', (ROOT / "index.html").read_text())

@@ -179,6 +179,7 @@ async function enhanceFieldsets() {
   restoreFormAnswers(form, readFormAnswers(form));
   fieldsetHostsReady = true;
   document.documentElement.classList.add("gcds-fieldsets-ready");
+  updateSelectAll();
   refreshActiveErrors();
 }
 
