@@ -188,7 +188,7 @@ function validate(answers) {
   if (!answers.deliveryFormat) {
     problems.push({
       message: "Choose how participants will attend.",
-      target: radioHostsReady
+      target: radioHostsReady && fieldsetHostsReady
         ? "delivery-format-radios"
         : "delivery-in-person",
     });
@@ -281,7 +281,7 @@ form.addEventListener("submit", (event) => {
 
 errors.addEventListener("click", (event) => {
   const link = event.target.closest('a[href^="#"]');
-  if (!link || !radioHostsReady) return;
+  if (!link || !radioHostsReady || !fieldsetHostsReady) return;
   const target = document.querySelector(link.hash);
   if (!target?.matches("gcds-radios")) return;
   event.preventDefault();
@@ -380,7 +380,7 @@ form.addEventListener("reset", () => {
     }).pathname);
     lastSearch = "";
     window.dispatchEvent(new Event("planner-statechange"));
-    if (radioHostsReady) {
+    if (radioHostsReady && fieldsetHostsReady) {
       form.querySelector("#delivery-format-radios").focus();
     } else {
       form.querySelector("#delivery-in-person").focus();

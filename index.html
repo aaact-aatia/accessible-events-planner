@@ -47,8 +47,8 @@
       ></gcds-error-summary>
 
       <div class="question-group">
-      <fieldset class="native-radio-fallback native-questionnaire-control-fallback">
-        <legend>1.&nbsp;&nbsp;How will participants attend? (required)</legend>
+      <fieldset class="native-fieldset-fallback native-questionnaire-control-fallback">
+        <legend class="question-title-legend">1.&nbsp;&nbsp;How will participants attend? (required)</legend>
         <p id="delivery-error" class="field-error" hidden>Choose how participants will attend.</p>
         <ul class="choice-list">
           <li><label for="delivery-in-person"><input id="delivery-in-person" type="radio" name="deliveryFormat" value="inPerson" required> <span>In-person only (everyone attends at the location)</span></label></li>
@@ -56,25 +56,31 @@
           <li><label for="delivery-hybrid"><input id="delivery-hybrid" type="radio" name="deliveryFormat" value="hybrid" required> <span>Hybrid (both in-person and remote participants)</span></label></li>
         </ul>
       </fieldset>
-      <gcds-radios
-        class="gcds-radio-enhancement"
-        id="delivery-format-radios"
-        name="deliveryFormat"
-        tabindex="-1"
-        legend="1. How will participants attend?"
-        required
-        validate-on="other"
-        error-message="Choose how participants will attend."
-        options='[
-          {"id":"delivery-in-person-gcds","label":"In-person only (everyone attends at the location)","value":"inPerson"},
-          {"id":"delivery-virtual-gcds","label":"Virtual only (everyone attends remotely)","value":"virtual"},
-          {"id":"delivery-hybrid-gcds","label":"Hybrid (both in-person and remote participants)","value":"hybrid"}
-        ]'
-      ></gcds-radios>
+      <gcds-fieldset
+        class="gcds-fieldset-enhancement"
+        legend="1. How will participants attend? (required)"
+        legend-size="h2"
+      >
+        <gcds-radios
+          class="gcds-radio-enhancement"
+          id="delivery-format-radios"
+          name="deliveryFormat"
+          tabindex="-1"
+          legend="Attendance format"
+          hide-legend
+          required
+          validate-on="other"
+          error-message="Choose how participants will attend."
+          options='[
+            {"id":"delivery-in-person-gcds","label":"In-person only (everyone attends at the location)","value":"inPerson"},
+            {"id":"delivery-virtual-gcds","label":"Virtual only (everyone attends remotely)","value":"virtual"},
+            {"id":"delivery-hybrid-gcds","label":"Hybrid (both in-person and remote participants)","value":"hybrid"}
+          ]'
+        ></gcds-radios>
+      </gcds-fieldset>
       </div>
 
       <div class="question-group">
-        <h2 class="gcds-fieldset-heading-enhancement wb-inv">2.&nbsp;&nbsp;What are you planning?</h2>
         <div class="native-fieldset-fallback">
           <h2 id="q2-heading">2.&nbsp;&nbsp;What are you planning?</h2>
           <fieldset class="native-questionnaire-control-fallback">
@@ -133,7 +139,7 @@
 
       <div class="question-group">
         <fieldset class="native-fieldset-fallback native-questionnaire-control-fallback">
-        <legend>3.&nbsp;&nbsp;What else applies? (optional)</legend>
+        <legend class="question-title-legend">3.&nbsp;&nbsp;What else applies? (optional)</legend>
         <p>Select all that apply. Leave them unchecked if none apply.</p>
         <label class="select-all-option"><input id="select-all-needs-native" type="checkbox" aria-controls="needs-options"> <span><strong>Select all considerations below</strong></span></label>
         <ul class="choice-list needs-grid" id="needs-options">

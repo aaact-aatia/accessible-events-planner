@@ -81,11 +81,9 @@ export function readFormAnswers(form) {
   };
   const selectedRadio = (name) => {
     const host = form.querySelector(`gcds-radios[name="${name}"]`);
-    const nestedFieldsetReady = name === "deliveryFormat"
-      || document.documentElement.classList.contains("gcds-fieldsets-ready");
     if (
       document.documentElement.classList.contains("gcds-radios-ready")
-      && nestedFieldsetReady
+      && document.documentElement.classList.contains("gcds-fieldsets-ready")
       && host
     ) {
       return host.value || "";

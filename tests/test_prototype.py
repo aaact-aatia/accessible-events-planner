@@ -358,23 +358,26 @@ class PrototypeTests(unittest.TestCase):
             )
         )
         fieldsets = self.questionnaire.select("gcds-fieldset")
-        self.assertEqual(len(fieldsets), 2)
+        self.assertEqual(len(fieldsets), 3)
         self.assertEqual(
             [fieldset["legend-size"] for fieldset in fieldsets],
-            ["h2", "h2"],
+            ["h2", "h2", "h2"],
         )
         self.assertIsNotNone(
-            self.questionnaire.select_one(
-                "h2.gcds-fieldset-heading-enhancement.wb-inv"
-            )
-        )
-        self.assertIsNotNone(
-            fieldsets[0].select_one(
+            fieldsets[1].select_one(
                 "gcds-checkboxes#session-features-checkboxes"
             )
         )
         self.assertIsNotNone(
-            fieldsets[1].select_one("gcds-checkboxes#needs-checkboxes")
+            fieldsets[2].select_one("gcds-checkboxes#needs-checkboxes")
+        )
+        delivery = fieldsets[0].select_one("gcds-radios#delivery-format-radios")
+        self.assertIsNotNone(delivery)
+        self.assertTrue(delivery.has_attr("hide-legend"))
+        self.assertEqual(delivery["legend"], "Attendance format")
+        self.assertEqual(
+            fieldsets[0]["legend"],
+            "1. How will participants attend? (required)",
         )
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
@@ -390,6 +393,9 @@ class PrototypeTests(unittest.TestCase):
             "  padding: 0;\n  border: 0;",
             styles,
         )
+        self.assertIn("font-size: 2.4375rem;", styles)
+        self.assertIn("@media (max-width: 47.999em)", styles)
+        self.assertIn("font-size: 2.1875rem;", styles)
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
         self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell,", styles)
         self.assertIn(".gcds-shell-visible .gcds-shell", styles)
@@ -441,6 +447,14 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn("if (errors.hidden && gcdsSummary.hidden) return;", questionnaire)
         self.assertIn(
             "target: fieldsetHostsReady ? \"event-type-radios\" : \"size-small\"",
+            questionnaire,
+        )
+        self.assertIn(
+            "target: radioHostsReady && fieldsetHostsReady",
+            questionnaire,
+        )
+        self.assertIn(
+            "if (radioHostsReady && fieldsetHostsReady)",
             questionnaire,
         )
         self.assertIn('if (errorSummarySource !== "validation") return;', questionnaire)
