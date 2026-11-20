@@ -191,6 +191,10 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertIsNone(page.select_one("#download-guide"))
         self.assertIsNotNone(page.select_one("#print-guide"))
+        self.assertEqual(
+            page.select_one("#print-guide").get_text(" ", strip=True),
+            "Print checklist",
+        )
         guide_script = (ROOT / "js/guide.js").read_text(encoding="utf-8")
         self.assertIn("function renderContents(model)", guide_script)
         self.assertIn("if (!articles.length) return;", guide_script)
@@ -216,6 +220,10 @@ class PrototypeTests(unittest.TestCase):
             page.select_one("#complete-guide-controls[hidden]")
         )
         self.assertIsNone(page.select_one("#download-complete-guide"))
+        self.assertEqual(
+            page.select_one("#print-complete-guide").get_text(" ", strip=True),
+            "Print checklist",
+        )
         self.assertIsNotNone(
             page.select_one('script[type="module"][src="js/full-guide.js"]')
         )
