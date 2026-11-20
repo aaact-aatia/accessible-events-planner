@@ -38,6 +38,12 @@ footer {
 main > * {
   max-width: 75ch;
 }
+.questionnaire-page main > *,
+.questionnaire-page #planning-form {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+}
 .action-grid:not(:defined),
 ul.needs-grid {
   display: grid;

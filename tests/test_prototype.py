@@ -346,6 +346,11 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertEqual(len(json.loads(gcds_features["options"])), 3)
         self.assertEqual(len(json.loads(gcds_needs["options"])), 10)
+        self.assertIsNotNone(
+            self.questionnaire.select_one(
+                "body.questionnaire-page #planning-form"
+            )
+        )
         fieldsets = self.questionnaire.select("gcds-fieldset")
         self.assertEqual(len(fieldsets), 2)
         self.assertEqual(
@@ -367,6 +372,8 @@ class PrototypeTests(unittest.TestCase):
         )
         styles = (ROOT / "css/styles.css").read_text(encoding="utf-8")
         self.assertIn(".action-grid:not(:defined)", styles)
+        self.assertIn(".questionnaire-page main > *,", styles)
+        self.assertIn(".questionnaire-page #planning-form", styles)
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
         self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell,", styles)
         self.assertIn(".gcds-shell-visible .gcds-shell", styles)
