@@ -361,7 +361,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertEqual(len(fieldsets), 3)
         self.assertEqual(
             [fieldset["legend-size"] for fieldset in fieldsets],
-            ["h2", "h2", "h2"],
+            ["h6", "h6", "h6"],
         )
         self.assertIsNotNone(
             fieldsets[1].select_one(
@@ -393,9 +393,12 @@ class PrototypeTests(unittest.TestCase):
             "  padding: 0;\n  border: 0;",
             styles,
         )
-        self.assertIn("font-size: 2.4375rem;", styles)
-        self.assertIn("@media (max-width: 47.999em)", styles)
-        self.assertIn("font-size: 2.1875rem;", styles)
+        self.assertIn(
+            '--gcds-fieldset-legend-size-h6-desktop: '
+            '700 1.25rem/160% "Noto Sans", sans-serif;',
+            styles,
+        )
+        self.assertIn("font-size: 1.25rem;", styles)
         self.assertIn(".gcds-shell-ready .native-shell-fallback", styles)
         self.assertIn("@media screen {\n  .gcds-shell-ready .gcds-shell,", styles)
         self.assertIn(".gcds-shell-visible .gcds-shell", styles)

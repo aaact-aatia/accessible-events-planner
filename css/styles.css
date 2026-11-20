@@ -89,6 +89,10 @@ ul.needs-grid {
 .gcds-fieldsets-ready .native-fieldset-fallback {
   display: none;
 }
+.gcds-fieldset-enhancement {
+  --gcds-fieldset-legend-size-h6-desktop: 700 1.25rem/160% "Noto Sans", sans-serif;
+  --gcds-fieldset-legend-size-h6-mobile: 700 1.25rem/160% "Noto Sans", sans-serif;
+}
 .gcds-controls-ready .gcds-control-enhancement,
 .gcds-errors-ready .gcds-error-enhancement,
 .gcds-notices-ready .gcds-notice-enhancement {
@@ -174,15 +178,8 @@ gcds-container > main {
 }
 .question-group .question-title-legend,
 .question-group h2 {
-  font-size: 2.4375rem;
-  line-height: 1.23;
-}
-@media (max-width: 47.999em) {
-  .question-group .question-title-legend,
-  .question-group h2 {
-    font-size: 2.1875rem;
-    line-height: 1.25;
-  }
+  font-size: 1.25rem;
+  line-height: 1.6;
 }
 .choice-list {
   padding: 0;
