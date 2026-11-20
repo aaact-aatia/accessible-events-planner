@@ -6,6 +6,7 @@ header, main, footer { max-width: none; padding: 0; }
 .gcds-shell,
 .native-shell-fallback,
 .complete-guide-recovery,
+.website-navigation,
 .page-controls,
 .skip-link,
 .return-to-contents {
@@ -13,7 +14,6 @@ header, main, footer { max-width: none; padding: 0; }
 }
 #questionnaire-status,
 #guide-status,
-#complete-guide-status,
 .error-summary {
   display: none;
 }
@@ -50,13 +50,16 @@ main > * { max-width: none; }
   display: none !important;
 }
 .gcds-error-enhancement,
-gcds-notice {
+.gcds-notice-enhancement {
   display: none !important;
 }
 .native-error-fallback {
   display: none !important;
 }
 .native-control-fallback {
+  display: block !important;
+}
+.native-notice-fallback {
   display: block !important;
 }
 .native-checkbox-fallback {

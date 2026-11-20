@@ -207,7 +207,7 @@ export function renderGuideInto(container, model) {
     section.setAttribute("tabindex", "-1");
     articles.forEach((article) => article.setAttribute("tabindex", "-1"));
     const contents = document.createElement("p");
-    contents.className = "return-to-contents no-export";
+    contents.className = "return-to-contents";
     contents.innerHTML = '<a href="#contents">Return to contents</a>';
     section.append(contents);
     container.append(section);

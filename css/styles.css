@@ -65,6 +65,9 @@ ul.needs-grid {
 .gcds-error-enhancement {
   display: none;
 }
+.gcds-notice-enhancement {
+  display: none;
+}
 .gcds-checkboxes-ready .gcds-checkbox-enhancement {
   display: block;
 }
@@ -87,10 +90,14 @@ ul.needs-grid {
   display: none;
 }
 .gcds-controls-ready .gcds-control-enhancement,
-.gcds-errors-ready .gcds-error-enhancement {
+.gcds-errors-ready .gcds-error-enhancement,
+.gcds-notices-ready .gcds-notice-enhancement {
   display: block;
 }
 .gcds-controls-ready .native-control-fallback {
+  display: none;
+}
+.gcds-notices-ready .native-notice-fallback {
   display: none;
 }
 gcds-container {
@@ -140,6 +147,14 @@ gcds-container > main {
   margin-block: 1.5rem;
   padding: 1rem;
   border: 1px solid #697078;
+}
+.prototype-notice {
+  margin-block: 1.5rem;
+  padding: 1rem;
+  border: 2px solid #26374a;
+}
+.prototype-notice h2 {
+  margin-block-start: 0;
 }
 .question-group h2 {
   margin-block-start: 0;

@@ -11,7 +11,7 @@ import {
   editUrl,
   parseAnswersUrl,
 } from "./rules.js";
-import { downloadGuide, printGuide } from "./export.js";
+import { printGuide } from "./export.js";
 import { setStatus, showErrors } from "./shared.js";
 
 const title = document.getElementById("guide-title");
@@ -22,10 +22,9 @@ const contents = document.getElementById("contents");
 const output = document.getElementById("personalized-content");
 const status = document.getElementById("guide-status");
 const edit = document.getElementById("edit-answers");
+const editGcds = document.getElementById("edit-answers-gcds");
 const printButton = document.getElementById("print-guide");
 const nativePrintButton = document.getElementById("print-guide-native");
-const downloadButton = document.getElementById("download-guide");
-const nativeDownloadButton = document.getElementById("download-guide-native");
 let currentAnswers = null;
 let renderGeneration = 0;
 let currentRoute = null;
@@ -116,8 +115,6 @@ async function render() {
     controls.hidden = false;
     printButton.hidden = true;
     nativePrintButton.hidden = true;
-    downloadButton.hidden = true;
-    nativeDownloadButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -128,7 +125,7 @@ async function render() {
     );
     const recovery = new URL("index.html", location.href);
     recovery.search = location.search;
-    edit.href = recovery;
+    setEditHref(recovery);
     const fallback = document.createElement("p");
     const link = document.createElement("a");
     link.href = "full-guide.html";
@@ -154,15 +151,13 @@ async function render() {
     renderGuideInto(output, model);
     renderContents(model);
     renderSummary(currentAnswers);
-    edit.href = editUrl(location.href, currentAnswers);
+    setEditHref(editUrl(location.href, currentAnswers));
     controls.hidden = false;
     showErrors(errors, []);
     document.title = "Personalized accessible meetings and events planning guide";
     setStatus(status, `Personalized guide created with ${model.applicableSourceActions.size} applicable source actions.`);
     printButton.hidden = false;
     nativePrintButton.hidden = false;
-    downloadButton.hidden = false;
-    nativeDownloadButton.hidden = false;
     focusCurrentFragment();
   } catch (error) {
     if (
@@ -175,8 +170,6 @@ async function render() {
     controls.hidden = false;
     printButton.hidden = true;
     nativePrintButton.hidden = true;
-    downloadButton.hidden = true;
-    nativeDownloadButton.hidden = true;
     contents.hidden = true;
     summary.hidden = true;
     output.replaceChildren();
@@ -193,36 +186,19 @@ async function render() {
     output.append(fallback);
     const recovery = new URL("index.html", location.href);
     recovery.search = location.search;
-    edit.href = recovery;
+    setEditHref(recovery);
     console.error(error);
+  }
+
+  function setEditHref(href) {
+    edit.href = href;
+    editGcds.href = href;
+    editGcds.setAttribute("href", href);
   }
 }
 
 nativePrintButton.addEventListener("click", () => printGuide());
 printButton.addEventListener("gcdsClick", () => printGuide());
-
-async function downloadCurrentGuide() {
-  if (downloadButton.getAttribute("aria-disabled") === "true") return;
-  try {
-    setStatus(status, "Preparing standalone guide.");
-    downloadButton.setAttribute("aria-disabled", "true");
-    await downloadGuide(
-      "personalized-accessible-events-guide.html",
-      "Personalized accessible meetings and events planning guide",
-      document.querySelector("main"),
-    );
-    setStatus(status, "Standalone personalized guide downloaded.");
-  } catch (error) {
-    setStatus(status, "The standalone guide could not be prepared.");
-    showErrors(errors, [{ message: `The HTML guide could not be downloaded. ${error.message}` }]);
-    console.error(error);
-  } finally {
-    downloadButton.removeAttribute("aria-disabled");
-  }
-}
-
-nativeDownloadButton.addEventListener("click", downloadCurrentGuide);
-downloadButton.addEventListener("gcdsClick", downloadCurrentGuide);
 
 window.addEventListener("popstate", () => {
   if (routeKey() === currentRoute) {

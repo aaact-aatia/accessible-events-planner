@@ -23,7 +23,7 @@ The command recreates `dist/` and copies an explicit allowlist containing only:
 - Preview-gate CSS and JavaScript
 - Generated preview-gate configuration
 
-Tests, source fixtures, documentation, repository instructions, package/configuration files and GitHub workflows do not enter `dist/`. The gate is injected only into prepared deployment copies. Canonical source pages and future standalone downloads do not inherit the gate.
+Tests, source fixtures, documentation, repository instructions, package/configuration files and GitHub workflows do not enter `dist/`. The gate is injected only into prepared deployment copies. Canonical source pages do not inherit the gate.
 
 ## Prepare a local preview
 

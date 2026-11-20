@@ -212,12 +212,18 @@ class DeploymentPreparationTests(unittest.TestCase):
         self.assertNotIn("secure authentication", script)
         self.assertIn("queueMicrotask", script)
         self.assertIn("box-sizing: border-box", (DIST / "css/preview-gate.css").read_text())
+        gate_styles = (DIST / "css/preview-gate.css").read_text()
+        session_rule = gate_styles.split(".preview-gate-session {", 1)[1].split(
+            "}", 1
+        )[0]
+        self.assertNotIn("border-bottom", session_rule)
+        self.assertNotIn("background:", session_rule)
         self.assertIn(
             "This browser could not clear remembered preview access.",
             script,
         )
 
-    def test_future_exports_do_not_include_preview_gate_assets(self) -> None:
+    def test_print_module_does_not_include_preview_gate_assets(self) -> None:
         export_source = (ROOT / "js/export.js").read_text(encoding="utf-8")
         self.assertNotIn('src="js/preview-gate', export_source)
         self.assertNotIn("import", export_source.split("export")[0])

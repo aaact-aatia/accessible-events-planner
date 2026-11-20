@@ -177,7 +177,13 @@ class PrototypeTests(unittest.TestCase):
         self.assertIsNotNone(page.select_one("#guide-errors[tabindex='-1']"))
         self.assertIsNotNone(page.select_one("#guide-status[role=status]"))
         self.assertIsNotNone(page.select_one("#edit-answers"))
-        self.assertIsNotNone(page.select_one("#download-guide"))
+        self.assertIsNotNone(
+            page.select_one(
+                'gcds-button#edit-answers-gcds[type="link"]'
+                '[href="index.html"]'
+            )
+        )
+        self.assertIsNone(page.select_one("#download-guide"))
         self.assertIsNotNone(page.select_one("#print-guide"))
         guide_script = (ROOT / "js/guide.js").read_text(encoding="utf-8")
         self.assertIn("function renderContents(model)", guide_script)
@@ -195,7 +201,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn("[hidden] {", styles)
         self.assertIn("display: none !important;", styles)
 
-    def test_complete_guide_download_controls_are_hidden_until_javascript_runs(self) -> None:
+    def test_complete_guide_print_controls_are_hidden_until_javascript_runs(self) -> None:
         page = BeautifulSoup(
             (ROOT / "full-guide.html").read_text(encoding="utf-8"),
             "html.parser",
@@ -203,6 +209,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertIsNotNone(
             page.select_one("#complete-guide-controls[hidden]")
         )
+        self.assertIsNone(page.select_one("#download-complete-guide"))
         self.assertIsNotNone(
             page.select_one('script[type="module"][src="js/full-guide.js"]')
         )
@@ -222,9 +229,10 @@ class PrototypeTests(unittest.TestCase):
                 name,
             )
         export = (ROOT / "js/export.js").read_text(encoding="utf-8")
-        self.assertIn("const snapshot = source.cloneNode(true);", export)
-        self.assertIn('role=\\"status\\"', export)
-        self.assertIn("script, noscript", export)
+        self.assertEqual(
+            export.strip(),
+            "export function printGuide() {\n  window.print();\n}",
+        )
         guide = (ROOT / "js/guide.js").read_text(encoding="utf-8")
         self.assertIn("const requestedRoute = routeKey();", guide)
         self.assertIn("if (routeKey() === currentRoute)", guide)
@@ -252,11 +260,19 @@ class PrototypeTests(unittest.TestCase):
                     'gcds-header.gcds-shell[skip-to-href="#main-content"]'
                 )
             )
-            self.assertIsNotNone(
-                page.select_one(".no-export")
-                if page_name == "full-guide.html"
-                else True
+            notice = page.select_one("gcds-notice")
+            self.assertIsNotNone(notice)
+            self.assertLess(
+                page.find_all().index(page.select_one("main h1")),
+                page.find_all().index(notice),
             )
+            self.assertIsNotNone(notice.find_parent("main"))
+            self.assertIsNotNone(
+                page.select_one(
+                    ".native-notice-fallback h2"
+                )
+            )
+            self.assertIsNone(page.select_one(".no-export"))
             self.assertIsNotNone(page.select_one("gcds-footer.gcds-shell"))
             self.assertEqual(len(page.select("gcds-header.gcds-shell")), 1)
             self.assertEqual(len(page.select("gcds-footer.gcds-shell")), 1)
@@ -395,7 +411,7 @@ class PrototypeTests(unittest.TestCase):
         self.assertIn('window.addEventListener("beforeprint"', navigation)
         self.assertIn('grid.setAttribute("columns-desktop", "1fr")', navigation)
 
-    def test_validation_and_download_focus_states_are_managed(self) -> None:
+    def test_validation_focus_states_are_managed(self) -> None:
         questionnaire = (ROOT / "js/questionnaire.js").read_text(encoding="utf-8")
         self.assertIn('setGroupError("deliveryFormat", "delivery-error"', questionnaire)
         self.assertIn('setGroupError("eventType", "size-error"', questionnaire)
@@ -406,10 +422,6 @@ class PrototypeTests(unittest.TestCase):
         )
         self.assertIn('if (errorSummarySource !== "validation") return;', questionnaire)
         self.assertIn('errorSummarySource = "url";', questionnaire)
-        for script_name in ("js/guide.js", "js/full-guide.js"):
-            script = (ROOT / script_name).read_text(encoding="utf-8")
-            self.assertIn('aria-disabled", "true"', script)
-            self.assertNotIn("downloadButton.focus()", script)
         full_guide = (ROOT / "js/full-guide.js").read_text(encoding="utf-8")
         self.assertIn('window.addEventListener("load", focusFragment', full_guide)
         self.assertIn('window.addEventListener("hashchange", focusFragment)', full_guide)

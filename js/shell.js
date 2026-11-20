@@ -75,3 +75,11 @@ readyComponents("gcds-error-summary")
   .catch((error) => {
     console.error("The GC Design System error summary could not be loaded.", error);
   });
+
+readyComponents("gcds-notice")
+  .then(() => {
+    document.documentElement.classList.add("gcds-notices-ready");
+  })
+  .catch((error) => {
+    console.error("The GC Design System notice could not be loaded.", error);
+  });
